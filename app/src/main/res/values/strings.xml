@@ -1,3 +1,64 @@
 <resources>
     <string name="app_name">UCLanTimetable</string>
+
+    <string name="uclan_cyprus_url">http://www.uclancyprus.ac.cy</string>
+    <string name="google_maps_key">11111</string>
+    <string name="timetable_security_token">e84e281d4c9b46f8a30e4a2fd9aa7058</string>
+    <string name="News">News</string>
+    <string name="Gallery">Gallery</string>
+    <string name="Contact">Contact</string>
+
+    <string name="Students">Students</string>
+
+    <string name="Room_timetable">Room timetable</string>
+
+    <string name="Students_and_staff">Students and staff</string>
+    <string name="Personal_timetable">Personal timetable</string>
+
+    <string name="Staff">Staff</string>
+    <string name="Student_attendance">Student attendance</string>
+
+    <string name="App">App</string>
+    <string name="About">About</string>
+    <string name="Navigate">Navigate</string>
+    <string name="Km">Km</string>
+    <string name="uclancy_address">12–14 University Avenue, Pyla CY-7080</string>
+    <string name="uclancy_driving_instructions">On the A3 highway towards Paralimni, take Exit 59 or Exit 60</string>
+
+    <string name="Not_available_yet">Not available yet</string>
+
+    <string name="Scan">Scan</string>
+    <string name="Cancelled">Cancelled</string>
+    <string name="Nothing_selected">Nothing selected</string>
+    <string name="Fetching_timetable">Fetching timetable …</string>
+    <string name="Data_fetched">Data_fetched</string>
+    <string name="session_type_with_lecturer">%1$s with %2$s</string>
+    <string name="Error_for">Error: %1$s</string>
+    <string name="Showing_data_for">Showing data for %1$s</string>
+    <string name="Select_a_room_or_scan_a_barcode">Select a room or scan a barcode or touch to NFC</string>
+    <string name="No_sessions_found_for_this_room_today">No sessions found for this room today</string>
+
+    <string name="Socialize">Socialize</string>
+    <string name="Share">Share</string>
+    <string name="Call">Call</string>
+    <string name="Email">Email</string>
+    <string name="Map">Map</string>
+
+    <string name="Unknown_room">Unknown room: %1$s</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_activity_map">UCLan Cyprus Map</string>
+
+    <string name="Install">Install UCLan Cyprus App for Android!</string>
+    <string name="Version">Version</string>
+    <string name="DevelopedBy">Developed by</string>
+    <string name="inspire_url" translatable="false">http://inspirecenter.org</string>
+    <string name="Tell_the_world">Tell the world</string>
+    <string name="Share_with_your_friends">Share with your friends</string>
+    <string name="Personal_upcoming_exams">Upcoming Exams</string>
+    <string name="Personal_timetable_notifications">Timetable Notifications</string>
+
 </resources>

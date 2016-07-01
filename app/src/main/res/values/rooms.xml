@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="uclan_cy_rooms">
+        <item>Select a room</item>
+        <item>CY006</item>
+        <item>CY007</item>
+        <item>CY008</item>
+        <item>CY013</item>
+        <item>CY014</item>
+        <item>CY017</item>
+        <item>CY018</item>
+        <item>CY019</item>
+        <item>CY020</item>
+        <item>CY021</item>
+        <item>CY106</item>
+        <item>CY109</item>
+        <item>CY111</item>
+        <item>CY113</item>
+        <item>CY114</item>
+        <item>CY115</item>
+        <item>CY127</item>
+        <item>CY128</item>
+        <item>CY129</item>
+        <item>CY130</item>
+        <item>CY131</item>
+        <item>CY132</item>
+        <item>CYAUD1</item>
+        <item>CYAUD2</item>
+        <item>CYAUD2b</item>
+        <item>CYCSL</item>
+        <item>CYMCT</item>
+    </string-array>
+</resources>
