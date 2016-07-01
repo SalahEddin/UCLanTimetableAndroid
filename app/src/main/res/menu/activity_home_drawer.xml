@@ -16,15 +16,15 @@
     <item android:title="@string/Students_and_staff">
         <menu>
             <item
-                android:id="@+id/action_personal_timetable"
+                android:id="@+id/nav_personal_timetable"
                 android:icon="@drawable/ic_insert_invitation_black_48dp"
                 android:title="@string/Personal_timetable" />
             <item
-                android:id="@+id/action_personal_upcoming_exams"
+                android:id="@+id/nav_personal_upcoming_exams"
                 android:icon="@drawable/ic_assignment_black_48dp"
                 android:title="@string/Personal_upcoming_exams" />
             <item
-                android:id="@+id/action_personal_notifications"
+                android:id="@+id/nav_personal_notifications"
                 android:icon="@drawable/ic_notifications_none_black_48dp"
                 android:title="@string/Personal_timetable_notifications" />
 

@@ -1,6 +1,5 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.ui;
 
-import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,9 +21,13 @@ public class ActivityHome extends AppCompatActivity
 
     public static final String TAG = "uclan-cy";
 
-    public static final int FRAGMENT_ID_NEWS    = 0x010;
+    public static final int FRAGMENT_ID_NEWS = 0x010;
     public static final int FRAGMENT_ID_GALLERY = 0x020;
     public static final int FRAGMENT_ID_CONTACT = 0x030;
+
+    public static final int FRAGMENT_ID_TIMETABLE = 0x040;
+    public static final int FRAGMENT_ID_TIMETABLE_EXAMS = 0x050;
+    public static final int FRAGMENT_ID_TIMETABLE_NOTIFICATIONS = 0x060;
 
     public static final String SELECTED_FRAGMENT_KEY = "selected-fragment";
 
@@ -34,6 +37,9 @@ public class ActivityHome extends AppCompatActivity
 
     private FragmentNews fragmentNews = new FragmentNews();
     private FragmentContact fragmentContact = new FragmentContact();
+    private FragmentTimetable fragmentTimetable = new FragmentTimetable();
+    private FragmentExams fragmentExams = new FragmentExams();
+    private FragmentTimetableNotifications fragmentTimetableNotifications = new FragmentTimetableNotifications();
 
     private Toolbar toolbar;
 
@@ -60,7 +66,7 @@ public class ActivityHome extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        if(selectedFragment == 0) {
+        if (selectedFragment == 0) {
             selectedFragment = PreferenceManager.getDefaultSharedPreferences(this).getInt(SELECTED_FRAGMENT_KEY, FRAGMENT_ID_NEWS);
             selectFragment();
         }
@@ -99,8 +105,21 @@ public class ActivityHome extends AppCompatActivity
         } else if (id == R.id.nav_contact) {
             selectedFragment = FRAGMENT_ID_CONTACT;
             selectFragment();
-        } else if (id == R.id.action_personal_timetable) {
-            Toast.makeText(ActivityHome.this, R.string.Not_available_yet, Toast.LENGTH_SHORT).show();
+        }
+        else if (id == R.id.nav_personal_timetable) {
+            // student timetable fragment
+            selectedFragment = FRAGMENT_ID_TIMETABLE;
+            selectFragment();
+        }
+        else if (id == R.id.nav_personal_upcoming_exams) {
+            // upcoming exams
+            selectedFragment = FRAGMENT_ID_TIMETABLE_EXAMS ;
+            selectFragment();
+        }
+        else if (id == R.id.nav_personal_notifications) {
+            // timetable notification
+            selectedFragment = FRAGMENT_ID_TIMETABLE_NOTIFICATIONS;
+            selectFragment();
         } else if (id == R.id.action_room_timetable) {
             startActivity(new Intent(this, ActivityRoomTimetable.class));
         } else if (id == R.id.action_attendance) {
@@ -110,7 +129,7 @@ public class ActivityHome extends AppCompatActivity
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if(drawer != null) drawer.closeDrawer(GravityCompat.START);
+        if (drawer != null) drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -127,7 +146,23 @@ public class ActivityHome extends AppCompatActivity
             toolbar.setSubtitle(getString(R.string.Contact));
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentContact).commit();
             fragmentManager.executePendingTransactions();
-        } else {
+        }
+        else if(selectedFragment == FRAGMENT_ID_TIMETABLE){
+            toolbar.setSubtitle("Timetable");
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentTimetable).commit();
+            fragmentManager.executePendingTransactions();
+        }
+        else if(selectedFragment == FRAGMENT_ID_TIMETABLE_EXAMS){
+            toolbar.setSubtitle("Upcoming Exams");
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentExams).commit();
+            fragmentManager.executePendingTransactions();
+        }
+        else if(selectedFragment == FRAGMENT_ID_TIMETABLE_NOTIFICATIONS){
+            toolbar.setSubtitle("Notifications");
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentTimetableNotifications).commit();
+            fragmentManager.executePendingTransactions();
+        }
+        else {
             Log.e(TAG, "Unknown selected fragment: " + selectedFragment);
         }
     }
