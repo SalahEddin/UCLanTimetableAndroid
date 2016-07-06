@@ -13,4 +13,5 @@
     <dimen name="list_item_event_name">20sp</dimen>
     <dimen name="list_item_event_description">18sp</dimen>
     <dimen name="list_item_event_description_secondary">16sp</dimen>
+    <dimen name="list_item_title">24sp</dimen>
 </resources>

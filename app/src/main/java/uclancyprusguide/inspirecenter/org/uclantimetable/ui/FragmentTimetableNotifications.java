@@ -35,26 +35,24 @@ public class FragmentTimetableNotifications extends Fragment {
 
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_timetable_notifications, container, false);
-//
-//        // dummy array
-//        ArrayList<TimetableSession> arr = new ArrayList<>();
-//        arr.add(new TimetableSession("Intro to Programming","CO1232","CYXX","02-7-2014 11:48:37","1:22","1:22",1,"Near","wow",new Date()));
-//        arr.add(new TimetableSession("Games Development","XX34","CYXX","11:48","1:22","1:22",1,"Near","wow",new Date()));
-//
-//        TimetableExamAdapter eventArrAdapter = new TimetableExamAdapter(view.getContext(), arr);
-//
-//        // bind the listView
-//        ListView eventsListView = (ListView) view.findViewById(R.id.eventsListView);
-//        eventsListView.setAdapter(eventArrAdapter);
-//        //pull to refresh
-//        SwipeRefreshLayout pullToRefresh = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
-//        pullToRefresh.setColorSchemeColors(ContextCompat.getColor(view.getContext(),R.color.colorAccent));
-//        pullToRefresh.setOnRefreshListener(()->{
-//            arr.add(new TimetableSession("Intross","XXd","CYXX","11:48","1:22","1:22",1,"Nearchos Paspallis","wow",new Date()));
-//            eventArrAdapter.notifyDataSetChanged();
-//            new Handler().postDelayed(() -> pullToRefresh.setRefreshing(false), 5000);
-//        });
+        // dummy array
+        ArrayList<TimetableSession> arr = new ArrayList<>();
+        arr.add(new TimetableSession("Room Change",getResources().getString(R.string.lerom_ipsum),"http://www.google.com",new Date()));
+        arr.add(new TimetableSession("Room Change",getResources().getString(R.string.lerom_ipsum),"http://www.Facebook.com",new Date()));
 
+        TimetableNotificationAdapter eventArrAdapter = new TimetableNotificationAdapter(view.getContext(), arr);
+
+        // bind the listView
+        ListView eventsListView = (ListView) view.findViewById(R.id.eventsListView);
+        eventsListView.setAdapter(eventArrAdapter);
+        //pull to refresh
+        SwipeRefreshLayout pullToRefresh = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
+        pullToRefresh.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        pullToRefresh.setOnRefreshListener(()->{
+            arr.add(new TimetableSession("Room Change",getResources().getString(R.string.lerom_ipsum),"http://www.Facebook.com",new Date()));
+            eventArrAdapter.notifyDataSetChanged();
+            new Handler().postDelayed(() -> pullToRefresh.setRefreshing(false), 5000);
+        });
 
         return view;
     }

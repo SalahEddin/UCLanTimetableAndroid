@@ -23,6 +23,7 @@ public class TimetableSession implements Serializable, Comparable {
     private String lecturerName;
     private String sessionDescription;
     private Date startDate;
+    private String link;
 
     // used for session
     public TimetableSession(String moduleCode, String moduleName, String roomCode, String startTimeFormatted, String endTimeFormatted, String dayOfWeek, int duration, String lecturerName, String sessionDescription) {
@@ -37,7 +38,7 @@ public class TimetableSession implements Serializable, Comparable {
         this.sessionDescription = sessionDescription;
     }
 
-    // used for session
+    // used for exams
     public TimetableSession(String moduleCode, String moduleName, String roomCode, String startTimeFormatted, String endTimeFormatted, String dayOfWeek, int duration, String lecturerName, String sessionDescription, Date date) {
         this.moduleCode = moduleCode;
         this.moduleName = moduleName;
@@ -48,6 +49,14 @@ public class TimetableSession implements Serializable, Comparable {
         this.duration = duration;
         this.lecturerName = lecturerName;
         this.sessionDescription = sessionDescription;
+        this.startDate = date;
+    }
+
+    //used for notification
+    public TimetableSession(String title, String description, String link, Date date) {
+        this.moduleName = title;
+        this.sessionDescription = description;
+        this.link = link;
         this.startDate = date;
     }
 
@@ -89,6 +98,10 @@ public class TimetableSession implements Serializable, Comparable {
 
     public Date getStartDate() {
         return startDate;
+    }
+
+    public String getLink() {
+        return link;
     }
 
     @Override

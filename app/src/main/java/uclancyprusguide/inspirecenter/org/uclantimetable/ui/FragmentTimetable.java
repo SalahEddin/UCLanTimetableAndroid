@@ -47,6 +47,8 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
+
         final View view = inflater.inflate(R.layout.fragment_timetable, container, false);
 
         // dummy array
@@ -123,6 +125,7 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
 
         return view;
     }
+
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
