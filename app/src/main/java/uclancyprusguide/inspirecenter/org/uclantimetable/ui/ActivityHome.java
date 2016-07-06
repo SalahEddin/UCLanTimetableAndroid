@@ -2,9 +2,12 @@ package uclancyprusguide.inspirecenter.org.uclantimetable.ui;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -105,18 +108,15 @@ public class ActivityHome extends AppCompatActivity
         } else if (id == R.id.nav_contact) {
             selectedFragment = FRAGMENT_ID_CONTACT;
             selectFragment();
-        }
-        else if (id == R.id.nav_personal_timetable) {
+        } else if (id == R.id.nav_personal_timetable) {
             // student timetable fragment
             selectedFragment = FRAGMENT_ID_TIMETABLE;
             selectFragment();
-        }
-        else if (id == R.id.nav_personal_upcoming_exams) {
+        } else if (id == R.id.nav_personal_upcoming_exams) {
             // upcoming exams
-            selectedFragment = FRAGMENT_ID_TIMETABLE_EXAMS ;
+            selectedFragment = FRAGMENT_ID_TIMETABLE_EXAMS;
             selectFragment();
-        }
-        else if (id == R.id.nav_personal_notifications) {
+        } else if (id == R.id.nav_personal_notifications) {
             // timetable notification
             selectedFragment = FRAGMENT_ID_TIMETABLE_NOTIFICATIONS;
             selectFragment();
@@ -146,23 +146,21 @@ public class ActivityHome extends AppCompatActivity
             toolbar.setSubtitle(getString(R.string.Contact));
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentContact).commit();
             fragmentManager.executePendingTransactions();
-        }
-        else if(selectedFragment == FRAGMENT_ID_TIMETABLE){
+        } else if (selectedFragment == FRAGMENT_ID_TIMETABLE) {
             toolbar.setSubtitle("Timetable");
+            final Drawable overflowIcon = ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_insert_invitation_black_48dp);
+
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentTimetable).commit();
             fragmentManager.executePendingTransactions();
-        }
-        else if(selectedFragment == FRAGMENT_ID_TIMETABLE_EXAMS){
+        } else if (selectedFragment == FRAGMENT_ID_TIMETABLE_EXAMS) {
             toolbar.setSubtitle("Upcoming Exams");
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentExams).commit();
             fragmentManager.executePendingTransactions();
-        }
-        else if(selectedFragment == FRAGMENT_ID_TIMETABLE_NOTIFICATIONS){
+        } else if (selectedFragment == FRAGMENT_ID_TIMETABLE_NOTIFICATIONS) {
             toolbar.setSubtitle("Notifications");
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentTimetableNotifications).commit();
             fragmentManager.executePendingTransactions();
-        }
-        else {
+        } else {
             Log.e(TAG, "Unknown selected fragment: " + selectedFragment);
         }
     }

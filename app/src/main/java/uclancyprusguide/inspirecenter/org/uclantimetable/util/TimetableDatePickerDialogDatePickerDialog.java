@@ -3,19 +3,23 @@ package uclancyprusguide.inspirecenter.org.uclantimetable.util;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+
+import uclancyprusguide.inspirecenter.org.uclantimetable.ui.FragmentTimetable;
 
 
 /**
  * Created by salah on 01/07/16.
  */
-public class TimetableDatePickerDialogDatePickerDialog extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+public class TimetableDatePickerDialogDatePickerDialog extends DialogFragment{
 
-    public TimetableDatePickerDialogDatePickerDialog(View view){
+    public TimetableDatePickerDialogDatePickerDialog(){
 
     }
 
@@ -25,12 +29,12 @@ public class TimetableDatePickerDialogDatePickerDialog extends DialogFragment im
         int month = c.get(java.util.Calendar.MONTH);
         int day = c.get(java.util.Calendar.DAY_OF_MONTH);
 
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        return new DatePickerDialog(getActivity(), new FragmentTimetable(), year, month, day);
     }
 
-    @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        String selectedDate = day+"-"+month+"-"+year;
-        Log.d("TAG", selectedDate);
-    }
+//    @Override
+//    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+//        String selectedDate = day+"-"+month+"-"+year;
+//        Log.d("TAG", selectedDate);
+//    }
 }

@@ -3,10 +3,14 @@ package uclancyprusguide.inspirecenter.org.uclantimetable.data;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * @author Nearchos Paspallis
- * 22/11/2015.
+ *         22/11/2015.
  */
 public class TimetableSession implements Serializable, Comparable {
     private String moduleCode;
@@ -18,7 +22,9 @@ public class TimetableSession implements Serializable, Comparable {
     private int duration;
     private String lecturerName;
     private String sessionDescription;
+    private Date startDate;
 
+    // used for session
     public TimetableSession(String moduleCode, String moduleName, String roomCode, String startTimeFormatted, String endTimeFormatted, String dayOfWeek, int duration, String lecturerName, String sessionDescription) {
         this.moduleCode = moduleCode;
         this.moduleName = moduleName;
@@ -29,6 +35,20 @@ public class TimetableSession implements Serializable, Comparable {
         this.duration = duration;
         this.lecturerName = lecturerName;
         this.sessionDescription = sessionDescription;
+    }
+
+    // used for session
+    public TimetableSession(String moduleCode, String moduleName, String roomCode, String startTimeFormatted, String endTimeFormatted, String dayOfWeek, int duration, String lecturerName, String sessionDescription, Date date) {
+        this.moduleCode = moduleCode;
+        this.moduleName = moduleName;
+        this.roomCode = roomCode;
+        this.startTimeFormatted = startTimeFormatted;
+        this.endTimeFormatted = endTimeFormatted;
+        this.dayOfWeek = dayOfWeek;
+        this.duration = duration;
+        this.lecturerName = lecturerName;
+        this.sessionDescription = sessionDescription;
+        this.startDate = date;
     }
 
     public String getModuleCode() {
@@ -65,6 +85,10 @@ public class TimetableSession implements Serializable, Comparable {
 
     public String getSessionDescription() {
         return sessionDescription;
+    }
+
+    public Date getStartDate() {
+        return startDate;
     }
 
     @Override

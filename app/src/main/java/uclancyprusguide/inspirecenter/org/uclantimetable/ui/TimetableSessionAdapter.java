@@ -12,6 +12,7 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.R;
 import uclancyprusguide.inspirecenter.org.uclantimetable.data.TimetableSession;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -24,6 +25,12 @@ public class TimetableSessionAdapter extends ArrayAdapter<TimetableSession> {
     public static final String TAG = "uclan-cy";
 
     private LayoutInflater layoutInflater;
+
+    // Added second constructor to support ArrayLists
+    public TimetableSessionAdapter(final Context context, final ArrayList<TimetableSession> timetableSessions) {
+        super(context, R.layout.timetable_session_list_item, timetableSessions);
+        this.layoutInflater = LayoutInflater.from(context);
+    }
 
     public TimetableSessionAdapter(final Context context, final TimetableSession [] timetableSessions) {
         super(context, R.layout.timetable_session_list_item, timetableSessions);
@@ -45,17 +52,20 @@ public class TimetableSessionAdapter extends ArrayAdapter<TimetableSession> {
         boolean pastEvent = currentTime.compareTo(timetableSession.getStartTimeFormatted()) > 0;
 
         final TextView time = (TextView) view.findViewById(R.id.timetable_session_list_item_time);
-        time.setText(String.format("%5s\n%5s", timetableSession.getStartTimeFormatted(), timetableSession.getEndTimeFormatted()));
-        time.setTextColor(pastEvent ? getContext().getResources().getColor(R.color.gray) : getContext().getResources().getColor(R.color.colorAccent));
-        time.setTypeface(null, pastEvent ? Typeface.NORMAL : Typeface.BOLD);
+        time.setText(String.format("%s -%5s", timetableSession.getStartTimeFormatted().trim(), timetableSession.getEndTimeFormatted()));
+        time.setTextColor(pastEvent ? getContext().getResources().getColor(R.color.gray) : getContext().getResources().getColor(R.color.colorPrimaryDark));
+        // time.setTypeface(null, pastEvent ? Typeface.NORMAL : Typeface.BOLD);
 
         final TextView name = (TextView) view.findViewById(R.id.timetable_session_list_item_name);
-        name.setText(String.format("%s - %s", timetableSession.getModuleCode(), timetableSession.getModuleName()));
+        name.setText(String.format("%s - %s", timetableSession.getModuleName(), timetableSession.getModuleCode()));
         name.setTypeface(null, pastEvent ? Typeface.NORMAL : Typeface.BOLD);
 
         final TextView description = (TextView) view.findViewById(R.id.timetable_session_list_item_description);
         description.setText(getContext().getString(R.string.session_type_with_lecturer, timetableSession.getSessionDescription(), timetableSession.getLecturerName()));
-        description.setTypeface(null, pastEvent ? Typeface.NORMAL : Typeface.BOLD);
+        // description.setTypeface(null, pastEvent ? Typeface.NORMAL : Typeface.BOLD);
+
+        final TextView room = (TextView) view.findViewById(R.id.timetable_session_list_item_room);
+        room.setText(timetableSession.getRoomCode());
 
         return view;
     }

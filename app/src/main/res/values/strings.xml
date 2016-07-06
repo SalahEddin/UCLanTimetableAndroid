@@ -61,6 +61,13 @@
     <string name="Personal_upcoming_exams">Upcoming Exams</string>
     <string name="Personal_timetable_notifications">Timetable Notifications</string>
 
+    <!--Date Spinner Values-->
+    <string-array name="dates_array">
+        <item>Today</item>
+        <item>Tomorrow</item>
+        <item>Pick Another Date</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
