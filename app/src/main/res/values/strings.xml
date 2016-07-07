@@ -76,4 +76,8 @@
         arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.
     </string>
     <string name="read_more">Read more</string>
+    <string name="Login">Login</string>
+    <string name="uclan_mail_suffix">\@uclan.ac.uk</string>
+    <string name="log_in_with_google">log in with Google+</string>
+    <string name="activity_after_login">LoginReturnActivityId</string>
 </resources>
