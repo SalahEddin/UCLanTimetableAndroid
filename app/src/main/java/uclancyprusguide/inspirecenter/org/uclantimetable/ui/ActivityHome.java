@@ -1,5 +1,6 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.ui;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,6 +33,7 @@ public class ActivityHome extends AppCompatActivity
     public static final int FRAGMENT_ID_TIMETABLE_EXAMS = 0x050;
     public static final int FRAGMENT_ID_TIMETABLE_NOTIFICATIONS = 0x060;
     public static final int FRAGMENT_ID_LOGIN = 0x070;
+    public static final int FRAGMENT_ID_ATTENDANCE = 0x080;
 
     public static final String SELECTED_FRAGMENT_KEY = "selected-fragment";
 
@@ -45,11 +47,14 @@ public class ActivityHome extends AppCompatActivity
     private FragmentExams fragmentExams = new FragmentExams();
     private FragmentTimetableNotifications fragmentTimetableNotifications = new FragmentTimetableNotifications();
     private FragmentLogin fragmentLogin = new FragmentLogin();
+    private FragmentAttendance fragmentAttendance = new FragmentAttendance();
+
     // holds ids of pages that requires logging in
     private static final Integer secureFragmentsArray[] = {
             R.id.nav_personal_timetable,
             R.id.nav_personal_upcoming_exams,
-            R.id.nav_personal_notifications
+            R.id.nav_personal_notifications,
+            R.id.action_attendance
     };
 
     private Toolbar toolbar;
@@ -107,7 +112,7 @@ public class ActivityHome extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         // todo check if user is logged in
-        Boolean isUserLoggedIn = false;
+        Boolean isUserLoggedIn = true;
 
         if (id == R.id.nav_news) {
             selectedFragment = FRAGMENT_ID_NEWS;
@@ -121,15 +126,17 @@ public class ActivityHome extends AppCompatActivity
         }
         // if user is not logged in and page is in the secure list
         else if (!isUserLoggedIn && Arrays.asList(secureFragmentsArray).contains(id)) {
-            //todo unavailable in Java8? IntStream.of(secureFragmentsArray).anyMatch(x -> x == id)
-
+            //IntStream.of(secureFragmentsArray).anyMatch(x -> x == id);
             int returnFragment = FRAGMENT_ID_NEWS;
-            switch (id){
+            switch (id) {
                 case R.id.nav_personal_notifications:
                     returnFragment = FRAGMENT_ID_TIMETABLE_NOTIFICATIONS;
                     break;
                 case R.id.nav_personal_upcoming_exams:
                     returnFragment = FRAGMENT_ID_TIMETABLE_EXAMS;
+                    break;
+                case R.id.action_attendance:
+                    returnFragment = FRAGMENT_ID_ATTENDANCE;
                     break;
                 default:
                     returnFragment = FRAGMENT_ID_TIMETABLE;
@@ -137,7 +144,7 @@ public class ActivityHome extends AppCompatActivity
             }
             // write the intended fragment Id to be redirected after login
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            prefs.edit().putInt(getString(R.string.activity_after_login),returnFragment).commit();
+            prefs.edit().putInt(getString(R.string.activity_after_login), returnFragment).commit();
             selectedFragment = FRAGMENT_ID_LOGIN;
             selectFragment();
         } else if (id == R.id.nav_personal_timetable) {
@@ -152,10 +159,12 @@ public class ActivityHome extends AppCompatActivity
             // timetable notification
             selectedFragment = FRAGMENT_ID_TIMETABLE_NOTIFICATIONS;
             selectFragment();
+        } else if (id == R.id.action_attendance) {
+            // timetable notification
+            selectedFragment = FRAGMENT_ID_ATTENDANCE;
+            selectFragment();
         } else if (id == R.id.action_room_timetable) {
             startActivity(new Intent(this, ActivityRoomTimetable.class));
-        } else if (id == R.id.action_attendance) {
-            Toast.makeText(ActivityHome.this, R.string.Not_available_yet, Toast.LENGTH_SHORT).show();
         } else if (id == R.id.action_about) {
             startActivity(new Intent(this, ActivityAbout.class));
         }
@@ -166,12 +175,11 @@ public class ActivityHome extends AppCompatActivity
     }
 
     private void selectFragment() {
-        if(selectedFragment == FRAGMENT_ID_LOGIN){
+        if (selectedFragment == FRAGMENT_ID_LOGIN) {
             toolbar.setSubtitle(getString(R.string.Login));
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentLogin).commit();
             fragmentManager.executePendingTransactions();
-        }
-        else if (selectedFragment == FRAGMENT_ID_NEWS) {
+        } else if (selectedFragment == FRAGMENT_ID_NEWS) {
             // Handle the news action
             toolbar.setSubtitle(getString(R.string.News));
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentNews).commit();
@@ -195,6 +203,10 @@ public class ActivityHome extends AppCompatActivity
         } else if (selectedFragment == FRAGMENT_ID_TIMETABLE_NOTIFICATIONS) {
             toolbar.setSubtitle("Notifications");
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentTimetableNotifications).commit();
+            fragmentManager.executePendingTransactions();
+        } else if (selectedFragment == FRAGMENT_ID_ATTENDANCE) {
+            toolbar.setSubtitle("Attendance");
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentAttendance).commit();
             fragmentManager.executePendingTransactions();
         } else {
             Log.e(TAG, "Unknown selected fragment: " + selectedFragment);

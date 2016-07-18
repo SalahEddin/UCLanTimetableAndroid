@@ -20,7 +20,7 @@ import java.util.Locale;
  * @author Nearchos Paspallis
  * 22/11/2015.
  */
-public class TimetableSessionAdapter extends ArrayAdapter<TimetableSession> {
+public class TimetableSessionAdapter extends TimetableGenericAdapter {
 
     public static final String TAG = "uclan-cy";
 
@@ -28,11 +28,6 @@ public class TimetableSessionAdapter extends ArrayAdapter<TimetableSession> {
 
     // Added second constructor to support ArrayLists
     public TimetableSessionAdapter(final Context context, final ArrayList<TimetableSession> timetableSessions) {
-        super(context, R.layout.timetable_session_list_item, timetableSessions);
-        this.layoutInflater = LayoutInflater.from(context);
-    }
-
-    public TimetableSessionAdapter(final Context context, final TimetableSession [] timetableSessions) {
         super(context, R.layout.timetable_session_list_item, timetableSessions);
         this.layoutInflater = LayoutInflater.from(context);
     }

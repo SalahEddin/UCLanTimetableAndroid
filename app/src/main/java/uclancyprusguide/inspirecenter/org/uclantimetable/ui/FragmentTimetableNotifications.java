@@ -36,22 +36,30 @@ public class FragmentTimetableNotifications extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_timetable_notifications, container, false);
         // dummy array
-        ArrayList<TimetableSession> arr = new ArrayList<>();
+        final ArrayList<TimetableSession> arr = new ArrayList<>();
         arr.add(new TimetableSession("Room Change",getResources().getString(R.string.lerom_ipsum),"http://www.google.com",new Date()));
         arr.add(new TimetableSession("Room Change",getResources().getString(R.string.lerom_ipsum),"http://www.Facebook.com",new Date()));
 
-        TimetableNotificationAdapter eventArrAdapter = new TimetableNotificationAdapter(view.getContext(), arr);
+        final TimetableNotificationAdapter eventArrAdapter = new TimetableNotificationAdapter(view.getContext(), arr);
 
         // bind the listView
         ListView eventsListView = (ListView) view.findViewById(R.id.eventsListView);
         eventsListView.setAdapter(eventArrAdapter);
         //pull to refresh
-        SwipeRefreshLayout pullToRefresh = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
+        final SwipeRefreshLayout pullToRefresh = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
         pullToRefresh.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
-        pullToRefresh.setOnRefreshListener(()->{
-            arr.add(new TimetableSession("Room Change",getResources().getString(R.string.lerom_ipsum),"http://www.Facebook.com",new Date()));
-            eventArrAdapter.notifyDataSetChanged();
-            new Handler().postDelayed(() -> pullToRefresh.setRefreshing(false), 5000);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                arr.add(new TimetableSession("Room Change", FragmentTimetableNotifications.this.getResources().getString(R.string.lerom_ipsum), "http://www.Facebook.com", new Date()));
+                eventArrAdapter.notifyDataSetChanged();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        pullToRefresh.setRefreshing(false);
+                    }
+                }, 5000);
+            }
         });
 
         return view;

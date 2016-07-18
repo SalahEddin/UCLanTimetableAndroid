@@ -2,6 +2,7 @@ package uclancyprusguide.inspirecenter.org.uclantimetable.ui;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -39,76 +40,88 @@ public class FragmentLogin extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        EditText mailText = (EditText) view.findViewById(R.id.edit_mail);
-        EditText mailPass = (EditText) view.findViewById(R.id.edit_pass);
-        Button loginButton = (Button) view.findViewById(R.id.button_login);
-        Button forgotButton = (Button) view.findViewById(R.id.button_forgot_login);
-        Button googleLoginButton = (Button) view.findViewById(R.id.button_google_login);
+        final EditText mailText = (EditText) view.findViewById(R.id.edit_mail);
+        final EditText mailPass = (EditText) view.findViewById(R.id.edit_pass);
+        final Button loginButton = (Button) view.findViewById(R.id.button_login);
+        final Button forgotButton = (Button) view.findViewById(R.id.button_forgot_login);
+        final Button googleLoginButton = (Button) view.findViewById(R.id.button_google_login);
 
-        loginButton.setOnClickListener((v) -> {
-            if (mailText.getText().toString().matches("")) {
-                generateEmptySubmittedAlert("oops", "Please enter your e-mail in the box above", "ok");
-            } else if (mailPass.getText().toString().matches("")) {
-                generateEmptySubmittedAlert("oops", "Please enter your password in the box above", "ok");
-            } else if (checkLogin(
-                    mailText.getText() + getString(R.string.uclan_mail_suffix), mailPass.getText().toString())) {
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mailText.getText().toString().matches("")) {
+                    FragmentLogin.this.generateEmptySubmittedAlert("oops", "Please enter your e-mail in the box above", "ok");
+                } else if (mailPass.getText().toString().matches("")) {
+                    FragmentLogin.this.generateEmptySubmittedAlert("oops", "Please enter your password in the box above", "ok");
+                } else if (FragmentLogin.this.checkLogin(
+                        mailText.getText() + getString(R.string.uclan_mail_suffix), mailPass.getText().toString())) {
 
-                String subtitle = "News"; // on actionbar
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                int fragmentId = prefs.getInt(getString(R.string.activity_after_login), ActivityHome.FRAGMENT_ID_NEWS);
-                Fragment frag = new FragmentNews();
-                final FragmentManager fragmentManager = getFragmentManager();
+                    String subtitle = "News"; // on actionbar
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(FragmentLogin.this.getActivity());
+                    int fragmentId = prefs.getInt(FragmentLogin.this.getString(R.string.activity_after_login), ActivityHome.FRAGMENT_ID_NEWS);
+                    Fragment frag = new FragmentNews();
+                    final FragmentManager fragmentManager = FragmentLogin.this.getFragmentManager();
 
-                switch (fragmentId) {
-                    case ActivityHome.FRAGMENT_ID_TIMETABLE:
-                        frag = new FragmentTimetable();
-                        subtitle = "Timetable";
-                        break;
-                    case ActivityHome.FRAGMENT_ID_TIMETABLE_EXAMS:
-                        subtitle = "Exams";
-                        frag = new FragmentExams();
-                        break;
-                    case ActivityHome.FRAGMENT_ID_TIMETABLE_NOTIFICATIONS:
-                        subtitle = "Notifications";
-                        frag = new FragmentTimetableNotifications();
-                        break;
-                    default:
-                        break;
+                    switch (fragmentId) {
+                        case ActivityHome.FRAGMENT_ID_TIMETABLE:
+                            frag = new FragmentTimetable();
+                            subtitle = "Timetable";
+                            break;
+                        case ActivityHome.FRAGMENT_ID_TIMETABLE_EXAMS:
+                            subtitle = "Exams";
+                            frag = new FragmentExams();
+                            break;
+                        case ActivityHome.FRAGMENT_ID_TIMETABLE_NOTIFICATIONS:
+                            subtitle = "Notifications";
+                            frag = new FragmentTimetableNotifications();
+                            break;
+                        default:
+                            break;
+                    }
+
+                    ((AppCompatActivity) FragmentLogin.this.getActivity()).getSupportActionBar().setSubtitle(subtitle);
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
+                    fragmentManager.executePendingTransactions();
+
+
+                    // dismissSoftKeyboard();
+
+
+                } else {
+                    AlertDialog alertDialog = new AlertDialog.Builder((AppCompatActivity) FragmentLogin.this.getActivity()).create();
+                    alertDialog.setTitle("Login Problem");
+                    alertDialog.setMessage("Username or Password are Incorrect");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Dismiss",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
                 }
-
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(subtitle);
-                fragmentManager.beginTransaction().replace(R.id.content_frame, frag).commit();
-                fragmentManager.executePendingTransactions();
-
-
-                // dismissSoftKeyboard();
-
-
-            } else {
-                AlertDialog alertDialog = new AlertDialog.Builder((AppCompatActivity) getActivity()).create();
-                alertDialog.setTitle("Login Problem");
-                alertDialog.setMessage("Username or Password are Incorrect");
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Dismiss",
-                        (dialog, which) -> {
-                            dialog.dismiss();
-                        });
-                alertDialog.show();
             }
         });
         // forgot button clicked
-        forgotButton.setOnClickListener((v) -> {
-            if (mailText.getText().toString().matches("")) {
-                generateEmptySubmittedAlert("oops", "Please enter your e-mail in the box above", "ok");
-            } else {
-                generateEmptySubmittedAlert("E-mail sent", "An email with instructions was sent to your UCLan email", "dismiss");
+        forgotButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mailText.getText().toString().matches("")) {
+                    FragmentLogin.this.generateEmptySubmittedAlert("oops", "Please enter your e-mail in the box above", "ok");
+                } else {
+                    FragmentLogin.this.generateEmptySubmittedAlert("E-mail sent", "An email with instructions was sent to your UCLan email", "dismiss");
+                }
             }
         });
         // Google login button clicked
-        googleLoginButton.setOnClickListener((v) -> {
-            if (mailText.getText().toString().matches("")) {
-                generateEmptySubmittedAlert("oops", "Please enter your e-mail in the box above", "ok");
-            } else {
-                generateEmptySubmittedAlert("Success", "An email with instructions was sent to your UCLan email", "ok");
+        googleLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mailText.getText().toString().matches("")) {
+                    FragmentLogin.this.generateEmptySubmittedAlert("oops", "Please enter your e-mail in the box above", "ok");
+                } else {
+                    FragmentLogin.this.generateEmptySubmittedAlert("Success", "An email with instructions was sent to your UCLan email", "ok");
+                }
             }
         });
         return view;
@@ -125,8 +138,11 @@ public class FragmentLogin extends Fragment {
         alertDialog.setTitle(Title);
         alertDialog.setMessage(Description);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, DissmissButtonText,
-                (dialog, which) -> {
-                    dialog.dismiss();
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
                 });
         alertDialog.show();
     }

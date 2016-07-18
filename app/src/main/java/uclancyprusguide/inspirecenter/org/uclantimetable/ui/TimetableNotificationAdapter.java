@@ -23,7 +23,7 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.data.TimetableSession;
  * @author Salah Eddin Alshaal
  *         22/11/2015.
  */
-public class TimetableNotificationAdapter extends ArrayAdapter<TimetableSession> {
+public class TimetableNotificationAdapter extends TimetableGenericAdapter {
 
     public static final String TAG = "uclan-cy";
 
@@ -31,11 +31,6 @@ public class TimetableNotificationAdapter extends ArrayAdapter<TimetableSession>
 
     // Added second constructor to support ArrayLists
     public TimetableNotificationAdapter(final Context context, final ArrayList<TimetableSession> timetableSessions) {
-        super(context, R.layout.timetable_notification_list_item, timetableSessions);
-        this.layoutInflater = LayoutInflater.from(context);
-    }
-
-    public TimetableNotificationAdapter(final Context context, final TimetableSession[] timetableSessions) {
         super(context, R.layout.timetable_notification_list_item, timetableSessions);
         this.layoutInflater = LayoutInflater.from(context);
     }

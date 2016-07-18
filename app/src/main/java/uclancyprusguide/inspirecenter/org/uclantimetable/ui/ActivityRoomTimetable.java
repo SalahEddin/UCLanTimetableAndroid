@@ -211,12 +211,12 @@ public class ActivityRoomTimetable extends AppCompatActivity {
             if(timetableSessions == null || timetableSessions.length == 0) {
                 textView.setText(R.string.No_sessions_found_for_this_room_today);
             } else {
-                Arrays.sort(timetableSessions);
-                Log.d(TAG, "sorted timetableSessions: " + Arrays.toString(timetableSessions));
-                final TimetableSessionAdapter timetableSessionAdapter = new TimetableSessionAdapter(this, timetableSessions);
-                Log.d(TAG, "timetableSessionAdapter: " + timetableSessionAdapter);
-                listView.setAdapter(timetableSessionAdapter);
-                listView.invalidate();
+//                Arrays.sort(timetableSessions);
+//                Log.d(TAG, "sorted timetableSessions: " + Arrays.toString(timetableSessions));
+//                final TimetableSessionAdapter timetableSessionAdapter = new TimetableSessionAdapter(this, timetableSessions);
+//                Log.d(TAG, "timetableSessionAdapter: " + timetableSessionAdapter);
+//                listView.setAdapter(timetableSessionAdapter);
+//                listView.invalidate();
             }
         } catch (JSONException jsone) {
             Log.d(TAG, "timetableSessionAdapter: " + jsone.getMessage());
