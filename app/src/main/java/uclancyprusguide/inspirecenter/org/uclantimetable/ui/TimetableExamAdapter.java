@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.threeten.bp.LocalDateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,6 +19,7 @@ import java.util.Locale;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
 import uclancyprusguide.inspirecenter.org.uclantimetable.data.TimetableSession;
+import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
 
 /**
  * @author Salah Eddin Alshaal
@@ -34,8 +37,6 @@ public class TimetableExamAdapter extends TimetableGenericAdapter {
         this.layoutInflater = LayoutInflater.from(context);
     }
 
-    public static final SimpleDateFormat HOURS_AND_MINUTES = new SimpleDateFormat("HH:mm", Locale.US);
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
@@ -44,9 +45,9 @@ public class TimetableExamAdapter extends TimetableGenericAdapter {
             view = layoutInflater.inflate(R.layout.timetable_exam_list_item, null);
         }
 
-        final TimetableSession timetableSession = getItem(position);
-        final String currentTime = HOURS_AND_MINUTES.format(new Date());
-        boolean pastEvent = currentTime.compareTo(timetableSession.getStartTimeFormatted()) > 0;
+        final TimetableSession ts = getItem(position);
+        final LocalDateTime currentTime = LocalDateTime.now();
+        boolean pastEvent = currentTime.isAfter(ts.getEndTimeFormatted());
 
         // binding
         final TextView date = (TextView) view.findViewById(R.id.timetable_exam_list_item_date);
@@ -54,17 +55,18 @@ public class TimetableExamAdapter extends TimetableGenericAdapter {
         final TextView name = (TextView) view.findViewById(R.id.timetable_exam_list_item_name);
         final TextView room = (TextView) view.findViewById(R.id.timetable_exam_list_item_room);
 
-        date.setText(String.format("%s %s%s", getMonthForInt(timetableSession.getStartDate().getMonth()), timetableSession.getStartDate().getDay(), getDayOfMonthSuffix(timetableSession.getStartDate().getDay())));
-        name.setText(String.format("%s - %s", timetableSession.getModuleName(), timetableSession.getModuleCode()));
-        room.setText(String.format("Room: %s", timetableSession.getRoomCode()));
+        date.setText(String.format("%s %s%s", ts.getStartTimeFormatted().getMonth().name(), ts.getStartTimeFormatted().getDayOfMonth(), getDayOfMonthSuffix(ts.getStartTimeFormatted().getDayOfMonth())));
+        name.setText(String.format("%s - %s", ts.getModuleName(), ts.getModuleCode()));
+        room.setText(String.format("Room: %s", ts.getRoomCode()));
+
+        time.setText(Misc.formatStartToEndDate(ts.getStartTimeFormatted(), ts.getEndTimeFormatted()));
 
         if (pastEvent) {
-            date.setTextColor(getContext().getResources().getColor(R.color.gray));
+            date.setTextColor(getContext().getResources().getColor(R.color.light_gray));
             date.setTypeface(null, Typeface.NORMAL);
-            time.setTextColor(getContext().getResources().getColor(R.color.gray));
-            name.setTextColor(getContext().getResources().getColor(R.color.gray));
+            time.setTextColor(getContext().getResources().getColor(R.color.light_gray));
+            name.setTextColor(getContext().getResources().getColor(R.color.light_gray));
             room.setTextColor(getContext().getResources().getColor(R.color.light_gray));
-
         }
 
         return view;

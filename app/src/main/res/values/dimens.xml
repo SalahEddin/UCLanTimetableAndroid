@@ -19,4 +19,7 @@
     <dimen name="heading">18sp</dimen>
     <dimen name="subheading">16sp</dimen>
     <dimen name="body">14sp</dimen>
+    <dimen name="regular_56">56sp</dimen>
+    <dimen name="regular_45">45sp</dimen>
+    <dimen name="regular_34">34sp</dimen>
 </resources>

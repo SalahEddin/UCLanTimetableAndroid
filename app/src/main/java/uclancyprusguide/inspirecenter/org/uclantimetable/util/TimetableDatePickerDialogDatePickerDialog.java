@@ -19,8 +19,10 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.ui.FragmentTimetable;
  */
 public class TimetableDatePickerDialogDatePickerDialog extends DialogFragment{
 
-    public TimetableDatePickerDialogDatePickerDialog(){
+    FragmentTimetable fragmentTimetable;
 
+    public TimetableDatePickerDialogDatePickerDialog(FragmentTimetable fragmentTimetable) {
+        this.fragmentTimetable = fragmentTimetable;
     }
 
     public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -29,7 +31,7 @@ public class TimetableDatePickerDialogDatePickerDialog extends DialogFragment{
         int month = c.get(java.util.Calendar.MONTH);
         int day = c.get(java.util.Calendar.DAY_OF_MONTH);
 
-        return new DatePickerDialog(getActivity(), new FragmentTimetable(), year, month, day);
+        return new DatePickerDialog(getActivity(), fragmentTimetable, year, month, day);
     }
 
 //    @Override

@@ -192,36 +192,36 @@ public class ActivityRoomTimetable extends AppCompatActivity {
 
     private void updateContent(final String xml) {
         // check if XML is null or empty
-        if(xml == null || xml.isEmpty()) {
-            Log.e(TAG, "Error: null or empty reply: " + xml);
-        } else if(!xml.startsWith("{") || !xml.startsWith("[")) {
-            Log.d(TAG, "JSON inside XML reply: " + xml);
-            final String json = Parser.extractJSON(xml);
-            Log.d(TAG, "json: " + json);
-            updateContentWithJson(json);
-//        final String json = Parser.extractJSON("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-//                "<string xmlns=\"http://cyprustimetable.uclan.ac.uk/TimetableAPI/TimetableWebService.asmx/\">[{\"SESSION_DATE_TIME_START\":\"\\/Date(1447259400000)\\/\",\"SESSION_DATE_TIME_END\":\"\\/Date(1447263000000)\\/\",\"TIMETABLE_ID\":65469,\"INSTANCE_ID\":9727,\"SESSION_ID\":-1,\"PERIOD_ID\":2,\"PERIOD_NAME\":\"2015/16\",\"MODULE_ID\":3717,\"MODULE_CODE\":\"CO4512\",\"MODULE_NAME\":\"Information Security Mgt\",\"SESSION_DATE\":\"\\/Date(1447192800000)\\/\",\"SESSION_DATE_FORMATTED\":\"11/11/2015\",\"DAY_OF_WEEK\":\"Wednesday\",\"START_TIME\":{\"Ticks\":666000000000,\"Days\":0,\"Hours\":18,\"Milliseconds\":0,\"Minutes\":30,\"Seconds\":0,\"TotalDays\":0.77083333333333326,\"TotalHours\":18.5,\"TotalMilliseconds\":66600000,\"TotalMinutes\":1110,\"TotalSeconds\":66600},\"END_TIME\":{\"Ticks\":702000000000,\"Days\":0,\"Hours\":19,\"Milliseconds\":0,\"Minutes\":30,\"Seconds\":0,\"TotalDays\":0.8125,\"TotalHours\":19.5,\"TotalMilliseconds\":70200000,\"TotalMinutes\":1170,\"TotalSeconds\":70200},\"START_TIME_FORMATTED\":\"22:30\",\"END_TIME_FORMATTED\":\"23:30\",\"DURATION\":1,\"LECTURER_ID\":88,\"LECTURER_NAME\":\"Stavrou Eliana\",\"ROOM_ID\":134,\"ROOM_CODE\":\"CY014\",\"SESSION_TYPE_ID\":2,\"SESSION_DESCRIPTION\":\"Practical\",\"GROUP_NAME\":\"\",\"DESCRIPTION\":\"\",\"EVENT_TYPE\":1,\"EVENT_TYPE_NAME\":\"Normal Session\"},{\"SESSION_DATE_TIME_START\":\"\\/Date(1447255800000)\\/\",\"SESSION_DATE_TIME_END\":\"\\/Date(1447259400000)\\/\",\"TIMETABLE_ID\":80074,\"INSTANCE_ID\":9727,\"SESSION_ID\":-1,\"PERIOD_ID\":2,\"PERIOD_NAME\":\"2015/16\",\"MODULE_ID\":3717,\"MODULE_CODE\":\"CO4512\",\"MODULE_NAME\":\"Information Security Mgt\",\"SESSION_DATE\":\"\\/Date(1447192800000)\\/\",\"SESSION_DATE_FORMATTED\":\"11/11/2015\",\"DAY_OF_WEEK\":\"Wednesday\",\"START_TIME\":{\"Ticks\":630000000000,\"Days\":0,\"Hours\":17,\"Milliseconds\":0,\"Minutes\":30,\"Seconds\":0,\"TotalDays\":0.72916666666666663,\"TotalHours\":17.5,\"TotalMilliseconds\":63000000,\"TotalMinutes\":1050,\"TotalSeconds\":63000},\"END_TIME\":{\"Ticks\":666000000000,\"Days\":0,\"Hours\":18,\"Milliseconds\":0,\"Minutes\":30,\"Seconds\":0,\"TotalDays\":0.77083333333333326,\"TotalHours\":18.5,\"TotalMilliseconds\":66600000,\"TotalMinutes\":1110,\"TotalSeconds\":66600},\"START_TIME_FORMATTED\":\"17:30\",\"END_TIME_FORMATTED\":\"18:30\",\"DURATION\":1,\"LECTURER_ID\":88,\"LECTURER_NAME\":\"Stavrou Eliana\",\"ROOM_ID\":134,\"ROOM_CODE\":\"CY014\",\"SESSION_TYPE_ID\":1,\"SESSION_DESCRIPTION\":\"Lecture\",\"GROUP_NAME\":\"\",\"DESCRIPTION\":\"\",\"EVENT_TYPE\":1,\"EVENT_TYPE_NAME\":\"Normal Session\"},{\"SESSION_DATE_TIME_START\":\"\\/Date(1447225200000)\\/\",\"SESSION_DATE_TIME_END\":\"\\/Date(1447232400000)\\/\",\"TIMETABLE_ID\":84868,\"INSTANCE_ID\":9689,\"SESSION_ID\":-1,\"PERIOD_ID\":2,\"PERIOD_NAME\":\"2015/16\",\"MODULE_ID\":3693,\"MODULE_CODE\":\"CO2402\",\"MODULE_NAME\":\"Advanced Programming With C++\",\"SESSION_DATE\":\"\\/Date(1447192800000)\\/\",\"SESSION_DATE_FORMATTED\":\"11/11/2015\",\"DAY_OF_WEEK\":\"Wednesday\",\"START_TIME\":{\"Ticks\":324000000000,\"Days\":0,\"Hours\":9,\"Milliseconds\":0,\"Minutes\":0,\"Seconds\":0,\"TotalDays\":0.375,\"TotalHours\":9,\"TotalMilliseconds\":32400000,\"TotalMinutes\":540,\"TotalSeconds\":32400},\"END_TIME\":{\"Ticks\":396000000000,\"Days\":0,\"Hours\":11,\"Milliseconds\":0,\"Minutes\":0,\"Seconds\":0,\"TotalDays\":0.45833333333333331,\"TotalHours\":11,\"TotalMilliseconds\":39600000,\"TotalMinutes\":660,\"TotalSeconds\":39600},\"START_TIME_FORMATTED\":\"09:00\",\"END_TIME_FORMATTED\":\"11:00\",\"DURATION\":2,\"LECTURER_ID\":89,\"LECTURER_NAME\":\"Andreou Panayiotis\",\"ROOM_ID\":134,\"ROOM_CODE\":\"CY014\",\"SESSION_TYPE_ID\":6,\"SESSION_DESCRIPTION\":\"Tutorial\",\"GROUP_NAME\":\"\",\"DESCRIPTION\":\"\",\"EVENT_TYPE\":1,\"EVENT_TYPE_NAME\":\"Normal Session\"}]</string>");
-        }
+//        if(xml == null || xml.isEmpty()) {
+//            Log.e(TAG, "Error: null or empty reply: " + xml);
+//        } else if(!xml.startsWith("{") || !xml.startsWith("[")) {
+//            Log.d(TAG, "JSON inside XML reply: " + xml);
+//            final String json = Parser.extractJSON(xml);
+//            Log.d(TAG, "json: " + json);
+//            updateContentWithJson(json);
+////        final String json = Parser.extractJSON("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+////                "<string xmlns=\"http://cyprustimetable.uclan.ac.uk/TimetableAPI/TimetableWebService.asmx/\">[{\"SESSION_DATE_TIME_START\":\"\\/Date(1447259400000)\\/\",\"SESSION_DATE_TIME_END\":\"\\/Date(1447263000000)\\/\",\"TIMETABLE_ID\":65469,\"INSTANCE_ID\":9727,\"SESSION_ID\":-1,\"PERIOD_ID\":2,\"PERIOD_NAME\":\"2015/16\",\"MODULE_ID\":3717,\"MODULE_CODE\":\"CO4512\",\"MODULE_NAME\":\"Information Security Mgt\",\"SESSION_DATE\":\"\\/Date(1447192800000)\\/\",\"SESSION_DATE_FORMATTED\":\"11/11/2015\",\"DAY_OF_WEEK\":\"Wednesday\",\"START_TIME\":{\"Ticks\":666000000000,\"Days\":0,\"Hours\":18,\"Milliseconds\":0,\"Minutes\":30,\"Seconds\":0,\"TotalDays\":0.77083333333333326,\"TotalHours\":18.5,\"TotalMilliseconds\":66600000,\"TotalMinutes\":1110,\"TotalSeconds\":66600},\"END_TIME\":{\"Ticks\":702000000000,\"Days\":0,\"Hours\":19,\"Milliseconds\":0,\"Minutes\":30,\"Seconds\":0,\"TotalDays\":0.8125,\"TotalHours\":19.5,\"TotalMilliseconds\":70200000,\"TotalMinutes\":1170,\"TotalSeconds\":70200},\"START_TIME_FORMATTED\":\"22:30\",\"END_TIME_FORMATTED\":\"23:30\",\"DURATION\":1,\"LECTURER_ID\":88,\"LECTURER_NAME\":\"Stavrou Eliana\",\"ROOM_ID\":134,\"ROOM_CODE\":\"CY014\",\"SESSION_TYPE_ID\":2,\"SESSION_DESCRIPTION\":\"Practical\",\"GROUP_NAME\":\"\",\"DESCRIPTION\":\"\",\"EVENT_TYPE\":1,\"EVENT_TYPE_NAME\":\"Normal Session\"},{\"SESSION_DATE_TIME_START\":\"\\/Date(1447255800000)\\/\",\"SESSION_DATE_TIME_END\":\"\\/Date(1447259400000)\\/\",\"TIMETABLE_ID\":80074,\"INSTANCE_ID\":9727,\"SESSION_ID\":-1,\"PERIOD_ID\":2,\"PERIOD_NAME\":\"2015/16\",\"MODULE_ID\":3717,\"MODULE_CODE\":\"CO4512\",\"MODULE_NAME\":\"Information Security Mgt\",\"SESSION_DATE\":\"\\/Date(1447192800000)\\/\",\"SESSION_DATE_FORMATTED\":\"11/11/2015\",\"DAY_OF_WEEK\":\"Wednesday\",\"START_TIME\":{\"Ticks\":630000000000,\"Days\":0,\"Hours\":17,\"Milliseconds\":0,\"Minutes\":30,\"Seconds\":0,\"TotalDays\":0.72916666666666663,\"TotalHours\":17.5,\"TotalMilliseconds\":63000000,\"TotalMinutes\":1050,\"TotalSeconds\":63000},\"END_TIME\":{\"Ticks\":666000000000,\"Days\":0,\"Hours\":18,\"Milliseconds\":0,\"Minutes\":30,\"Seconds\":0,\"TotalDays\":0.77083333333333326,\"TotalHours\":18.5,\"TotalMilliseconds\":66600000,\"TotalMinutes\":1110,\"TotalSeconds\":66600},\"START_TIME_FORMATTED\":\"17:30\",\"END_TIME_FORMATTED\":\"18:30\",\"DURATION\":1,\"LECTURER_ID\":88,\"LECTURER_NAME\":\"Stavrou Eliana\",\"ROOM_ID\":134,\"ROOM_CODE\":\"CY014\",\"SESSION_TYPE_ID\":1,\"SESSION_DESCRIPTION\":\"Lecture\",\"GROUP_NAME\":\"\",\"DESCRIPTION\":\"\",\"EVENT_TYPE\":1,\"EVENT_TYPE_NAME\":\"Normal Session\"},{\"SESSION_DATE_TIME_START\":\"\\/Date(1447225200000)\\/\",\"SESSION_DATE_TIME_END\":\"\\/Date(1447232400000)\\/\",\"TIMETABLE_ID\":84868,\"INSTANCE_ID\":9689,\"SESSION_ID\":-1,\"PERIOD_ID\":2,\"PERIOD_NAME\":\"2015/16\",\"MODULE_ID\":3693,\"MODULE_CODE\":\"CO2402\",\"MODULE_NAME\":\"Advanced Programming With C++\",\"SESSION_DATE\":\"\\/Date(1447192800000)\\/\",\"SESSION_DATE_FORMATTED\":\"11/11/2015\",\"DAY_OF_WEEK\":\"Wednesday\",\"START_TIME\":{\"Ticks\":324000000000,\"Days\":0,\"Hours\":9,\"Milliseconds\":0,\"Minutes\":0,\"Seconds\":0,\"TotalDays\":0.375,\"TotalHours\":9,\"TotalMilliseconds\":32400000,\"TotalMinutes\":540,\"TotalSeconds\":32400},\"END_TIME\":{\"Ticks\":396000000000,\"Days\":0,\"Hours\":11,\"Milliseconds\":0,\"Minutes\":0,\"Seconds\":0,\"TotalDays\":0.45833333333333331,\"TotalHours\":11,\"TotalMilliseconds\":39600000,\"TotalMinutes\":660,\"TotalSeconds\":39600},\"START_TIME_FORMATTED\":\"09:00\",\"END_TIME_FORMATTED\":\"11:00\",\"DURATION\":2,\"LECTURER_ID\":89,\"LECTURER_NAME\":\"Andreou Panayiotis\",\"ROOM_ID\":134,\"ROOM_CODE\":\"CY014\",\"SESSION_TYPE_ID\":6,\"SESSION_DESCRIPTION\":\"Tutorial\",\"GROUP_NAME\":\"\",\"DESCRIPTION\":\"\",\"EVENT_TYPE\":1,\"EVENT_TYPE_NAME\":\"Normal Session\"}]</string>");
+//        }
     }
 
-    private void updateContentWithJson(final String json) {
-        try {
-            final TimetableSession [] timetableSessions = Parser.getRoomTimetableSessions(json);
-            Log.d(TAG, "timetableSessions: " + Arrays.toString(timetableSessions));
-            if(timetableSessions == null || timetableSessions.length == 0) {
-                textView.setText(R.string.No_sessions_found_for_this_room_today);
-            } else {
-//                Arrays.sort(timetableSessions);
-//                Log.d(TAG, "sorted timetableSessions: " + Arrays.toString(timetableSessions));
-//                final TimetableSessionAdapter timetableSessionAdapter = new TimetableSessionAdapter(this, timetableSessions);
-//                Log.d(TAG, "timetableSessionAdapter: " + timetableSessionAdapter);
-//                listView.setAdapter(timetableSessionAdapter);
-//                listView.invalidate();
-            }
-        } catch (JSONException jsone) {
-            Log.d(TAG, "timetableSessionAdapter: " + jsone.getMessage());
-            textView.setText(getString(R.string.Error_for, jsone.getMessage()));
-        }
-
-    }
+//    private void updateContentWithJson(final String json) {
+//        try {
+//            final TimetableSession [] timetableSessions = Parser.getRoomTimetableSessions(json);
+//            Log.d(TAG, "timetableSessions: " + Arrays.toString(timetableSessions));
+//            if(timetableSessions == null || timetableSessions.length == 0) {
+//                textView.setText(R.string.No_sessions_found_for_this_room_today);
+//            } else {
+////                Arrays.sort(timetableSessions);
+////                Log.d(TAG, "sorted timetableSessions: " + Arrays.toString(timetableSessions));
+////                final TimetableSessionAdapter timetableSessionAdapter = new TimetableSessionAdapter(this, timetableSessions);
+////                Log.d(TAG, "timetableSessionAdapter: " + timetableSessionAdapter);
+////                listView.setAdapter(timetableSessionAdapter);
+////                listView.invalidate();
+//            }
+//        } catch (JSONException jsone) {
+//            Log.d(TAG, "timetableSessionAdapter: " + jsone.getMessage());
+//            textView.setText(getString(R.string.Error_for, jsone.getMessage()));
+//        }
+//
+//    }
 }

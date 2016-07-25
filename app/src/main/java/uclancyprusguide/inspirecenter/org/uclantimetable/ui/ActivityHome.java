@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
+import uclancyprusguide.inspirecenter.org.uclantimetable.UclanCyApplication;
 
 public class ActivityHome extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,6 +62,7 @@ public class ActivityHome extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -76,6 +78,8 @@ public class ActivityHome extends AppCompatActivity
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
+
+        final UclanCyApplication application = (UclanCyApplication) getApplication();
     }
 
     @Override

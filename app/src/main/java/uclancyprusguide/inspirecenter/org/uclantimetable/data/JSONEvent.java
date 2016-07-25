@@ -1,5 +1,7 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.data;
 
+import java.util.Date;
+
 /**
  * Created by salah on 13/07/16.
  */

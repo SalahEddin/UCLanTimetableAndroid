@@ -12,10 +12,10 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.StringJoiner;
 
+import org.threeten.bp.*;
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
 import uclancyprusguide.inspirecenter.org.uclantimetable.data.TimetableSession;
 
@@ -45,25 +45,22 @@ public class TimetableNotificationAdapter extends TimetableGenericAdapter {
             view = layoutInflater.inflate(R.layout.timetable_notification_list_item, null);
         }
 
-        final TimetableSession timetableSession = getItem(position);
-        final String currentTime = HOURS_AND_MINUTES.format(new Date());
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(timetableSession.getStartDate());
+        final TimetableSession ts = getItem(position);
+        final LocalTime currentTime = LocalTime.now();
 
         final TextView date = (TextView) view.findViewById(R.id.timetable_notify_list_item_date);
-        date.setText(String.format("%s %s%s", getMonthForInt(cal.MONTH), cal.DAY_OF_MONTH, getDayOfMonthSuffix(cal.DAY_OF_MONTH)));
+        date.setText(String.format("%s %s%s", ts.getStartTimeFormatted().getMonth().name(), ts.getStartTimeFormatted().getDayOfMonth(), getDayOfMonthSuffix(ts.getStartTimeFormatted().getDayOfMonth())));
 
         final TextView time = (TextView) view.findViewById(R.id.timetable_notify_list_item_time);
         time.setText("19:00");
 
         final TextView title = (TextView) view.findViewById(R.id.timetable_notify_list_item_name);
-        title.setText(timetableSession.getModuleName());
+        title.setText(ts.getModuleName());
 
         final TextView desc = (TextView) view.findViewById(R.id.timetable_notify_list_item_desc);
-        desc.setText(timetableSession.getSessionDescription());
+        desc.setText(ts.getSessionDescription());
 
-        final String linkText = String.format("<a href='%s'>More Details</a>", timetableSession.getLink());
+        final String linkText = String.format("<a href='%s'>More Details</a>", ts.getLink());
         final TextView link = (TextView) view.findViewById(R.id.timetable_notify_list_item_more_link);
         link.setMovementMethod(LinkMovementMethod.getInstance());
         link.setText(Html.fromHtml(linkText));

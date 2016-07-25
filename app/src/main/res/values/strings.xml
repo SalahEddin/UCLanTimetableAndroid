@@ -68,7 +68,6 @@
         <item>Pick Another Date</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="lerom_ipsum">
@@ -80,4 +79,6 @@
     <string name="uclan_mail_suffix">\@uclan.ac.uk</string>
     <string name="log_in_with_google">log in with Google+</string>
     <string name="activity_after_login">LoginReturnActivityId</string>
+    <string name="show_more_button_text">Show More Badges</string>
+    <string name="show_less_button_text">Show Less Badges</string>
 </resources>

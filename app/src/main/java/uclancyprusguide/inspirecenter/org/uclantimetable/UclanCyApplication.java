@@ -4,12 +4,20 @@ import android.app.Application;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
 /**
  * @author Nearchos
  *         Created: 03-Jun-16
  */
 public class UclanCyApplication extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        AndroidThreeTen.init(this);
+    }
+
     private Tracker mTracker;
 
     /**
