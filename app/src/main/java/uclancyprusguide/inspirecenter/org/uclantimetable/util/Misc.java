@@ -32,6 +32,11 @@ public class Misc {
         return simpleDateFormat.format(date);
     }
 
+    public static LocalDate APIFormatToLocalDate(String date) {
+        final DateTimeFormatter dtf = DateTimeFormatter.ISO_LOCAL_DATE;
+        return LocalDate.parse(date, dtf);
+    }
+
     public static LocalDateTime parseHoursMinsDate(String hour, String min, String date) {
         LocalDateTime parsedDate = null;
         String minFixed = (min.length() == 1) ? "0" + min : min;

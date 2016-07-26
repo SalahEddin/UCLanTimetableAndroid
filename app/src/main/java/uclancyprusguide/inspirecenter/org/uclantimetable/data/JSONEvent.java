@@ -1,11 +1,12 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by salah on 13/07/16.
  */
-public class JSONEvent {
+public class JSONEvent implements Serializable {
     private String MODULE_ID;
 
     private String SESSION_TYPE_ID;

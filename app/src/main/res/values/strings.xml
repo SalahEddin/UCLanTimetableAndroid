@@ -81,4 +81,6 @@
     <string name="activity_after_login">LoginReturnActivityId</string>
     <string name="show_more_button_text">Show More Badges</string>
     <string name="show_less_button_text">Show Less Badges</string>
+    <string name="sessions_filename">timetable_sessions</string>
+    <string name="APIDatePattern">yyyy-MM-dd</string>
 </resources>

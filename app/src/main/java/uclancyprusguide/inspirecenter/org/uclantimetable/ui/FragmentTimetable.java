@@ -3,10 +3,12 @@ package uclancyprusguide.inspirecenter.org.uclantimetable.ui;
 import android.app.DatePickerDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,19 +37,21 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableDatePicke
 * */
 public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDateSetListener, TimetableData.MyCallbackInterface {
 
-    private LocalDate selectedDate = null;
+    // UI Binding
     private SwipeRefreshLayout pullToRefresh;
     private ArrayList<TimetableSession> timetableSessions;
     private TimetableSessionAdapter eventArrAdapter;
+    private Context context = null;
+    // Data objects
+    private final String STUDENT_ID = "622";
+    private LocalDate selectedDate = null;
 
-    Context context = null;
-    ListView eventsListView = null;
     public FragmentTimetable() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         setHasOptionsMenu(true);
@@ -57,7 +61,7 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
         timetableSessions = new ArrayList<>();
         eventArrAdapter = new TimetableSessionAdapter(view.getContext(), timetableSessions);
         // bind the listView
-        eventsListView = (ListView) view.findViewById(R.id.eventsListView);
+        ListView eventsListView = (ListView) view.findViewById(R.id.eventsListView);
         eventsListView.setAdapter(eventArrAdapter);
         //pull to refresh
         pullToRefresh = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
@@ -65,10 +69,9 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, Misc.DateToAPIFormat(selectedDate), Misc.DateToAPIFormat(selectedDate), "622", FragmentTimetable.this, getActivity().getBaseContext());
+                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, Misc.DateToAPIFormat(selectedDate), Misc.DateToAPIFormat(selectedDate), STUDENT_ID, FragmentTimetable.this, context);
             }
         });
-
 
         // spinner helps users pick a date quickly
         Spinner spinner = (Spinner) view.findViewById(R.id.date_spinner);
@@ -93,13 +96,13 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
                             case 0:
                                 selectedDate = LocalDate.now();
                                 selectedDateFormatted = Misc.DateToAPIFormat(selectedDate);
-                                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, "622", FragmentTimetable.this, getActivity().getBaseContext());
+                                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, STUDENT_ID, FragmentTimetable.this, context);
                                 break;
                             case 1:
                                 selectedDate = LocalDate.now();
                                 selectedDate.plusDays(1);
                                 selectedDateFormatted = Misc.DateToAPIFormat(selectedDate);
-                                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, "622", FragmentTimetable.this, getActivity().getBaseContext());
+                                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, STUDENT_ID, FragmentTimetable.this, context);
                                 break;
                             default:
                                 TimetableDatePickerDialogDatePickerDialog datePicker = new TimetableDatePickerDialogDatePickerDialog(FragmentTimetable.this);
@@ -116,16 +119,29 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
                     }
                 }
         );
-        TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, "2015-08-02", "2016-08-02", "622", FragmentTimetable.this, context);
+
+        // update user offline timetable
+        if (Misc.isOnline(context)) {
+            String todayDate = Misc.DateToAPIFormat(LocalDate.now());
+            String OfflineDateLimit = Misc.DateToAPIFormat(LocalDate.now().plusMonths(3));
+            TimetableData.SaveTimetableEventsForOffline(todayDate, OfflineDateLimit, STUDENT_ID, context);
+        } else {
+            // user is offline
+            new AlertDialog.Builder(context)
+                    .setTitle("No Network connection")
+                    .setMessage("you're in offline mode, you will not receive new changes to the timetable")
+                    .setCancelable(false)
+                    .setPositiveButton("continue in offline mode", null).create().show();
+        }
         return view;
     }
 
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        selectedDate = LocalDate.of(year, month, day);
+        selectedDate = LocalDate.of(year, month + 1, day);
         String selectedDateFormatted = Misc.DateToAPIFormat(selectedDate);
-        TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, "622", FragmentTimetable.this, context);
+        TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, STUDENT_ID, FragmentTimetable.this, context);
         Log.d("TAGS", selectedDate.toString());
     }
 
@@ -136,22 +152,5 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
         timetableSessions.addAll(result);
         eventArrAdapter.notifyDataSetChanged();
         if (pullToRefresh.isRefreshing()) pullToRefresh.setRefreshing(false);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        context = getActivity();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = getActivity();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 }

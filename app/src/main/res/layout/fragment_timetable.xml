@@ -9,22 +9,34 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Showing timetable for"
+            android:text="Showing: "
             android:textColor="@color/black"
             android:textSize="@dimen/heading" />
 
         <Spinner
             android:id="@+id/date_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="25dp"
+            android:layout_gravity="end"
+            android:gravity="end">
 
         </Spinner>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:background="@color/light_gray" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/pullToRefresh"

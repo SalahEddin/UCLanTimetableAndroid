@@ -2,19 +2,15 @@ package uclancyprusguide.inspirecenter.org.uclantimetable.ui;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.format.TextStyle;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
@@ -55,7 +51,7 @@ public class TimetableExamAdapter extends TimetableGenericAdapter {
         final TextView name = (TextView) view.findViewById(R.id.timetable_exam_list_item_name);
         final TextView room = (TextView) view.findViewById(R.id.timetable_exam_list_item_room);
 
-        date.setText(String.format("%s %s%s", ts.getStartTimeFormatted().getMonth().name(), ts.getStartTimeFormatted().getDayOfMonth(), getDayOfMonthSuffix(ts.getStartTimeFormatted().getDayOfMonth())));
+        date.setText(String.format("%s %s", ts.getStartTimeFormatted().getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH), getDayOfMonthSuffixed(ts.getStartTimeFormatted().getDayOfMonth())));
         name.setText(String.format("%s - %s", ts.getModuleName(), ts.getModuleCode()));
         room.setText(String.format("Room: %s", ts.getRoomCode()));
 
@@ -73,28 +69,28 @@ public class TimetableExamAdapter extends TimetableGenericAdapter {
     }
 
     // adds st, nd, rd or th
-    static String getDayOfMonthSuffix(final int n) {
-        if (n <= 1 && n >= 31) return "";
+    static String getDayOfMonthSuffixed(final int n) {
+        if (n <= 1 && n >= 31) return n + "";
 
         if (n >= 11 && n <= 13) {
-            return "th";
+            return n + "th";
         }
 
         switch (n % 10) {
             case 1:
-                return "st";
+                return n + "st";
             case 2:
-                return "nd";
+                return n + "nd";
             case 3:
-                return "rd";
+                return n + "rd";
             default:
-                return "th";
+                return n + "th";
         }
     }
 
     static String getMonthForInt(int month) {
-        //String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-        String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        //String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         return monthNames[month];
     }
 }

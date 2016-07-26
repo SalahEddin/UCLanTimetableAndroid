@@ -1,9 +1,11 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.data;
 
+import java.io.Serializable;
+
 /**
  * Created by salah on 14/07/16.
  */
-public class END_TIME {
+public class END_TIME implements Serializable {
     private String TotalMinutes;
 
     private String TotalHours;

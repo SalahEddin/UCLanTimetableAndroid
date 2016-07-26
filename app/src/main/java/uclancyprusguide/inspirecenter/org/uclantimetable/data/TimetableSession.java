@@ -98,4 +98,6 @@ public class TimetableSession implements Serializable {
                 ", sessionDescription='" + sessionDescription + '\'' +
                 '}';
     }
+
+
 }
