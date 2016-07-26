@@ -2,9 +2,13 @@ package uclancyprusguide.inspirecenter.org.uclantimetable.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
+
+import com.google.gson.Gson;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
@@ -14,13 +18,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import uclancyprusguide.inspirecenter.org.uclantimetable.R;
+import uclancyprusguide.inspirecenter.org.uclantimetable.data.JSONAuthenticationUser;
+
 /**
  * Created by salah on 22/07/16.
  * Includes misc static methods
  */
 public class Misc {
 
-    public static boolean isOnline(Context context) {
+    public static boolean IsOnline(Context context) {
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -56,5 +63,14 @@ public class Misc {
         formattedDate1 = dtf.format(startDate);
         formattedDate2 = dtf.format(endDate);
         return String.format("%s - %s", formattedDate1, formattedDate2);
+    }
+
+    public static JSONAuthenticationUser IsUserLoggedIn(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Gson gson = new Gson();
+        String json = prefs.getString(context.getString(R.string.userId), null);
+        JSONAuthenticationUser obj = gson.fromJson(json, JSONAuthenticationUser.class);
+        return obj;
+
     }
 }

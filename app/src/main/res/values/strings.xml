@@ -13,7 +13,7 @@
     <string name="Room_timetable">Room timetable</string>
 
     <string name="Students_and_staff">Students and staff</string>
-    <string name="Personal_timetable">Personal timetable</string>
+    <string name="Personal_timetable">Timetable</string>
 
     <string name="Staff">Staff</string>
     <string name="Student_attendance">Student attendance</string>
@@ -59,7 +59,7 @@
     <string name="Tell_the_world">Tell the world</string>
     <string name="Share_with_your_friends">Share with your friends</string>
     <string name="Personal_upcoming_exams">Upcoming Exams</string>
-    <string name="Personal_timetable_notifications">Timetable Notifications</string>
+    <string name="Personal_timetable_notifications">Notifications</string>
 
     <!--Date Spinner Values-->
     <string-array name="dates_array">
@@ -83,4 +83,8 @@
     <string name="show_less_button_text">Show Less Badges</string>
     <string name="sessions_filename">timetable_sessions</string>
     <string name="APIDatePattern">yyyy-MM-dd</string>
+    <string name="userId">user_id</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string name="ExaminationTypeName">Examination</string>
 </resources>

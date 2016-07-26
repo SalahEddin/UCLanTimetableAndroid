@@ -11,7 +11,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -27,12 +26,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
+import uclancyprusguide.inspirecenter.org.uclantimetable.data.JSONAuthenticationUser;
 import uclancyprusguide.inspirecenter.org.uclantimetable.data.JSONEvent;
+import uclancyprusguide.inspirecenter.org.uclantimetable.data.JSONRoom;
 import uclancyprusguide.inspirecenter.org.uclantimetable.data.TimetableSession;
 import uclancyprusguide.inspirecenter.org.uclantimetable.sync.TimetableSystemAPI;
 
 import org.threeten.bp.*;
-import org.threeten.bp.format.DateTimeFormatter;
 
 /**
  * Created by salah on 06/07/16.
@@ -41,7 +41,6 @@ public class TimetableData {
 
     //define callback interface
     public interface MyCallbackInterface {
-
         void onDownloadFinished(ArrayList<TimetableSession> result);
     }
 
@@ -49,21 +48,105 @@ public class TimetableData {
         ALL, EXAMS, NOTIFICATIONS
     }
 
-    public ArrayList<TimetableSession> LoadEvents(TimetableEventsType eventType) {
-        // todo check login first
+    public enum TimetableType {
+        USER, ROOM
+    }
 
-        ArrayList<TimetableSession> entries = new ArrayList<>();
-        switch (eventType) {
-            case ALL:
-                break;
-            case EXAMS:
-                break;
-            case NOTIFICATIONS:
-                break;
-            default:
-                break;
-        }
-        return entries;
+    public static void GetRooms(final MyRoomCallbackInterface myCallbackInterface, final Context context) {
+// JSON converter
+        Gson gson = new GsonBuilder().create();
+        // API library
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TimetableSystemAPI.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        // prepare call in Retrofit 2.0
+        TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
+
+        Call<List<JSONRoom>> getCall = api.listRooms(TimetableSystemAPI.SECURITY_TOKEN);
+
+        getCall.enqueue(new Callback<List<JSONRoom>>() {
+            @Override
+            public void onResponse(Call<List<JSONRoom>> call, Response<List<JSONRoom>> response) {
+                int code = response.code();
+                if (code == 200) {
+                    final List<JSONRoom> rooms = response.body();
+                    Handler mainHandler = new Handler(context.getMainLooper());
+
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            myCallbackInterface.onRoomDownloadFinished(rooms);
+                        }
+                    };
+                    mainHandler.post(myRunnable);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<JSONRoom>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void GetLoginData(final String email, final String pass, final Context context, final MyUserCallbackInterface myCallbackInterface) {
+        // JSON converter
+        Gson gson = new GsonBuilder().create();
+        // API library
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(TimetableSystemAPI.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        // prepare call in Retrofit 2.0
+        TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
+// TODO: 26/07/16 hash pass
+//        try {
+//            String plaintext = "your text here";
+//            MessageDigest m = MessageDigest.getInstance("MD5");
+//            m.reset();
+//            m.update(plaintext.getBytes());
+//            byte[] digest = m.digest();
+//            BigInteger bigInt = new BigInteger(1, digest);
+//            String hashtext = bigInt.toString(16);
+//// Now we need to zero pad it if you actually want the full 32 chars.
+//            while (hashtext.length() < 32) {
+//                hashtext = "0" + hashtext;
+//            }
+//        }
+//        catch(Exception e){
+//
+//        }
+
+
+//        byte[] thedigest = md.digest(bytesOfMessage);
+//        String hashedPass = new String(thedigest);
+
+        Call<JSONAuthenticationUser> getCall = api.getAuthenticationData(TimetableSystemAPI.SECURITY_TOKEN, email, pass);
+
+        getCall.enqueue(new Callback<JSONAuthenticationUser>() {
+            @Override
+            public void onResponse(Call<JSONAuthenticationUser> call, Response<JSONAuthenticationUser> response) {
+                int code = response.code();
+                if (code == 200) {
+                    final JSONAuthenticationUser userDetails = response.body();
+                    Handler mainHandler = new Handler(context.getMainLooper());
+
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            myCallbackInterface.onUserDownloadFinished(userDetails);
+                        }
+                    };
+                    mainHandler.post(myRunnable);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONAuthenticationUser> call, Throwable t) {
+
+            }
+        });
     }
 
     public static void SaveTimetableEventsForOffline(final String startDate, final String endDate, final String studentID, final Context context) {
@@ -117,11 +200,11 @@ public class TimetableData {
 
     public static void LoadTimetableEvents(final TimetableEventsType typeFilter,
                                            final String startDate, final String endDate,
-                                           final String studentID, final MyCallbackInterface myCallbackInterface, final Context context) {
+                                           final String id, final MyCallbackInterface myCallbackInterface, final Context context, final TimetableType timetableType) {
         final ArrayList<TimetableSession> processedEvents = new ArrayList<>();
 
         // check if user is offline
-        if (!Misc.isOnline(context)) {
+        if (!Misc.IsOnline(context)) {
             final String fileName = context.getString(R.string.sessions_filename);
             ArrayList<JSONEvent> loadedEvents = null;
 
@@ -169,7 +252,8 @@ public class TimetableData {
                     LocalDate itemDate = Misc.parseHoursMinsDate(event.getSTART_TIME().getHours(), event.getSTART_TIME().getMinutes(), event.getSESSION_DATE_FORMATTED()).toLocalDate();
                     LocalDate selectedDateParsed = Misc.APIFormatToLocalDate(startDate);
 
-                    if ((typeFilter.equals(TimetableEventsType.EXAMS) && event.getSESSION_DESCRIPTION().equals("Examination"))) {
+                    // exams
+                    if ((typeFilter.equals(TimetableEventsType.EXAMS) && event.getSESSION_DESCRIPTION().equals(context.getString(R.string.ExaminationTypeName)))) {
                         processedEvents.add(new TimetableSession(event.getMODULE_CODE(), event.getMODULE_NAME(), event.getROOM_CODE(), start_date, end_date,
                                 event.getDAY_OF_WEEK(), Integer.parseInt(event.getDURATION()), event.getLECTURER_NAME(), event.getSESSION_DESCRIPTION()));
                     }
@@ -195,9 +279,12 @@ public class TimetableData {
                     .build();
             // prepare call in Retrofit 2.0
             TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
-
-            Call<List<JSONEvent>> getCall = api.getTimetableByStudent(TimetableSystemAPI.SECURITY_TOKEN, studentID, startDate, endDate);
-
+            Call<List<JSONEvent>> getCall;
+            if (timetableType == TimetableType.USER) {
+                getCall = api.getTimetableByStudent(TimetableSystemAPI.SECURITY_TOKEN, id, startDate, endDate);
+            } else {
+                getCall = api.getRoomTimtable(TimetableSystemAPI.SECURITY_TOKEN, id, startDate, endDate);
+            }
             getCall.enqueue(new Callback<List<JSONEvent>>() {
                 @Override
                 public void onResponse(Call<List<JSONEvent>> call, Response<List<JSONEvent>> response) {
@@ -207,7 +294,6 @@ public class TimetableData {
                         List<JSONEvent> events = response.body();
 
                         for (JSONEvent event : events) {
-
 
                             LocalDateTime startDate = null;
                             LocalDateTime endDate = null;

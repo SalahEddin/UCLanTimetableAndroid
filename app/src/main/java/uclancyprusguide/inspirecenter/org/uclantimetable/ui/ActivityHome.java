@@ -1,8 +1,6 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.ui;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,14 +11,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
-import uclancyprusguide.inspirecenter.org.uclantimetable.UclanCyApplication;
+import uclancyprusguide.inspirecenter.org.uclantimetable.data.JSONAuthenticationUser;
+import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
 
 public class ActivityHome extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,10 +34,13 @@ public class ActivityHome extends AppCompatActivity
     public static final int FRAGMENT_ID_TIMETABLE_NOTIFICATIONS = 0x060;
     public static final int FRAGMENT_ID_LOGIN = 0x070;
     public static final int FRAGMENT_ID_ATTENDANCE = 0x080;
+    public static final int FRAGMENT_ID_ROOM = 0x090;
+    public static final int FRAGMENT_ID_ABOUT = 0x100;
 
     public static final String SELECTED_FRAGMENT_KEY = "selected-fragment";
 
     final FragmentManager fragmentManager = getFragmentManager();
+    NavigationView navigationView;
 
     private int selectedFragment = 0;
 
@@ -49,13 +51,17 @@ public class ActivityHome extends AppCompatActivity
     private FragmentTimetableNotifications fragmentTimetableNotifications = new FragmentTimetableNotifications();
     private FragmentLogin fragmentLogin = new FragmentLogin();
     private FragmentAttendance fragmentAttendance = new FragmentAttendance();
+    private FragmentRooms fragmentRooms = new FragmentRooms();
+    private FragmentAbout fragmentAbout = new FragmentAbout();
+
 
     // holds ids of pages that requires logging in
     private static final Integer secureFragmentsArray[] = {
-            R.id.nav_personal_timetable,
-            R.id.nav_personal_upcoming_exams,
-            R.id.nav_personal_notifications,
-            R.id.action_attendance
+            R.id.nav_timetable,
+            R.id.nav_exams,
+            R.id.nav_notifications,
+            R.id.nav_attendance,
+            R.id.nav_room_timetable
     };
 
     private Toolbar toolbar;
@@ -75,11 +81,15 @@ public class ActivityHome extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
 
-        final UclanCyApplication application = (UclanCyApplication) getApplication();
+        JSONAuthenticationUser user = Misc.IsUserLoggedIn(this);
+        if (user != null) {
+            // user is logged in, hide unavailable stuff
+            switchUserView(user.getACCOUNT_TYPE_ID());
+        }
     }
 
     @Override
@@ -113,10 +123,13 @@ public class ActivityHome extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        // todo check if user is logged in
-        Boolean isUserLoggedIn = true;
+        // check if user is logged in
+        JSONAuthenticationUser user = Misc.IsUserLoggedIn(this);
+        Boolean isUserLoggedIn = user != null;
 
         if (id == R.id.nav_news) {
             selectedFragment = FRAGMENT_ID_NEWS;
@@ -130,16 +143,18 @@ public class ActivityHome extends AppCompatActivity
         }
         // if user is not logged in and page is in the secure list
         else if (!isUserLoggedIn && Arrays.asList(secureFragmentsArray).contains(id)) {
-            //IntStream.of(secureFragmentsArray).anyMatch(x -> x == id);
-            int returnFragment = FRAGMENT_ID_NEWS;
+            int returnFragment;
             switch (id) {
-                case R.id.nav_personal_notifications:
+                case R.id.nav_notifications:
                     returnFragment = FRAGMENT_ID_TIMETABLE_NOTIFICATIONS;
                     break;
-                case R.id.nav_personal_upcoming_exams:
+                case R.id.nav_exams:
                     returnFragment = FRAGMENT_ID_TIMETABLE_EXAMS;
                     break;
-                case R.id.action_attendance:
+                case R.id.nav_room_timetable:
+                    returnFragment = FRAGMENT_ID_ROOM;
+                    break;
+                case R.id.nav_attendance:
                     returnFragment = FRAGMENT_ID_ATTENDANCE;
                     break;
                 default:
@@ -147,30 +162,32 @@ public class ActivityHome extends AppCompatActivity
                     break;
             }
             // write the intended fragment Id to be redirected after login
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            prefs.edit().putInt(getString(R.string.activity_after_login), returnFragment).commit();
+            prefs.edit().putInt(getString(R.string.activity_after_login), returnFragment).apply();
             selectedFragment = FRAGMENT_ID_LOGIN;
             selectFragment();
-        } else if (id == R.id.nav_personal_timetable) {
+
+        } else if (id == R.id.nav_timetable) {
             // student timetable fragment
             selectedFragment = FRAGMENT_ID_TIMETABLE;
             selectFragment();
-        } else if (id == R.id.nav_personal_upcoming_exams) {
+        } else if (id == R.id.nav_exams) {
             // upcoming exams
             selectedFragment = FRAGMENT_ID_TIMETABLE_EXAMS;
             selectFragment();
-        } else if (id == R.id.nav_personal_notifications) {
+        } else if (id == R.id.nav_notifications) {
             // timetable notification
             selectedFragment = FRAGMENT_ID_TIMETABLE_NOTIFICATIONS;
             selectFragment();
-        } else if (id == R.id.action_attendance) {
+        } else if (id == R.id.nav_attendance) {
             // timetable notification
             selectedFragment = FRAGMENT_ID_ATTENDANCE;
             selectFragment();
-        } else if (id == R.id.action_room_timetable) {
-            startActivity(new Intent(this, ActivityRoomTimetable.class));
-        } else if (id == R.id.action_about) {
-            startActivity(new Intent(this, ActivityAbout.class));
+        } else if (id == R.id.nav_room_timetable) {
+            selectedFragment = FRAGMENT_ID_ROOM;
+            selectFragment();
+        } else if (id == R.id.nav_about) {
+            selectedFragment = FRAGMENT_ID_ABOUT;
+            selectFragment();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -208,12 +225,31 @@ public class ActivityHome extends AppCompatActivity
             toolbar.setSubtitle("Notifications");
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentTimetableNotifications).commit();
             fragmentManager.executePendingTransactions();
+        } else if (selectedFragment == FRAGMENT_ID_ROOM) {
+            toolbar.setSubtitle("Rooms");
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentRooms).commit();
+            fragmentManager.executePendingTransactions();
         } else if (selectedFragment == FRAGMENT_ID_ATTENDANCE) {
             toolbar.setSubtitle("Attendance");
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentAttendance).commit();
             fragmentManager.executePendingTransactions();
+        } else if (selectedFragment == FRAGMENT_ID_ABOUT) {
+            toolbar.setSubtitle("About us");
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentAbout).commit();
+            fragmentManager.executePendingTransactions();
         } else {
             Log.e(TAG, "Unknown selected fragment: " + selectedFragment);
+        }
+    }
+
+    public void switchUserView(String userType) {
+        Menu nav_Menu = navigationView.getMenu();
+        if (userType.equals("5")) {
+            // student
+            nav_Menu.findItem(R.id.nav_room_timetable).setVisible(false);
+        } else {
+            nav_Menu.findItem(R.id.nav_exams).setVisible(false);
+            nav_Menu.findItem(R.id.nav_attendance).setVisible(false);
         }
     }
 }

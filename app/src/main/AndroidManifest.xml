@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="uclancyprusguide.inspirecenter.org.uclantimetable">
 
@@ -44,15 +45,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".ui.ActivityRoomTimetable"
-            android:parentActivityName=".ui.ActivityHome">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.ActivityHome" />
-        </activity>
-
         <activity
             android:name=".ui.ActivityAbout"
             android:parentActivityName=".ui.ActivityHome">
@@ -61,4 +53,5 @@
                 android:value=".ui.ActivityHome" />
         </activity>
     </application>
+
 </manifest>

@@ -45,7 +45,7 @@ public class FragmentContact
 
     public static final String TAG = "uclan-cy";
 
-    public static final LatLng UCLAN_CY_LAT_LNG = new LatLng(35.008511d,33.696940d);
+    public static final LatLng UCLAN_CY_LAT_LNG = new LatLng(35.008511d, 33.696940d);
 
     private GoogleMap googleMap = null;
 
@@ -63,19 +63,80 @@ public class FragmentContact
         final MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.activity_uclancy_map);
         mapFragment.getMapAsync(this);
 
-//        fragmentContactDetails = (FragmentContactDetails) getFragmentManager().findFragmentById(R.id.activity_about_details);
         uclanCyDistance = (TextView) view.findViewById(R.id.fragment_uclancy_distance_l1);
         final Button uclanCyCall = (Button) view.findViewById(R.id.fragment_uclancy_call);
+        final Button uclanCyStudentSupportCall = (Button) view.findViewById(R.id.fragment_uclancy_student_support_call);
+        final Button uclanCyEmail = (Button) view.findViewById(R.id.fragment_uclancy_email);
+        final Button uclanCyFacebook = (Button) view.findViewById(R.id.facebook_button);
+        final Button uclanCyTwitter = (Button) view.findViewById(R.id.twitter_button);
+        final Button uclanCyInstagram = (Button) view.findViewById(R.id.instagram_button);
         final Button uclanCyNavigate = (Button) view.findViewById(R.id.fragment_uclancy_navigate);
 
+        // call button
         {
             final Intent dialUclanCyIntent = new Intent(Intent.ACTION_DIAL);
-            dialUclanCyIntent.setData(Uri.parse("tel: +35724694000"));
+
             uclanCyCall.setEnabled(IntentUtils.isIntentAvailable(getActivity(), dialUclanCyIntent));
             uclanCyCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    dialUclanCyIntent.setData(Uri.parse("tel: +35724694000"));
                     startActivity(dialUclanCyIntent);
+                }
+            });
+            uclanCyStudentSupportCall.setEnabled(IntentUtils.isIntentAvailable(getActivity(), dialUclanCyIntent));
+            uclanCyStudentSupportCall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialUclanCyIntent.setData(Uri.parse("tel: +35724694026"));
+                    startActivity(dialUclanCyIntent);
+                }
+            });
+        }
+        // mail
+        {
+            final Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("message/rfc822");
+            intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"info@uclancyprus.ac.cy"});
+            uclanCyEmail.setEnabled(IntentUtils.isIntentAvailable(getActivity(), intent));
+            uclanCyEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(intent);
+                }
+            });
+        }
+        // social media
+        {
+            final Intent intent = new Intent(Intent.ACTION_VIEW);
+
+            uclanCyFacebook.setEnabled(IntentUtils.isIntentAvailable(getActivity(), intent));
+            uclanCyFacebook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = "http://www.facebook.com/uclancyprus";
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+                }
+            });
+
+            uclanCyTwitter.setEnabled(IntentUtils.isIntentAvailable(getActivity(), intent));
+            uclanCyTwitter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = "https://twitter.com/uclancyprus";
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+                }
+            });
+
+            uclanCyInstagram.setEnabled(IntentUtils.isIntentAvailable(getActivity(), intent));
+            uclanCyInstagram.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = "https://www.instagram.com/uclancyprus/";
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
                 }
             });
         }
@@ -119,7 +180,7 @@ public class FragmentContact
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String [] { Manifest.permission.ACCESS_FINE_LOCATION }, PERMISSIONS_REQUEST_CODE_ACCESS_AND_CHANGE_WIFI);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_CODE_ACCESS_AND_CHANGE_WIFI);
         } else {
             googleMap.setMyLocationEnabled(true);
         }
@@ -130,7 +191,7 @@ public class FragmentContact
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if(googleMap != null) googleMap.setMyLocationEnabled(true);
+            if (googleMap != null) googleMap.setMyLocationEnabled(true);
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
     }
@@ -152,7 +213,7 @@ public class FragmentContact
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String [] { Manifest.permission.ACCESS_FINE_LOCATION }, PERMISSIONS_REQUEST_CODE_ACCESS_AND_CHANGE_WIFI);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_CODE_ACCESS_AND_CHANGE_WIFI);
             return;
         }
         final Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -181,7 +242,7 @@ public class FragmentContact
     @Override
     public void onPause() {
         super.onPause();
-        if(mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
     }
@@ -201,7 +262,7 @@ public class FragmentContact
     }
 
     void updateDistance(final Location location) {
-        final float [] distance = new float[3];
+        final float[] distance = new float[3];
         Location.distanceBetween(location.getLatitude(), location.getLongitude(), FragmentContact.UCLAN_CY_LAT_LNG.latitude, FragmentContact.UCLAN_CY_LAT_LNG.longitude, distance);
         uclanCyDistance.setText(String.format(Locale.US, "%.1f", distance[0] / 1000f));
     }

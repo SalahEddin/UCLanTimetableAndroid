@@ -1,10 +1,16 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.ui;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.renderscript.ScriptGroup;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -46,7 +52,10 @@ public class BadgeGridAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             vi = inflater.inflate(R.layout.badge_grid_item, null);
         }
-
+        ImageView badgeSvg = (ImageView) vi.findViewById(R.id.badge_image);
+        TextView badgeName = (TextView) vi.findViewById(R.id.badge_name);
+        //badgeSvg.
+        //badgeSvg.setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
         return vi;
     }
 

@@ -23,6 +23,7 @@ public class FragmentExams extends Fragment implements TimetableData.MyCallbackI
     private ArrayList<TimetableSession> sessions;
     private TimetableExamAdapter eventArrAdapter;
     private SwipeRefreshLayout pullToRefresh;
+
     public FragmentExams() {
         // Required empty public constructor
     }
@@ -46,11 +47,11 @@ public class FragmentExams extends Fragment implements TimetableData.MyCallbackI
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.EXAMS, "2015-08-01", "2016-08-01", "622", FragmentExams.this, getActivity().getBaseContext());
+                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.EXAMS, "2015-08-01", "2016-08-01", "622", FragmentExams.this, getActivity().getBaseContext(), TimetableData.TimetableType.USER);
             }
         });
 
-        TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.EXAMS, "2015-08-01", "2017-08-01", "622", FragmentExams.this, getActivity().getBaseContext());
+        TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.EXAMS, "2015-08-01", "2017-08-01", "622", FragmentExams.this, getActivity().getBaseContext(), TimetableData.TimetableType.USER);
 
         return view;
     }

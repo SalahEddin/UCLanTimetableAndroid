@@ -29,7 +29,7 @@ public class FragmentNews extends Fragment {
                 return true;
             }
         });
-        webView.loadUrl("http://www.twitter.com/uclancyprus");
+        webView.loadUrl("http://www.uclancyprus.ac.cy/en/news/latest-news");
         return view;
     }
 }

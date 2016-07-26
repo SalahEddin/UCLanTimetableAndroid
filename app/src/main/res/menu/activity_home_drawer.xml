@@ -1,56 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_news"
-            android:icon="@android:drawable/ic_menu_today"
-            android:title="@string/News" />
-        <item android:id="@+id/nav_gallery"
-            android:icon="@android:drawable/ic_menu_gallery"
-            android:title="@string/Gallery" />
-        <item android:id="@+id/nav_contact"
-            android:icon="@android:drawable/ic_menu_mapmode"
-            android:title="@string/Contact" />
-    </group>
-
     <item android:title="@string/Students_and_staff">
         <menu>
             <item
-                android:id="@+id/nav_personal_timetable"
+                android:id="@+id/nav_timetable"
                 android:icon="@drawable/ic_insert_invitation_black_48dp"
                 android:title="@string/Personal_timetable" />
             <item
-                android:id="@+id/nav_personal_upcoming_exams"
+                android:id="@+id/nav_exams"
                 android:icon="@drawable/ic_assignment_black_48dp"
                 android:title="@string/Personal_upcoming_exams" />
+
             <item
-                android:id="@+id/nav_personal_notifications"
+                android:id="@+id/nav_attendance"
+                android:icon="@android:drawable/ic_menu_myplaces"
+                android:title="@string/Student_attendance" />
+
+            <item
+                android:id="@+id/nav_notifications"
                 android:icon="@drawable/ic_notifications_none_black_48dp"
                 android:title="@string/Personal_timetable_notifications" />
 
             <item
-                android:id="@+id/action_room_timetable"
+                android:id="@+id/nav_room_timetable"
                 android:icon="@android:drawable/ic_menu_my_calendar"
                 android:title="@string/Room_timetable" />
         </menu>
     </item>
 
-    <item android:title="@string/Staff">
-        <menu>
-            <item
-                android:id="@+id/action_attendance"
-                android:icon="@android:drawable/ic_menu_myplaces"
-                android:title="@string/Student_attendance" />
-        </menu>
-    </item>
-
-    <item android:title="@string/App">
-        <menu>
-            <item
-                android:id="@+id/action_about"
-                android:icon="@android:drawable/ic_menu_info_details"
-                android:title="@string/About" />
-        </menu>
-    </item>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_news"
+            android:icon="@android:drawable/ic_menu_today"
+            android:title="@string/News" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="@string/Gallery"
+            android:visible="false" />
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_contact_mail_black_24dp"
+            android:title="@string/Contact" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info_black_24dp"
+            android:title="@string/About" />
+    </group>
 
 </menu>
