@@ -3,15 +3,9 @@ package uclancyprusguide.inspirecenter.org.uclantimetable.util;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.SharedPreferences;
-import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.View;
-import android.widget.DatePicker;
 
-import uclancyprusguide.inspirecenter.org.uclantimetable.ui.FragmentTimetable;
+import uclancyprusguide.inspirecenter.org.uclantimetable.views.FragmentTimetable;
 
 
 /**

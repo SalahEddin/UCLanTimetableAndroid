@@ -2,57 +2,65 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="13dp">
 
-    <TextView
-        android:id="@+id/timetable_notify_list_item_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Room Change for CO2012"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="@dimen/list_item_title" />
+    <View
+        android:id="@+id/isImportantView"
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="8dp"
-        android:paddingBottom="4dp">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/timetable_notify_list_item_date"
-            android:layout_width="wrap_content"
+            android:id="@+id/timetable_notify_list_item_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Jun 13th"
-            android:layout_marginEnd="8dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/list_item_time_size"
-            android:textStyle="bold" />
+            android:text="Room Change for CO2012"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/list_item_title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="4dp"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/timetable_notify_list_item_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Jun 13th"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/list_item_time_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/timetable_notify_list_item_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9:00 -10:00"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/list_item_time_size" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/timetable_notify_list_item_time"
-            android:layout_width="wrap_content"
+            android:id="@+id/timetable_notify_list_item_desc"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="9:00 -10:00"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/list_item_time_size" />
+            android:maxLines="2"
+            android:text="@string/lerom_ipsum"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/list_item_event_description" />
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/timetable_notify_list_item_desc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/lerom_ipsum"
-        android:textColor="@color/colorSecondaryText"
-        android:textSize="@dimen/list_item_event_description" />
 
-<TextView
-    android:id="@+id/timetable_notify_list_item_more_link"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textSize="@dimen/list_item_event_description"
-    android:paddingTop="13dp"
-    android:textColor="@color/colorAccent"
-    android:linksClickable="true"
-    android:text="@string/read_more"/>
 </LinearLayout>

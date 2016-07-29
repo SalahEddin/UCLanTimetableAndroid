@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +27,15 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
-import uclancyprusguide.inspirecenter.org.uclantimetable.data.JSONAuthenticationUser;
-import uclancyprusguide.inspirecenter.org.uclantimetable.data.JSONEvent;
-import uclancyprusguide.inspirecenter.org.uclantimetable.data.JSONRoom;
-import uclancyprusguide.inspirecenter.org.uclantimetable.data.TimetableSession;
-import uclancyprusguide.inspirecenter.org.uclantimetable.sync.TimetableSystemAPI;
+import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyNotificationCallbackInterface;
+import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyRoomCallbackInterface;
+import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyUserCallbackInterface;
+import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
+import uclancyprusguide.inspirecenter.org.uclantimetable.models.User;
+import uclancyprusguide.inspirecenter.org.uclantimetable.models.JSONEvent;
+import uclancyprusguide.inspirecenter.org.uclantimetable.models.JSONRoom;
+import uclancyprusguide.inspirecenter.org.uclantimetable.models.TimetableSession;
+import uclancyprusguide.inspirecenter.org.uclantimetable.api.TimetableSystemAPI;
 
 import org.threeten.bp.*;
 
@@ -52,14 +57,38 @@ public class TimetableData {
         USER, ROOM
     }
 
+    public static void LoadNotifications(String user_id, final MyNotificationCallbackInterface myCallbackInterface, final Context context) {
+        Retrofit retrofit = getDefaultUCLanRetrofit();
+        TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
+
+        Call<List<Notification>> getCall = api.getNotificationsByUser(TimetableSystemAPI.SECURITY_TOKEN, user_id);
+        getCall.enqueue(new Callback<List<Notification>>() {
+            @Override
+            public void onResponse(Call<List<Notification>> call, Response<List<Notification>> response) {
+                int code = response.code();
+                if (code == 200) {
+                    final List<Notification> notifications = response.body();
+                    Handler mainHandler = new Handler(context.getMainLooper());
+
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            myCallbackInterface.onNotificationDownloadFinished(notifications);
+                        }
+                    };
+                    mainHandler.post(myRunnable);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Notification>> call, Throwable t) {
+
+            }
+        });
+    }
     public static void GetRooms(final MyRoomCallbackInterface myCallbackInterface, final Context context) {
-// JSON converter
-        Gson gson = new GsonBuilder().create();
-        // API library
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(TimetableSystemAPI.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
+
+        Retrofit retrofit = getDefaultUCLanRetrofit();
         // prepare call in Retrofit 2.0
         TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
 
@@ -91,13 +120,8 @@ public class TimetableData {
     }
 
     public static void GetLoginData(final String email, final String pass, final Context context, final MyUserCallbackInterface myCallbackInterface) {
-        // JSON converter
-        Gson gson = new GsonBuilder().create();
-        // API library
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(TimetableSystemAPI.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
+
+        Retrofit retrofit = getDefaultUCLanRetrofit();
         // prepare call in Retrofit 2.0
         TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
 // TODO: 26/07/16 hash pass
@@ -122,14 +146,14 @@ public class TimetableData {
 //        byte[] thedigest = md.digest(bytesOfMessage);
 //        String hashedPass = new String(thedigest);
 
-        Call<JSONAuthenticationUser> getCall = api.getAuthenticationData(TimetableSystemAPI.SECURITY_TOKEN, email, pass);
+        Call<User> getCall = api.getAuthenticationData(TimetableSystemAPI.SECURITY_TOKEN, email, pass);
 
-        getCall.enqueue(new Callback<JSONAuthenticationUser>() {
+        getCall.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<JSONAuthenticationUser> call, Response<JSONAuthenticationUser> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 int code = response.code();
                 if (code == 200) {
-                    final JSONAuthenticationUser userDetails = response.body();
+                    final User userDetails = response.body();
                     Handler mainHandler = new Handler(context.getMainLooper());
 
                     Runnable myRunnable = new Runnable() {
@@ -143,7 +167,7 @@ public class TimetableData {
             }
 
             @Override
-            public void onFailure(Call<JSONAuthenticationUser> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
 
             }
         });
@@ -152,13 +176,7 @@ public class TimetableData {
     public static void SaveTimetableEventsForOffline(final String startDate, final String endDate, final String studentID, final Context context) {
         final String fileName = context.getString(R.string.sessions_filename);
 
-        // JSON converter
-        Gson gson = new GsonBuilder().create();
-        // API library
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(TimetableSystemAPI.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
+        Retrofit retrofit = getDefaultUCLanRetrofit();
         // prepare call in Retrofit 2.0
         TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
 
@@ -270,13 +288,7 @@ public class TimetableData {
         } else {
             // online request
 
-            // JSON converter
-            Gson gson = new GsonBuilder().create();
-            // API library
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(TimetableSystemAPI.ENDPOINT)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
+            Retrofit retrofit = getDefaultUCLanRetrofit();
             // prepare call in Retrofit 2.0
             TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
             Call<List<JSONEvent>> getCall;
@@ -332,5 +344,15 @@ public class TimetableData {
                 }
             });
         }
+    }
+
+    private static Retrofit getDefaultUCLanRetrofit() {
+        // JSON converter
+        Gson gson = new GsonBuilder().create();
+        // API library
+        return new Retrofit.Builder()
+                .baseUrl(TimetableSystemAPI.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
     }
 }

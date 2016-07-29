@@ -6,9 +6,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!--Map card-->
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,9 +63,7 @@
                             android:layout_alignParentTop="true"
                             android:layout_margin="4dp"
                             android:layout_marginEnd="16dp"
-                            android:layout_marginRight="16dp"
                             android:layout_toEndOf="@id/fragment_uclancy_distance_l2"
-                            android:layout_toRightOf="@id/fragment_uclancy_distance_l2"
                             android:text="@string/uclancy_address"
                             android:textStyle="bold" />
 
@@ -75,9 +74,7 @@
                             android:layout_below="@id/fragment_uclancy_address"
                             android:layout_margin="4dp"
                             android:layout_marginEnd="16dp"
-                            android:layout_marginRight="16dp"
                             android:layout_toEndOf="@id/fragment_uclancy_distance_l2"
-                            android:layout_toRightOf="@id/fragment_uclancy_distance_l2"
                             android:text="@string/uclancy_driving_instructions"
                             android:textStyle="italic" />
 
@@ -104,15 +101,16 @@
                 <fragment
                     android:id="@+id/activity_uclancy_map"
                     android:name="com.google.android.gms.maps.MapFragment"
-                    android:layout_alignParentTop="true"
-                    android:layout_above="@id/activity_about_details"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_above="@id/activity_about_details"
+                    android:layout_alignParentTop="true" />
 
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
 
+        <!--contact us card-->
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -140,12 +138,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-
+                    <!--+357 24 69 40 00-->
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Tel: +357 24 69 40 00"
+                        android:text="Reception Telephone"
                         android:textColor="@color/colorPrimaryText" />
 
                     <Button
@@ -170,11 +168,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+                    <!--+357 24 694026-->
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Student Support: +357 24 694026"
+                        android:text="Student Support Telephone"
                         android:textColor="@color/colorPrimaryText" />
 
                     <Button
@@ -203,7 +202,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Email: info@uclancyprus.ac.cy"
+                        android:text="info@uclancyprus.ac.cy"
                         android:textColor="@color/colorPrimaryText" />
 
                     <Button
@@ -217,6 +216,7 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
+        <!--Social Media card-->
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

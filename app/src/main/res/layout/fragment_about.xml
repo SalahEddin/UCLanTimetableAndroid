@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="uclancyprusguide.inspirecenter.org.uclantimetable.ui.FragmentAbout">
+    tools:context="uclancyprusguide.inspirecenter.org.uclantimetable.views.FragmentAbout">
 
     <LinearLayout
         android:layout_margin="@dimen/activity_horizontal_margin"

@@ -1,25 +1,22 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.icu.util.Calendar;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 
+import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.sql.Timestamp;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
-import uclancyprusguide.inspirecenter.org.uclantimetable.data.JSONAuthenticationUser;
+import uclancyprusguide.inspirecenter.org.uclantimetable.models.User;
 
 /**
  * Created by salah on 22/07/16.
@@ -32,6 +29,17 @@ public class Misc {
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public static LocalDateTime APITimestampToLocalDate(String strDate) {
+        // remove parantheses
+        String requiredString = strDate.substring(strDate.indexOf("(") + 1, strDate.indexOf(")"));
+
+        //convert unix epoch timestamp (seconds) to milliseconds
+        Long longTS = Long.parseLong(requiredString);
+        Timestamp timestamp = new Timestamp(longTS);
+        LocalDateTime dateTime = DateTimeUtils.toLocalDateTime(timestamp);
+        return dateTime;
     }
 
     public static String DateToAPIFormat(LocalDate date) {
@@ -65,12 +73,38 @@ public class Misc {
         return String.format("%s - %s", formattedDate1, formattedDate2);
     }
 
-    public static JSONAuthenticationUser IsUserLoggedIn(Context context) {
+    public static User IsUserLoggedIn(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Gson gson = new Gson();
         String json = prefs.getString(context.getString(R.string.userId), null);
-        JSONAuthenticationUser obj = gson.fromJson(json, JSONAuthenticationUser.class);
+        User obj = gson.fromJson(json, User.class);
         return obj;
 
+    }
+
+    // adds st, nd, rd or th
+    public static String getDayOfMonthSuffixed(final int n) {
+        if (n <= 1 && n >= 31) return n + "";
+
+        if (n >= 11 && n <= 13) {
+            return n + "th";
+        }
+
+        switch (n % 10) {
+            case 1:
+                return n + "st";
+            case 2:
+                return n + "nd";
+            case 3:
+                return n + "rd";
+            default:
+                return n + "th";
+        }
+    }
+
+    public static String getMonthForInt(int month) {
+        String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        //String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        return monthNames[month];
     }
 }

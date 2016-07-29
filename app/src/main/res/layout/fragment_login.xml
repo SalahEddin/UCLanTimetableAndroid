@@ -6,7 +6,7 @@
     android:paddingEnd="@dimen/activity_horizontal_margin"
     android:paddingStart="@dimen/activity_horizontal_margin"
     android:paddingTop="40dp"
-    tools:context=".ui.FragmentLogin">
+    tools:context=".views.FragmentLogin">
 
     <!-- email is always in English, disallow special characters-->
     <LinearLayout

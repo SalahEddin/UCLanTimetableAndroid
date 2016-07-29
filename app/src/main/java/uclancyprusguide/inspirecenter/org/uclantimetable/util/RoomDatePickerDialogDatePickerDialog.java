@@ -5,8 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 
-import uclancyprusguide.inspirecenter.org.uclantimetable.ui.FragmentRooms;
-import uclancyprusguide.inspirecenter.org.uclantimetable.ui.FragmentTimetable;
+import uclancyprusguide.inspirecenter.org.uclantimetable.views.FragmentRooms;
 
 
 /**
