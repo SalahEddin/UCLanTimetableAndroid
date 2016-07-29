@@ -73,13 +73,29 @@ public class Misc {
         return String.format("%s - %s", formattedDate1, formattedDate2);
     }
 
-    public static User IsUserLoggedIn(Context context) {
+    public static User loadUser(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Gson gson = new Gson();
         String json = prefs.getString(context.getString(R.string.userId), null);
-        User obj = gson.fromJson(json, User.class);
-        return obj;
+        return gson.fromJson(json, User.class);
+    }
 
+    public static void saveUser(Context context, User user) {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        // convert user object to json
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        prefsEditor.putString(context.getString(R.string.userId), json);
+        prefsEditor.apply();
+    }
+
+    public static void logoutUser(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        prefsEditor.putString(context.getString(R.string.userId), null);
+        prefsEditor.apply();
     }
 
     // adds st, nd, rd or th

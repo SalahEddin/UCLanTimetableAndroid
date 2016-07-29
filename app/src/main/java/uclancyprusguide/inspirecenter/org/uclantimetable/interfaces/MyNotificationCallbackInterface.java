@@ -9,4 +9,15 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
  */
 public interface MyNotificationCallbackInterface {
     void onNotificationDownloadFinished(List<Notification> notifications);
+
+    void onStatusChanged();
+//    void onMarkedAsRead(Notification item);
+//
+//    void onMarkedAsUnread(Notification item);
+//
+//    void onMarkedAsArchived(Notification item);
+//
+//    void onMarkedAsUnarchived(Notification item);
+//
+//    void onMarkedAsDeleted(Notification item);
 }

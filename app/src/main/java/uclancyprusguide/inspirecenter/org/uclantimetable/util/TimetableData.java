@@ -17,7 +17,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,9 +56,59 @@ public class TimetableData {
         USER, ROOM
     }
 
+    public enum NotifStatus {
+        READ, UNREAD, ARCHIVED, UNARCHIVED, DELETED
+    }
+
+    public static void ChangeNotifStatus(NotifStatus newStatus, int id, final MyNotificationCallbackInterface callback, final Context context) {
+        TimetableSystemAPI api = getDefaultUCLanAPI();
+        int statusCode = getStatusInt(newStatus);
+
+        Call<Void> getCall = api.updateNotificationStatus(TimetableSystemAPI.SECURITY_TOKEN, id, statusCode);
+        getCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(final Call<Void> call, Response<Void> response) {
+                if (response.code() == 200) {
+                    Handler mainHandler = new Handler(context.getMainLooper());
+
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onStatusChanged();
+                        }
+                    };
+                    mainHandler.post(myRunnable);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+
+    private static int getStatusInt(NotifStatus status) {
+        switch (status) {
+            case READ:
+                return 1;
+            case UNREAD:
+                return 0;
+            case ARCHIVED:
+                return 4;
+            case UNARCHIVED:
+                return 1;
+            case DELETED:
+                return 2;
+            default:
+                return 0;
+        }
+    }
+
     public static void LoadNotifications(String user_id, final MyNotificationCallbackInterface myCallbackInterface, final Context context) {
-        Retrofit retrofit = getDefaultUCLanRetrofit();
-        TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
+        TimetableSystemAPI api = getDefaultUCLanAPI();
 
         Call<List<Notification>> getCall = api.getNotificationsByUser(TimetableSystemAPI.SECURITY_TOKEN, user_id);
         getCall.enqueue(new Callback<List<Notification>>() {
@@ -86,11 +135,10 @@ public class TimetableData {
             }
         });
     }
+
     public static void GetRooms(final MyRoomCallbackInterface myCallbackInterface, final Context context) {
 
-        Retrofit retrofit = getDefaultUCLanRetrofit();
-        // prepare call in Retrofit 2.0
-        TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
+        TimetableSystemAPI api = getDefaultUCLanAPI();
 
         Call<List<JSONRoom>> getCall = api.listRooms(TimetableSystemAPI.SECURITY_TOKEN);
 
@@ -121,9 +169,7 @@ public class TimetableData {
 
     public static void GetLoginData(final String email, final String pass, final Context context, final MyUserCallbackInterface myCallbackInterface) {
 
-        Retrofit retrofit = getDefaultUCLanRetrofit();
-        // prepare call in Retrofit 2.0
-        TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
+        TimetableSystemAPI api = getDefaultUCLanAPI();
 // TODO: 26/07/16 hash pass
 //        try {
 //            String plaintext = "your text here";
@@ -175,10 +221,9 @@ public class TimetableData {
 
     public static void SaveTimetableEventsForOffline(final String startDate, final String endDate, final String studentID, final Context context) {
         final String fileName = context.getString(R.string.sessions_filename);
-
-        Retrofit retrofit = getDefaultUCLanRetrofit();
         // prepare call in Retrofit 2.0
-        TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
+        TimetableSystemAPI api = getDefaultUCLanAPI();
+
 
         Call<List<JSONEvent>> getCall = api.getTimetableByStudent(TimetableSystemAPI.SECURITY_TOKEN, studentID, startDate, endDate);
 
@@ -288,9 +333,8 @@ public class TimetableData {
         } else {
             // online request
 
-            Retrofit retrofit = getDefaultUCLanRetrofit();
-            // prepare call in Retrofit 2.0
-            TimetableSystemAPI api = retrofit.create(TimetableSystemAPI.class);
+            TimetableSystemAPI api = getDefaultUCLanAPI();
+
             Call<List<JSONEvent>> getCall;
             if (timetableType == TimetableType.USER) {
                 getCall = api.getTimetableByStudent(TimetableSystemAPI.SECURITY_TOKEN, id, startDate, endDate);
@@ -346,13 +390,14 @@ public class TimetableData {
         }
     }
 
-    private static Retrofit getDefaultUCLanRetrofit() {
+    private static TimetableSystemAPI getDefaultUCLanAPI() {
         // JSON converter
         Gson gson = new GsonBuilder().create();
         // API library
-        return new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(TimetableSystemAPI.ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
+        return retrofit.create(TimetableSystemAPI.class);
     }
 }

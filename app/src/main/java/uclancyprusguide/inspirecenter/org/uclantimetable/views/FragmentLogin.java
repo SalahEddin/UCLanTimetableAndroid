@@ -135,12 +135,7 @@ public class FragmentLogin extends Fragment implements MyUserCallbackInterface {
             // save the login
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-            // convert user object to json
-            SharedPreferences.Editor prefsEditor = prefs.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(user);
-            prefsEditor.putString(context.getString(R.string.userId), json);
-            prefsEditor.apply();
+            Misc.saveUser(context, user);
 
             if (rememberMeCheckBox.isChecked()) {
                 prefs.edit().putString(context.getString(R.string.username), lastTypedName).apply();
@@ -194,7 +189,7 @@ public class FragmentLogin extends Fragment implements MyUserCallbackInterface {
     @Override
     public void onResume() {
         super.onResume();
-        if (Misc.IsUserLoggedIn(context) != null) {
+        if (Misc.loadUser(context) != null) {
             Fragment frag = new FragmentTimetable();
             ((AppCompatActivity) FragmentLogin.this.getActivity()).getSupportActionBar().setSubtitle("Timetable");
             final FragmentManager fragmentManager = FragmentLogin.this.getFragmentManager();

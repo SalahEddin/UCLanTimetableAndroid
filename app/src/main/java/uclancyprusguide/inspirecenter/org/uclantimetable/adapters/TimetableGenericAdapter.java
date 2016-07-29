@@ -1,4 +1,4 @@
-package uclancyprusguide.inspirecenter.org.uclantimetable.views;
+package uclancyprusguide.inspirecenter.org.uclantimetable.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

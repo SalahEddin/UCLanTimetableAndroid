@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
+import uclancyprusguide.inspirecenter.org.uclantimetable.adapters.TimetableSessionAdapter;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.JSONRoom;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.TimetableSession;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;

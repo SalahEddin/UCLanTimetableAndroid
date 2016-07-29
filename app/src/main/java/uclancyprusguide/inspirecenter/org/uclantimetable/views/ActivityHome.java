@@ -85,7 +85,7 @@ public class ActivityHome extends AppCompatActivity
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
 
-        User user = Misc.IsUserLoggedIn(this);
+        User user = Misc.loadUser(this);
         if (user != null) {
             // user is logged in, hide unavailable stuff
             switchUserView(user.getACCOUNT_TYPE_ID());
@@ -128,14 +128,16 @@ public class ActivityHome extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         // check if user is logged in
-        User user = Misc.IsUserLoggedIn(this);
+        User user = Misc.loadUser(this);
         Boolean isUserLoggedIn = user != null;
 
+        // if logged in, show logout
+        if (id == R.id.nav_logout && isUserLoggedIn) {
+// TODO: 29/07/16 remove logout
+            Misc.logoutUser(this);
+        }
         if (id == R.id.nav_news) {
             selectedFragment = FRAGMENT_ID_NEWS;
-            selectFragment();
-        } else if (id == R.id.nav_gallery) {
-            selectedFragment = FRAGMENT_ID_GALLERY;
             selectFragment();
         } else if (id == R.id.nav_contact) {
             selectedFragment = FRAGMENT_ID_CONTACT;

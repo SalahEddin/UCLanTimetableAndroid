@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
-import uclancyprusguide.inspirecenter.org.uclantimetable.views.BadgeGridAdapter;
+import uclancyprusguide.inspirecenter.org.uclantimetable.adapters.BadgeGridAdapter;
 
 /**
  * Created by salah on 19/07/16.

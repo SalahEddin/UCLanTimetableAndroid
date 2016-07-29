@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:title="@string/Students_and_staff">
         <menu>
@@ -14,8 +15,9 @@
 
             <item
                 android:id="@+id/nav_attendance"
-                android:icon="@android:drawable/ic_menu_myplaces"
-                android:title="@string/Student_attendance" />
+                android:icon="@drawable/trophy"
+                android:title="@string/Student_attendance"
+                app:actionViewClass="android.widget.TextView" />
 
             <item
                 android:id="@+id/nav_notifications"
@@ -24,7 +26,7 @@
 
             <item
                 android:id="@+id/nav_room_timetable"
-                android:icon="@android:drawable/ic_menu_my_calendar"
+                android:icon="@drawable/classroom"
                 android:title="@string/Room_timetable" />
         </menu>
     </item>
@@ -32,13 +34,13 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_news"
-            android:icon="@android:drawable/ic_menu_today"
+            android:icon="@drawable/google_news_copyrighted"
             android:title="@string/News" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@android:drawable/ic_menu_gallery"
-            android:title="@string/Gallery"
-            android:visible="false" />
+        <!--<item-->
+        <!--android:id="@+id/nav_gallery"-->
+        <!--android:icon="@android:drawable/ic_menu_gallery"-->
+        <!--android:title="@string/Gallery"-->
+        <!--android:visible="false" />-->
         <item
             android:id="@+id/nav_contact"
             android:icon="@drawable/ic_contact_mail_black_24dp"
@@ -49,4 +51,8 @@
             android:title="@string/About" />
     </group>
 
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/exit"
+        android:title="@string/logout" />
 </menu>

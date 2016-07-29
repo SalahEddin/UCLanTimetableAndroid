@@ -115,6 +115,24 @@ public class Notification {
         this.NOTIFICATION_TEXT = NOTIFICATION_TEXT;
     }
 
+    public boolean isRead() {
+        int status = Integer.parseInt(NOTIFICATION_STATUS);
+        byte byteStatus = (byte) status;
+        return (byteStatus & 0b00000001) == 1;
+    }
+
+    public boolean isDeleted() {
+        int status = Integer.parseInt(NOTIFICATION_STATUS);
+        byte byteStatus = (byte) status;
+        return (byteStatus >> 1 & 0b00000001) == 1;
+    }
+
+    public boolean isArchived() {
+        int status = Integer.parseInt(NOTIFICATION_STATUS);
+        byte byteStatus = (byte) status;
+        return (byteStatus >> 2 & 0b00000001) == 1;
+    }
+
     @Override
     public String toString() {
         return "ClassPojo [EXPIRY_DATE = " + EXPIRY_DATE + ", NOTIFICATION_STATUS = " + NOTIFICATION_STATUS + ", NOTIFICATION_TYPE_NAME = " + NOTIFICATION_TYPE_NAME + ", USER_ID = " + USER_ID + ", CREATE_DATE = " + CREATE_DATE + ", PUBLISH_DATE = " + PUBLISH_DATE + ", NOTIFICATION_TITLE = " + NOTIFICATION_TITLE + ", NOTIFICATION_TYPE_ID = " + NOTIFICATION_TYPE_ID + ", NOTIFICATION_ID = " + NOTIFICATION_ID + ", NOTIFICATION_URL = " + NOTIFICATION_URL + ", NOTIFICATION_TEXT = " + NOTIFICATION_TEXT + "]";

@@ -3,7 +3,6 @@ package uclancyprusguide.inspirecenter.org.uclantimetable.views;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
+import uclancyprusguide.inspirecenter.org.uclantimetable.adapters.TimetableNotificationAdapter;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyNotificationCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
@@ -38,7 +38,7 @@ public class FragmentTimetableNotifications extends Fragment implements MyNotifi
         final View view = inflater.inflate(R.layout.fragment_timetable_notifications, container, false);
         context = getActivity();
         // set adapter
-        notificationAdapter = new TimetableNotificationAdapter(view.getContext(), selectedNotifications);
+        notificationAdapter = new TimetableNotificationAdapter(view.getContext(), selectedNotifications, this);
 
         // bind the listView
         ListView eventsListView = (ListView) view.findViewById(R.id.eventsListView);
@@ -73,6 +73,12 @@ public class FragmentTimetableNotifications extends Fragment implements MyNotifi
         // update adapter
         notificationAdapter.notifyDataSetChanged();
         if (pullToRefresh.isRefreshing()) pullToRefresh.setRefreshing(false);
+    }
+
+    @Override
+    public void onStatusChanged() {
+        // todo reload notifications
+        TimetableData.LoadNotifications("15", this, context);
     }
 
     public FragmentTimetableNotifications() {

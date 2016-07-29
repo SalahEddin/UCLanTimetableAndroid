@@ -13,6 +13,7 @@ import org.threeten.bp.LocalDate;
 import java.util.ArrayList;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
+import uclancyprusguide.inspirecenter.org.uclantimetable.adapters.TimetableExamAdapter;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.TimetableSession;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
