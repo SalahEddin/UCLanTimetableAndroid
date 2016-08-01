@@ -28,7 +28,17 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:gravity="bottom"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:paddingTop="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Find Us"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="@dimen/list_item_title" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -93,6 +103,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_navigation_black_24dp"
                             android:drawableStart="@drawable/ic_navigation_black_24dp"
+                            android:drawableTint="@android:color/holo_blue_dark"
                             android:text="@string/Navigate" />
 
                     </LinearLayout>
@@ -143,6 +154,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:text="Reception Telephone"
                         android:textColor="@color/colorPrimaryText" />
 
@@ -151,14 +163,15 @@
                         style="?android:attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawablePadding="15dp"
                         android:drawableStart="@drawable/ic_call_black_24dp"
+                        android:drawableTint="@color/colorAccent"
                         android:text="@string/Call" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:background="@color/light_gray" />
@@ -173,6 +186,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:text="Student Support Telephone"
                         android:textColor="@color/colorPrimaryText" />
 
@@ -181,14 +195,16 @@
                         style="?android:attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawablePadding="15dp"
                         android:drawableStart="@drawable/ic_call_black_24dp"
+                        android:drawableTint="@color/colorAccent"
+                        android:paddingEnd="16dp"
                         android:text="@string/Call" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:background="@color/light_gray" />
@@ -202,6 +218,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
                         android:text="info@uclancyprus.ac.cy"
                         android:textColor="@color/colorPrimaryText" />
 
@@ -210,7 +227,9 @@
                         style="?android:attr/borderlessButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
                         android:drawableStart="@drawable/ic_communication_email"
+                        android:drawableTint="@color/colorAccent"
                         android:text="@string/Email" />
                 </LinearLayout>
             </LinearLayout>
@@ -229,7 +248,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/activity_horizontal_margin">
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -251,6 +272,13 @@
                         android:drawableStart="@drawable/ic_facebook_512"
                         android:text="Facebook" />
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:background="@color/light_gray" />
+
                     <Button
                         android:id="@+id/instagram_button"
                         style="?android:attr/borderlessButtonStyle"
@@ -258,6 +286,13 @@
                         android:layout_height="wrap_content"
                         android:drawableStart="@drawable/ic_instagram_old_512"
                         android:text="Instagram" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:background="@color/light_gray" />
 
                     <Button
                         android:id="@+id/twitter_button"

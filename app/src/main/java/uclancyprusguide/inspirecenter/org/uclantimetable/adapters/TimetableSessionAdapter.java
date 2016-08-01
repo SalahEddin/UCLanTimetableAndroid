@@ -39,23 +39,27 @@ public class TimetableSessionAdapter extends TimetableGenericAdapter {
             view = layoutInflater.inflate(R.layout.timetable_session_list_item, null);
         }
 
-        final TimetableSession timetableSession = getItem(position);
+        final TimetableSession ts = getItem(position);
         final LocalDateTime currentTime = LocalDateTime.now();
-        boolean pastEvent = currentTime.isAfter(timetableSession.getEndTimeFormatted());
+        boolean pastEvent = currentTime.isAfter(ts.getEndTimeFormatted());
 
         final TextView time = (TextView) view.findViewById(R.id.timetable_session_list_item_time);
-        time.setText(Misc.formatStartToEndDate(timetableSession.getStartTimeFormatted(), timetableSession.getEndTimeFormatted()));
+        time.setText(Misc.formatStartToEndDate(ts.getStartTimeFormatted(), ts.getEndTimeFormatted()));
 
         final TextView name = (TextView) view.findViewById(R.id.timetable_session_list_item_name);
-        name.setText(String.format("%s - %s", timetableSession.getModuleName(), timetableSession.getModuleCode()));
+        name.setText(String.format("%s - %s", ts.getModuleCode(), ts.getModuleName()));
         name.setTypeface(null, pastEvent ? Typeface.NORMAL : Typeface.BOLD);
+        if (ts.getModuleName().equals("N/A") || ts.getModuleName().equals("") || ts.getModuleName() == null) {
+            // use description
+            name.setText(ts.getSessionDescription());
+        }
 
         final TextView description = (TextView) view.findViewById(R.id.timetable_session_list_item_description);
-        description.setText(getContext().getString(R.string.session_type_with_lecturer, timetableSession.getSessionDescription(), timetableSession.getLecturerName()));
+        description.setText(getContext().getString(R.string.session_type_with_lecturer, ts.getSessionDescription(), ts.getLecturerName()));
         // description.setTypeface(null, pastEvent ? Typeface.NORMAL : Typeface.BOLD);
 
         final TextView room = (TextView) view.findViewById(R.id.timetable_session_list_item_room);
-        room.setText(timetableSession.getRoomCode());
+        room.setText(ts.getRoomCode());
 
         if (pastEvent) {
             description.setTextColor(getContext().getResources().getColor(R.color.light_gray));

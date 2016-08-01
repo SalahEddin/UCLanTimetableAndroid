@@ -1,9 +1,8 @@
 <resources>
-    <string name="app_name">UCLanTimetable</string>
+    <string name="app_name">UCLan Cyprus App</string>
 
     <string name="uclan_cyprus_url">http://www.uclancyprus.ac.cy</string>
     <string name="google_maps_key">11111</string>
-    <string name="timetable_security_token">e84e281d4c9b46f8a30e4a2fd9aa7058</string>
     <string name="News">News</string>
     <string name="Gallery">Gallery</string>
     <string name="Contact">Contact</string>
@@ -65,7 +64,7 @@
     <string-array name="dates_array">
         <item>Today</item>
         <item>Tomorrow</item>
-        <item>Pick Another Date</item>
+        <item>Pick Date</item>
     </string-array>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>

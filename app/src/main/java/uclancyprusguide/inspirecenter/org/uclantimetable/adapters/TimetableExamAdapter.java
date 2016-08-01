@@ -42,8 +42,6 @@ public class TimetableExamAdapter extends TimetableGenericAdapter {
         }
 
         final TimetableSession ts = getItem(position);
-        final LocalDateTime currentTime = LocalDateTime.now();
-        boolean pastEvent = currentTime.isAfter(ts.getEndTimeFormatted());
 
         // binding
         final TextView date = (TextView) view.findViewById(R.id.timetable_exam_list_item_date);
@@ -56,14 +54,6 @@ public class TimetableExamAdapter extends TimetableGenericAdapter {
         room.setText(String.format("Room: %s", ts.getRoomCode()));
 
         time.setText(Misc.formatStartToEndDate(ts.getStartTimeFormatted(), ts.getEndTimeFormatted()));
-
-        if (pastEvent) {
-            date.setTextColor(getContext().getResources().getColor(R.color.light_gray));
-            date.setTypeface(null, Typeface.NORMAL);
-            time.setTextColor(getContext().getResources().getColor(R.color.light_gray));
-            name.setTextColor(getContext().getResources().getColor(R.color.light_gray));
-            room.setTextColor(getContext().getResources().getColor(R.color.light_gray));
-        }
 
         return view;
     }

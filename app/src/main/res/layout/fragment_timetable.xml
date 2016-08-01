@@ -9,25 +9,52 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/prev_day_button"
+            style="@style/AppTheme.ButtonColorless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/previous"
+            android:text="prev"
+            android:textColor="@color/colorAccent" />
+
         <TextView
+            android:id="@+id/selected_date_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Showing: "
-            android:textColor="@color/black"
-            android:textSize="@dimen/heading" />
+            android:layout_gravity="center"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:text="May 5, 2016"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/subheading" />
 
-        <Spinner
-            android:id="@+id/date_spinner"
+        <Button
+            android:id="@+id/next_day_button"
+            style="@style/AppTheme.ButtonColorless"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_height="25dp"
-            android:layout_gravity="end"
-            android:gravity="end">
+            android:drawableEnd="@drawable/next"
+            android:text="next"
+            android:textColor="@color/colorAccent" />
+    </LinearLayout>
 
-        </Spinner>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin">
+
+        <Button
+            android:id="@+id/date_picker_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="open datepicker" />
     </LinearLayout>
 
     <View

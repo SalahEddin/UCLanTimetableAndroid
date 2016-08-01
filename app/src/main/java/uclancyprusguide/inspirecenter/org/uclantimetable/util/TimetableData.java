@@ -332,7 +332,6 @@ public class TimetableData {
 
         } else {
             // online request
-
             TimetableSystemAPI api = getDefaultUCLanAPI();
 
             Call<List<JSONEvent>> getCall;

@@ -16,8 +16,8 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.R;
 import uclancyprusguide.inspirecenter.org.uclantimetable.adapters.TimetableNotificationAdapter;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyNotificationCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
+import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
-
 
 /**
  * Retrieves events with notification types (cancelled, room changed, etc.)
@@ -54,13 +54,14 @@ public class FragmentTimetableNotifications extends Fragment implements MyNotifi
             }
         });
 
-        TimetableData.LoadNotifications("15", this, context);
+        reloadNotifications();
 
         return view;
     }
 
     private void reloadNotifications() {
-        TimetableData.LoadNotifications("15", this, context);
+        String userId = Misc.loadUser(context).getUSER_ID();
+        TimetableData.LoadNotifications(userId, this, context);
     }
 
     @Override

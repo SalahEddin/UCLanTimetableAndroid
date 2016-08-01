@@ -20,32 +20,32 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-            android:gravity="center"
-            android:hint="username"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-."
+            android:hint="Username"
             android:inputType="text"
             android:textColor="@color/colorPrimaryText" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/uclan_mail_suffix"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="@dimen/list_item_event_description" />
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/uclan_mail_suffix"-->
+        <!--android:textColor="@color/colorPrimaryText"-->
+        <!--android:textSize="@dimen/list_item_event_description" />-->
     </LinearLayout>
 
     <EditText
         android:id="@+id/edit_pass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
         android:hint="Enter Password"
         android:inputType="textPassword" />
 
     <CheckBox
-        android:layout_margin="@dimen/activity_horizontal_margin"
         android:id="@+id/rememberMeCheckbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
         android:text="Remember Me" />
 
     <Button

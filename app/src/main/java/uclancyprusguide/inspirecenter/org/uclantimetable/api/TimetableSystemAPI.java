@@ -34,6 +34,6 @@ public interface TimetableSystemAPI {
     @GET("app_getNotificationsByUser")
     Call<List<Notification>> getNotificationsByUser(@Query("securityToken") String securityToken, @Query("USER_ID") String user_id);
 
-    @POST("app_updateNotificationStatus")
-    Call<Void> updateNotificationStatus(@Field("securityToken") String securityToken, @Field("NOTIFICATION_ID") int id, @Field("NOTIFICATION_STATUS") int newStatus);
+    @GET("app_updateNotificationStatus")
+    Call<Void> updateNotificationStatus(@Query("securityToken") String securityToken, @Query("NOTIFICATION_ID") int id, @Query("NOTIFICATION_STATUS") int newStatus);
 }

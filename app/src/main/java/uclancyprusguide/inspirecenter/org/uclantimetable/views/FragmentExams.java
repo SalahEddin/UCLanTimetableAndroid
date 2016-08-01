@@ -57,11 +57,12 @@ public class FragmentExams extends Fragment implements TimetableData.MyCallbackI
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.EXAMS, todayApi, tillDateApi, "622", FragmentExams.this, getActivity().getBaseContext(), TimetableData.TimetableType.USER);
+                String account_id = Misc.loadUser(getActivity()).getACCOUNT_ID();
+                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.EXAMS, todayApi, tillDateApi, account_id, FragmentExams.this, getActivity().getBaseContext(), TimetableData.TimetableType.USER);
             }
         });
-
-        TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.EXAMS, todayApi, tillDateApi, "622", FragmentExams.this, getActivity().getBaseContext(), TimetableData.TimetableType.USER);
+        String account_id = Misc.loadUser(getActivity()).getACCOUNT_ID();
+        TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.EXAMS, todayApi, tillDateApi, account_id, FragmentExams.this, getActivity().getBaseContext(), TimetableData.TimetableType.USER);
 
         return view;
     }

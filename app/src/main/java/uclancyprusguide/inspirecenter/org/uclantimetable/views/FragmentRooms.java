@@ -12,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.threeten.bp.LocalDate;
 
@@ -29,17 +31,18 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyRoomCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.RoomDatePickerDialogDatePickerDialog;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
+import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableDatePickerDialogDatePickerDialog;
 
 
 public class FragmentRooms extends Fragment implements TimetableData.MyCallbackInterface, MyRoomCallbackInterface, DatePickerDialog.OnDateSetListener {
 
     // UI Binding
     private SwipeRefreshLayout pullToRefresh;
-    private Context context = null;
+    private TextView selectedDateTextView;
     private Spinner roomSpinner;
+    private Context context = null;
     // Data objects
-    private final String STUDENT_ID = "622";
-    private LocalDate selectedDate = null;
+    private LocalDate selectedDate = LocalDate.now();
     private ArrayList<TimetableSession> timetableSessions;
     private TimetableSessionAdapter eventArrAdapter;
     private List<JSONRoom> roomsList; // dictionary
@@ -64,7 +67,16 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
         // bind the listView
         ListView eventsListView = (ListView) view.findViewById(R.id.roomEventsListView);
         eventsListView.setAdapter(eventArrAdapter);
-
+        //pull to refresh
+        pullToRefresh = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
+        pullToRefresh.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                reloadTimetable();
+            }
+        });
+        // room selection UI
         roomSpinner = (Spinner) view.findViewById(R.id.room_codes_spinner);
         roomCodeArrayList = new ArrayList<>();
         roomSpinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, roomCodeArrayList);
@@ -77,9 +89,7 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
                     @Override
                     public void onItemSelected(AdapterView<?> arg0, View v,
                                                int selectedIndex, long arg3) {
-                        String selectedDateFormatted = null;
-                        String roomID = "x";
-                        Log.d("x", "xxxx");
+                        reloadTimetable();
                     }
 
                     @Override
@@ -88,61 +98,37 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
                     }
                 }
         );
+        //
+        selectedDateTextView = (TextView) view.findViewById(R.id.selected_date_textView);
+        // next/prev day buttons
+        Button nextDayButton = (Button) view.findViewById(R.id.next_day_button);
+        Button prevDayButton = (Button) view.findViewById(R.id.prev_day_button);
 
-        // spinner helps users pick a date quickly
-        Spinner dateSpinner = (Spinner) view.findViewById(R.id.date_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout (the spinner values are predetermined in resources)
-        final ArrayAdapter<CharSequence> dateSpinnerAdapter = ArrayAdapter.createFromResource(view.getContext(),
-                R.array.dates_array, android.R.layout.simple_spinner_item);
-
-
-        // Specify the layout to use when the list of choices appears
-        dateSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        dateSpinner.setAdapter(dateSpinnerAdapter);
-        dateSpinnerAdapter.notifyDataSetChanged();
-        dateSpinner.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View v,
-                                               int selectedIndex, long arg3) {
-                        String selectedDateFormatted = null;
-                        String roomID = null;
-
-                        switch (selectedIndex) {
-                            case 0:
-                                selectedDate = LocalDate.now();
-                                if (roomSpinner.getSelectedItem() == null) break;
-                                roomID = getRoomIdFromName(roomSpinner.getSelectedItem().toString());
-                                if (roomID != null) {
-                                    TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, Misc.DateToAPIFormat(selectedDate), Misc.DateToAPIFormat(selectedDate), roomID, FragmentRooms.this, context, TimetableData.TimetableType.ROOM);
-                                }
-                                break;
-                            case 1:
-                                selectedDate = LocalDate.now();
-                                selectedDate.plusDays(1);
-                                selectedDateFormatted = Misc.DateToAPIFormat(selectedDate);
-                                roomID = getRoomIdFromName(roomSpinner.getSelectedItem().toString());
-                                if (roomID != null) {
-                                    TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, Misc.DateToAPIFormat(selectedDate), Misc.DateToAPIFormat(selectedDate), roomID, FragmentRooms.this, context, TimetableData.TimetableType.ROOM);
-                                }
-                                break;
-                            default:
-                                RoomDatePickerDialogDatePickerDialog datePicker = new RoomDatePickerDialogDatePickerDialog(FragmentRooms.this);
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                datePicker.show(ft, "Date Picker");
-
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                        // TODO Auto-generated method stub
-                    }
-                }
-        );
+        nextDayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedDate = selectedDate.plusDays(1);
+                reloadTimetable();
+            }
+        });
+        prevDayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedDate = selectedDate.minusDays(1);
+                reloadTimetable();
+            }
+        });
+        // date puickker button
+        Button datePickerButton = (Button) view.findViewById(R.id.date_picker_button);
+        datePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // launch date picker
+                RoomDatePickerDialogDatePickerDialog datePicker = new RoomDatePickerDialogDatePickerDialog(FragmentRooms.this);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                datePicker.show(ft, "Date Picker");
+            }
+        });
 
         return view;
     }
@@ -151,9 +137,7 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         try {
             selectedDate = LocalDate.of(year, month + 1, day);
-
-            TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, Misc.DateToAPIFormat(selectedDate), Misc.DateToAPIFormat(selectedDate), getRoomIdFromName(roomSpinner.getSelectedItem().toString()), FragmentRooms.this, context, TimetableData.TimetableType.ROOM);
-            Log.d("TAGS", selectedDate.toString());
+            reloadTimetable();
         } catch (Exception ex) {
             Log.d("error", ex.toString());
         }
@@ -164,14 +148,13 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
         timetableSessions.clear();
         timetableSessions.addAll(result);
         eventArrAdapter.notifyDataSetChanged();
+        if (pullToRefresh.isRefreshing()) pullToRefresh.setRefreshing(false);
     }
 
     @Override
     public void onRoomDownloadFinished(List<JSONRoom> rooms) {
         roomsList = rooms;
-
         roomCodeArrayList.clear();
-
         for (JSONRoom room : rooms) {
             roomCodeArrayList.add(room.getROOM_CODE());
         }
@@ -187,5 +170,12 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
             }
         }
         return s;
+    }
+
+    private void reloadTimetable() {
+        // update textView
+        selectedDateTextView.setText(Misc.formatDateByPattern(selectedDate, "dd MMM, yy"));
+        String selectedDateFormatted = Misc.DateToAPIFormat(selectedDate);
+        TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, getRoomIdFromName(roomSpinner.getSelectedItem().toString()), FragmentRooms.this, context, TimetableData.TimetableType.ROOM);
     }
 }

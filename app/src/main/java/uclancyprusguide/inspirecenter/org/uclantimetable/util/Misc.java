@@ -73,6 +73,11 @@ public class Misc {
         return String.format("%s - %s", formattedDate1, formattedDate2);
     }
 
+    public static String formatDateByPattern(LocalDate date, String pattern) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
+        return dtf.format(date);
+    }
+
     public static User loadUser(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Gson gson = new Gson();

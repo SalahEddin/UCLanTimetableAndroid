@@ -13,9 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.github.lzyzsd.circleprogress.Utils;
 
 import java.util.ArrayList;
 
@@ -35,12 +39,15 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
 
     // UI Binding
     private SwipeRefreshLayout pullToRefresh;
+    private TextView selectedDateTextView;
+    // adapters
     private ArrayList<TimetableSession> timetableSessions;
     private TimetableSessionAdapter eventArrAdapter;
     private Context context = null;
     // Data objects
-    private final String STUDENT_ID = "622";
-    private LocalDate selectedDate = null;
+    // TODO: 31/07/16 dynamicity
+    private String STUDENT_ID;
+    private LocalDate selectedDate = LocalDate.now();
 
     public FragmentTimetable() {
         // Required empty public constructor
@@ -65,58 +72,43 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, Misc.DateToAPIFormat(selectedDate), Misc.DateToAPIFormat(selectedDate), STUDENT_ID, FragmentTimetable.this, context, TimetableData.TimetableType.USER);
+                reloadTimetable();
             }
         });
+        // selected date textView
+        selectedDateTextView = (TextView) view.findViewById(R.id.selected_date_textView);
+        selectedDateTextView.setText(Misc.formatDateByPattern(selectedDate, "dd MMM, yy"));
+        // next/prev day buttons
+        Button nextDayButton = (Button) view.findViewById(R.id.next_day_button);
+        Button prevDayButton = (Button) view.findViewById(R.id.prev_day_button);
 
-        // spinner helps users pick a date quickly
-        Spinner spinner = (Spinner) view.findViewById(R.id.date_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout (the spinner values are predetermined in resources)
-        final ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(view.getContext(),
-                R.array.dates_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(spinnerAdapter);
-
-        spinnerAdapter.notifyDataSetChanged();
-
-        spinner.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View v,
-                                               int selectedIndex, long arg3) {
-                        String selectedDateFormatted = null;
-                        switch (selectedIndex) {
-                            case 0:
-                                selectedDate = LocalDate.now();
-                                selectedDateFormatted = Misc.DateToAPIFormat(selectedDate);
-                                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, STUDENT_ID, FragmentTimetable.this, context, TimetableData.TimetableType.USER);
-                                break;
-                            case 1:
-                                selectedDate = LocalDate.now();
-                                selectedDate.plusDays(1);
-                                selectedDateFormatted = Misc.DateToAPIFormat(selectedDate);
-                                TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, STUDENT_ID, FragmentTimetable.this, context, TimetableData.TimetableType.USER);
-                                break;
-                            default:
-                                TimetableDatePickerDialogDatePickerDialog datePicker = new TimetableDatePickerDialogDatePickerDialog(FragmentTimetable.this);
-                                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                datePicker.show(ft, "Date Picker");
-
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-                        // TODO Auto-generated method stub
-                    }
-                }
-        );
-
+        nextDayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedDate = selectedDate.plusDays(1);
+                reloadTimetable();
+            }
+        });
+        prevDayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedDate = selectedDate.minusDays(1);
+                reloadTimetable();
+            }
+        });
+        // date puickker button
+        Button datePickerButton = (Button) view.findViewById(R.id.date_picker_button);
+        datePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // launch date picker
+                TimetableDatePickerDialogDatePickerDialog datePicker = new TimetableDatePickerDialogDatePickerDialog(FragmentTimetable.this);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                datePicker.show(ft, "Date Picker");
+            }
+        });
         // update user offline timetable
+
         if (Misc.IsOnline(context)) {
             String todayDate = Misc.DateToAPIFormat(LocalDate.now());
             String OfflineDateLimit = Misc.DateToAPIFormat(LocalDate.now().plusMonths(3));
@@ -129,23 +121,31 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
                     .setCancelable(false)
                     .setPositiveButton("continue in offline mode", null).create().show();
         }
+
         return view;
     }
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        // add one to month because of zero-based indexing
         selectedDate = LocalDate.of(year, month + 1, day);
-        String selectedDateFormatted = Misc.DateToAPIFormat(selectedDate);
-        TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, STUDENT_ID, FragmentTimetable.this, context, TimetableData.TimetableType.USER);
+        reloadTimetable();
         Log.d("TAGS", selectedDate.toString());
     }
 
     @Override
     public void onDownloadFinished(ArrayList<TimetableSession> result) {
-
         timetableSessions.clear();
         timetableSessions.addAll(result);
         eventArrAdapter.notifyDataSetChanged();
         if (pullToRefresh.isRefreshing()) pullToRefresh.setRefreshing(false);
+    }
+
+    private void reloadTimetable() {
+        // update textView
+        STUDENT_ID = Misc.loadUser(getActivity()).getACCOUNT_ID();
+        selectedDateTextView.setText(Misc.formatDateByPattern(selectedDate, "dd MMM, yy"));
+        String selectedDateFormatted = Misc.DateToAPIFormat(selectedDate);
+        TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, STUDENT_ID, FragmentTimetable.this, context, TimetableData.TimetableType.USER);
     }
 }

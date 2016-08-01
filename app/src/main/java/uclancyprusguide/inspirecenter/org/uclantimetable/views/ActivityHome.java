@@ -27,7 +27,6 @@ public class ActivityHome extends AppCompatActivity
     public static final String TAG = "uclan-cy";
 
     public static final int FRAGMENT_ID_NEWS = 0x010;
-    public static final int FRAGMENT_ID_GALLERY = 0x020;
     public static final int FRAGMENT_ID_CONTACT = 0x030;
     public static final int FRAGMENT_ID_TIMETABLE = 0x040;
     public static final int FRAGMENT_ID_TIMETABLE_EXAMS = 0x050;
@@ -85,10 +84,14 @@ public class ActivityHome extends AppCompatActivity
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
 
+        // hide logout by default and show login
+        navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
+        navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
         User user = Misc.loadUser(this);
         if (user != null) {
             // user is logged in, hide unavailable stuff
             switchUserView(user.getACCOUNT_TYPE_ID());
+            navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
         }
     }
 
@@ -124,19 +127,29 @@ public class ActivityHome extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        // Handle navigation view item clicks here.
+        // get id of clicked item
         int id = item.getItemId();
         // check if user is logged in
         User user = Misc.loadUser(this);
         Boolean isUserLoggedIn = user != null;
 
+        // Handle navigation view item clicks here.
+
         // if logged in, show logout
         if (id == R.id.nav_logout && isUserLoggedIn) {
-// TODO: 29/07/16 remove logout
             Misc.logoutUser(this);
-        }
-        if (id == R.id.nav_news) {
+            // hide logout and secure items
+            navigationView.getMenu().findItem(R.id.nav_room_timetable).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_exams).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_attendance).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
+            selectedFragment = FRAGMENT_ID_NEWS;
+            selectFragment();
+        } else if (id == R.id.nav_login) {
+            selectedFragment = FRAGMENT_ID_LOGIN;
+            selectFragment();
+        } else if (id == R.id.nav_news) {
             selectedFragment = FRAGMENT_ID_NEWS;
             selectFragment();
         } else if (id == R.id.nav_contact) {
@@ -207,9 +220,6 @@ public class ActivityHome extends AppCompatActivity
             toolbar.setSubtitle(getString(R.string.News));
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentNews).commit();
             fragmentManager.executePendingTransactions();
-        } else if (selectedFragment == FRAGMENT_ID_GALLERY) {
-            toolbar.setSubtitle(getString(R.string.Gallery));
-            Toast.makeText(ActivityHome.this, R.string.Not_available_yet, Toast.LENGTH_SHORT).show();
         } else if (selectedFragment == FRAGMENT_ID_CONTACT) {
             toolbar.setSubtitle(getString(R.string.Contact));
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentContact).commit();
@@ -246,12 +256,19 @@ public class ActivityHome extends AppCompatActivity
 
     public void switchUserView(String userType) {
         Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_timetable).setVisible(true);
+        nav_Menu.findItem(R.id.nav_notifications).setVisible(true);
+
         if (userType.equals("5")) {
             // student
-            nav_Menu.findItem(R.id.nav_room_timetable).setVisible(false);
+            nav_Menu.findItem(R.id.nav_exams).setVisible(true);
+            nav_Menu.findItem(R.id.nav_attendance).setVisible(true);
+
         } else {
-            nav_Menu.findItem(R.id.nav_exams).setVisible(false);
-            nav_Menu.findItem(R.id.nav_attendance).setVisible(false);
+            nav_Menu.findItem(R.id.nav_room_timetable).setVisible(true);
         }
+        // make logout visible, and login invisible
+        nav_Menu.findItem(R.id.nav_logout).setVisible(true);
+        nav_Menu.findItem(R.id.nav_login).setVisible(false);
     }
 }
