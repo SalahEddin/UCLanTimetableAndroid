@@ -155,7 +155,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:text="Reception Telephone"
+                        android:text="Reception"
                         android:textColor="@color/colorPrimaryText" />
 
                     <Button
@@ -166,6 +166,7 @@
                         android:drawablePadding="15dp"
                         android:drawableStart="@drawable/ic_call_black_24dp"
                         android:drawableTint="@color/colorAccent"
+                        android:paddingEnd="16dp"
                         android:text="@string/Call" />
                 </LinearLayout>
 
@@ -187,7 +188,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:text="Student Support Telephone"
+                        android:text="Student Support"
                         android:textColor="@color/colorPrimaryText" />
 
                     <Button

@@ -5,7 +5,7 @@
     <string name="google_maps_key">11111</string>
     <string name="News">News</string>
     <string name="Gallery">Gallery</string>
-    <string name="Contact">Contact</string>
+    <string name="Contact">Contact Us</string>
 
     <string name="Students">Students</string>
 
@@ -87,4 +87,5 @@
     <string name="password">password</string>
     <string name="ExaminationTypeName">Examination</string>
     <string name="logout">Logout</string>
+    <string name="notificationKey">notificationKey</string>
 </resources>

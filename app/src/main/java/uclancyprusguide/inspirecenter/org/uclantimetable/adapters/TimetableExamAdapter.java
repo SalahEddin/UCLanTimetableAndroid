@@ -50,7 +50,7 @@ public class TimetableExamAdapter extends TimetableGenericAdapter {
         final TextView room = (TextView) view.findViewById(R.id.timetable_exam_list_item_room);
 
         date.setText(String.format("%s %s", ts.getStartTimeFormatted().getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH), Misc.getDayOfMonthSuffixed(ts.getStartTimeFormatted().getDayOfMonth())));
-        name.setText(String.format("%s - %s", ts.getModuleName(), ts.getModuleCode()));
+        name.setText(String.format("%s - %s", ts.getModuleCode(), ts.getModuleName()));
         room.setText(String.format("Room: %s", ts.getRoomCode()));
 
         time.setText(Misc.formatStartToEndDate(ts.getStartTimeFormatted(), ts.getEndTimeFormatted()));

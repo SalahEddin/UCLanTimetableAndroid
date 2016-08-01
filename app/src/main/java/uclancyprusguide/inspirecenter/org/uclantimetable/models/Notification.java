@@ -1,10 +1,12 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.models;
 
+import java.io.Serializable;
+
 /**
  * Created by salah on 29/07/16.
  * JSON response
  */
-public class Notification {
+public class Notification implements Serializable {
     private String EXPIRY_DATE;
 
     private String NOTIFICATION_STATUS;
@@ -18,6 +20,8 @@ public class Notification {
     private String PUBLISH_DATE;
 
     private String NOTIFICATION_TITLE;
+
+    private String IMPORTANT;
 
     private String NOTIFICATION_TYPE_ID;
 
@@ -83,6 +87,14 @@ public class Notification {
         this.NOTIFICATION_TITLE = NOTIFICATION_TITLE;
     }
 
+    public String getIMPORTANT() {
+        return IMPORTANT;
+    }
+
+    public void setIMPORTANT(String IMPORTANT) {
+        this.IMPORTANT = IMPORTANT;
+    }
+
     public String getNOTIFICATION_TYPE_ID() {
         return NOTIFICATION_TYPE_ID;
     }
@@ -115,6 +127,11 @@ public class Notification {
         this.NOTIFICATION_TEXT = NOTIFICATION_TEXT;
     }
 
+    @Override
+    public String toString() {
+        return "ClassPojo [EXPIRY_DATE = " + EXPIRY_DATE + ", NOTIFICATION_STATUS = " + NOTIFICATION_STATUS + ", NOTIFICATION_TYPE_NAME = " + NOTIFICATION_TYPE_NAME + ", USER_ID = " + USER_ID + ", CREATE_DATE = " + CREATE_DATE + ", PUBLISH_DATE = " + PUBLISH_DATE + ", NOTIFICATION_TITLE = " + NOTIFICATION_TITLE + ", IMPORTANT = " + IMPORTANT + ", NOTIFICATION_TYPE_ID = " + NOTIFICATION_TYPE_ID + ", NOTIFICATION_ID = " + NOTIFICATION_ID + ", NOTIFICATION_URL = " + NOTIFICATION_URL + ", NOTIFICATION_TEXT = " + NOTIFICATION_TEXT + "]";
+    }
+
     public boolean isRead() {
         int status = Integer.parseInt(NOTIFICATION_STATUS);
         byte byteStatus = (byte) status;
@@ -131,10 +148,5 @@ public class Notification {
         int status = Integer.parseInt(NOTIFICATION_STATUS);
         byte byteStatus = (byte) status;
         return (byteStatus >> 2 & 0b00000001) == 1;
-    }
-
-    @Override
-    public String toString() {
-        return "ClassPojo [EXPIRY_DATE = " + EXPIRY_DATE + ", NOTIFICATION_STATUS = " + NOTIFICATION_STATUS + ", NOTIFICATION_TYPE_NAME = " + NOTIFICATION_TYPE_NAME + ", USER_ID = " + USER_ID + ", CREATE_DATE = " + CREATE_DATE + ", PUBLISH_DATE = " + PUBLISH_DATE + ", NOTIFICATION_TITLE = " + NOTIFICATION_TITLE + ", NOTIFICATION_TYPE_ID = " + NOTIFICATION_TYPE_ID + ", NOTIFICATION_ID = " + NOTIFICATION_ID + ", NOTIFICATION_URL = " + NOTIFICATION_URL + ", NOTIFICATION_TEXT = " + NOTIFICATION_TEXT + "]";
     }
 }

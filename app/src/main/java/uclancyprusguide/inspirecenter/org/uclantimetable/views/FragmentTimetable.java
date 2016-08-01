@@ -11,15 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.github.lzyzsd.circleprogress.Utils;
 
 import java.util.ArrayList;
 
@@ -107,6 +102,16 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
                 datePicker.show(ft, "Date Picker");
             }
         });
+        // date acan be clicked
+        selectedDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // launch date picker
+                TimetableDatePickerDialogDatePickerDialog datePicker = new TimetableDatePickerDialogDatePickerDialog(FragmentTimetable.this);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                datePicker.show(ft, "Date Picker");
+            }
+        });
         // update user offline timetable
 
         if (Misc.IsOnline(context)) {
@@ -146,6 +151,11 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
         STUDENT_ID = Misc.loadUser(getActivity()).getACCOUNT_ID();
         selectedDateTextView.setText(Misc.formatDateByPattern(selectedDate, "dd MMM, yy"));
         String selectedDateFormatted = Misc.DateToAPIFormat(selectedDate);
-        TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, STUDENT_ID, FragmentTimetable.this, context, TimetableData.TimetableType.USER);
+        String type = Misc.loadUser(context).getACCOUNT_TYPE_ID();
+        if (type.equals("5")) {
+            TimetableData.LoadTimetableEvents(selectedDateFormatted, selectedDateFormatted, STUDENT_ID, FragmentTimetable.this, context, TimetableData.TimetableType.STUDENT);
+        } else {
+            TimetableData.LoadTimetableEvents(selectedDateFormatted, selectedDateFormatted, STUDENT_ID, FragmentTimetable.this, context, TimetableData.TimetableType.LECTURER);
+        }
     }
 }

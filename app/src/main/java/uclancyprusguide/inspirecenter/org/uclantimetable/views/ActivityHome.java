@@ -5,24 +5,32 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.List;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
+import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyNotificationCallbackInterface;
+import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.User;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
+import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
 
 public class ActivityHome extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MyNotificationCallbackInterface {
 
     public static final String TAG = "uclan-cy";
 
@@ -53,7 +61,8 @@ public class ActivityHome extends AppCompatActivity
     private FragmentRooms fragmentRooms = new FragmentRooms();
     private FragmentAbout fragmentAbout = new FragmentAbout();
 
-
+    // to update notification count
+    private MenuItem notificationNav;
     // holds ids of pages that requires logging in
     private static final Integer secureFragmentsArray[] = {
             R.id.nav_timetable,
@@ -92,6 +101,8 @@ public class ActivityHome extends AppCompatActivity
             // user is logged in, hide unavailable stuff
             switchUserView(user.getACCOUNT_TYPE_ID());
             navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
+            // TODO: 01/08/16 load notifications count
+            TimetableData.LoadNotifications(user.getUSER_ID(), this, this);
         }
     }
 
@@ -108,7 +119,6 @@ public class ActivityHome extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(SELECTED_FRAGMENT_KEY, selectedFragment).apply();
     }
 
@@ -123,7 +133,6 @@ public class ActivityHome extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -257,7 +266,8 @@ public class ActivityHome extends AppCompatActivity
     public void switchUserView(String userType) {
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.nav_timetable).setVisible(true);
-        nav_Menu.findItem(R.id.nav_notifications).setVisible(true);
+        notificationNav = nav_Menu.findItem(R.id.nav_notifications);
+        notificationNav.setVisible(true);
 
         if (userType.equals("5")) {
             // student
@@ -270,5 +280,19 @@ public class ActivityHome extends AppCompatActivity
         // make logout visible, and login invisible
         nav_Menu.findItem(R.id.nav_logout).setVisible(true);
         nav_Menu.findItem(R.id.nav_login).setVisible(false);
+    }
+
+    @Override
+    public void onNotificationDownloadFinished(List<Notification> notifications) {
+        final int notiCount = notifications.size();
+        TextView actionView = (TextView) MenuItemCompat.getActionView(notificationNav);
+        actionView.setText(String.valueOf(notiCount));
+        actionView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        actionView.setGravity(Gravity.CENTER);
+    }
+
+    @Override
+    public void onStatusChanged() {
+// ignored
     }
 }

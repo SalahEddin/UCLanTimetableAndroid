@@ -15,7 +15,7 @@
                 android:visible="true" />
             <item
                 android:id="@+id/nav_exams"
-                android:icon="@drawable/ic_assignment_black_48dp"
+                android:icon="@drawable/exam"
                 android:title="@string/Personal_upcoming_exams"
                 android:visible="false" />
 
@@ -30,7 +30,9 @@
                 android:id="@+id/nav_notifications"
                 android:icon="@drawable/ic_notifications_none_black_48dp"
                 android:title="@string/Personal_timetable_notifications"
-                android:visible="true" />
+                android:visible="true"
+                app:actionViewClass="android.widget.TextView"
+                app:showAsAction="always" />
 
             <item
                 android:id="@+id/nav_room_timetable"

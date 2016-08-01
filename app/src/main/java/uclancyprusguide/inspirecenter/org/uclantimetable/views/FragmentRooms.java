@@ -31,7 +31,6 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyRoomCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.RoomDatePickerDialogDatePickerDialog;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
-import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableDatePickerDialogDatePickerDialog;
 
 
 public class FragmentRooms extends Fragment implements TimetableData.MyCallbackInterface, MyRoomCallbackInterface, DatePickerDialog.OnDateSetListener {
@@ -129,6 +128,17 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
                 datePicker.show(ft, "Date Picker");
             }
         });
+        // text view is clickable
+        // date acan be clicked
+        selectedDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // launch date picker
+                RoomDatePickerDialogDatePickerDialog datePicker = new RoomDatePickerDialogDatePickerDialog(FragmentRooms.this);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                datePicker.show(ft, "Date Picker");
+            }
+        });
 
         return view;
     }
@@ -176,6 +186,6 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
         // update textView
         selectedDateTextView.setText(Misc.formatDateByPattern(selectedDate, "dd MMM, yy"));
         String selectedDateFormatted = Misc.DateToAPIFormat(selectedDate);
-        TimetableData.LoadTimetableEvents(TimetableData.TimetableEventsType.ALL, selectedDateFormatted, selectedDateFormatted, getRoomIdFromName(roomSpinner.getSelectedItem().toString()), FragmentRooms.this, context, TimetableData.TimetableType.ROOM);
+        TimetableData.LoadTimetableEvents(selectedDateFormatted, selectedDateFormatted, getRoomIdFromName(roomSpinner.getSelectedItem().toString()), FragmentRooms.this, context, TimetableData.TimetableType.ROOM);
     }
 }

@@ -22,6 +22,9 @@ public interface TimetableSystemAPI {
     @GET("app_getTimetableByStudent")
     Call<List<JSONEvent>> getTimetableByStudent(@Query("securityToken") String securityToken, @Query("STUDENT_ID") String studentId, @Query("START_DATE_TIME") String startDate, @Query("END_DATE_TIME") String endDate);
 
+    @GET("app_getTimetableByLecturer")
+    Call<List<JSONEvent>> getTimetableByLecturer(@Query("securityToken") String securityToken, @Query("LECTURER_ID") String studentId, @Query("START_DATE_TIME") String startDate, @Query("END_DATE_TIME") String endDate);
+
     @GET("app_login")
     Call<User> getAuthenticationData(@Query("securityToken") String securityToken, @Query("USERNAME") String username, @Query("PASSWORD") String hashedPass);
 
@@ -33,6 +36,9 @@ public interface TimetableSystemAPI {
 
     @GET("app_getNotificationsByUser")
     Call<List<Notification>> getNotificationsByUser(@Query("securityToken") String securityToken, @Query("USER_ID") String user_id);
+
+    @GET("app_getUpcomingExams")
+    Call<List<JSONEvent>> getUpcomingExam(@Query("securityToken") String securityToken, @Query("STUDENT_ID") String studentId);
 
     @GET("app_updateNotificationStatus")
     Call<Void> updateNotificationStatus(@Query("securityToken") String securityToken, @Query("NOTIFICATION_ID") int id, @Query("NOTIFICATION_STATUS") int newStatus);

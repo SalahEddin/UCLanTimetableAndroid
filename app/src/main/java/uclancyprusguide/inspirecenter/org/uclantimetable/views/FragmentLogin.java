@@ -73,8 +73,16 @@ public class FragmentLogin extends Fragment implements MyUserCallbackInterface {
                 } else {
                     lastTypedName = mailText.getText().toString();
                     lastTypedPass = mailPass.getText().toString();
-                    FragmentLogin.this.checkLogin(
-                            mailText.getText() + getString(R.string.uclan_mail_suffix), mailPass.getText().toString());
+                    // check if @ is already typed
+                    final String userName = (!mailText.getText().toString().toLowerCase().contains(getString(R.string.uclan_mail_suffix))) ? mailText.getText().toString() + getString(R.string.uclan_mail_suffix) : mailText.getText().toString();
+                    FragmentLogin.this.checkLogin(userName, mailPass.getText().toString());
+
+                    // Check if no view has focus:
+                    View view = getActivity().getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
                 }
             }
         });

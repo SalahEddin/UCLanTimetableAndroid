@@ -1,17 +1,22 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import uclancyprusguide.inspirecenter.org.uclantimetable.DetailedNotificationActivity;
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
 import uclancyprusguide.inspirecenter.org.uclantimetable.adapters.TimetableNotificationAdapter;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyNotificationCallbackInterface;
@@ -23,26 +28,34 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
  * Retrieves events with notification types (cancelled, room changed, etc.)
  */
 public class FragmentTimetableNotifications extends Fragment implements MyNotificationCallbackInterface {
-
+    // TODO: 01/08/16 filter
     private final ArrayList<Notification> allNotifications = new ArrayList<>();
-    private final ArrayList<Notification> selectedNotifications = new ArrayList<>();
     private TimetableNotificationAdapter notificationAdapter;
     private SwipeRefreshLayout pullToRefresh;
     private Context context = null;
+    private ListView eventsListView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_timetable_notifications, container, false);
         context = getActivity();
         // set adapter
-        notificationAdapter = new TimetableNotificationAdapter(view.getContext(), selectedNotifications, this);
+        notificationAdapter = new TimetableNotificationAdapter(context, allNotifications, this);
 
         // bind the listView
-        ListView eventsListView = (ListView) view.findViewById(R.id.eventsListView);
+        eventsListView = (ListView) view.findViewById(R.id.eventsListView);
         eventsListView.setAdapter(notificationAdapter);
+        eventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent myIntent = new Intent(context, DetailedNotificationActivity.class);
+                myIntent.putExtra(context.getString(R.string.notificationKey), allNotifications.get(i));
+                startActivity(myIntent);
+            }
+        });
 
         //pull to refresh
         pullToRefresh = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
@@ -65,24 +78,36 @@ public class FragmentTimetableNotifications extends Fragment implements MyNotifi
     }
 
     @Override
-    public void onNotificationDownloadFinished(List<Notification> notifications) {
+    public void onNotificationDownloadFinished(final List<Notification> notifications) {
         allNotifications.clear();
         allNotifications.addAll(notifications);
-        // fill the viewed notifs
-        selectedNotifications.clear();
-        selectedNotifications.addAll(notifications);
+        // sort
+        Collections.sort(allNotifications, new Comparator<Notification>() {
+            @Override
+            public int compare(Notification a1, Notification a2) {
+                // String implements Comparable
+                return (a1.getIMPORTANT()).compareTo(a2.getIMPORTANT());
+            }
+        });
+
         // update adapter
-        notificationAdapter.notifyDataSetChanged();
+        notificationAdapter = new TimetableNotificationAdapter(context, allNotifications, this);
+        eventsListView.setAdapter(notificationAdapter);
         if (pullToRefresh.isRefreshing()) pullToRefresh.setRefreshing(false);
     }
 
     @Override
     public void onStatusChanged() {
-        // todo reload notifications
-        TimetableData.LoadNotifications("15", this, context);
+        reloadNotifications();
     }
 
     public FragmentTimetableNotifications() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadNotifications();
     }
 }

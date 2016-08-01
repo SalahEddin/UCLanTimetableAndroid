@@ -55,7 +55,6 @@ public class TimetableNotificationAdapter extends BaseSwipeAdapter {
         // cell content
         final Notification item = mNotificationArrayList.get(position);
 
-        final LocalDateTime currentTime = LocalDateTime.now();
         final LocalDateTime publishDate = Misc.APITimestampToLocalDate(item.getPUBLISH_DATE());
         // format date
         String dateFormatted = String.format("%s %s", publishDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH), Misc.getDayOfMonthSuffixed(publishDate.getDayOfMonth()));
@@ -74,11 +73,13 @@ public class TimetableNotificationAdapter extends BaseSwipeAdapter {
         title.setText(item.getNOTIFICATION_TITLE());
 
         final TextView desc = (TextView) v.findViewById(R.id.timetable_notify_list_item_desc);
-        desc.setText(item.getNOTIFICATION_TEXT());
+        desc.setText(item.getNOTIFICATION_TYPE_NAME());
 
         final View ribbon = v.findViewById(R.id.isImportantView);
         // TODO: 29/07/16 change types of importance
-        if (isImportant(item.getNOTIFICATION_STATUS())) {
+        if (isImportant(item.getIMPORTANT())) {
+            ribbon.setVisibility(View.VISIBLE);
+        } else {
             ribbon.setVisibility(View.INVISIBLE);
         }
 
@@ -91,87 +92,82 @@ public class TimetableNotificationAdapter extends BaseSwipeAdapter {
             desc.setTextColor(mContext.getResources().getColor(R.color.light_gray));
         }
 
+        // id of notification
         final int ParsedNotifId = Integer.parseInt(item.getNOTIFICATION_ID());
         // swipe code
         SwipeLayout swipeLayout = (SwipeLayout) v.findViewById(getSwipeLayoutResourceId(position));
 
-        // delete button
-        swipeLayout.addDrag(SwipeLayout.DragEdge.Left, swipeLayout.findViewById(R.id.left_wrapper));
-        v.findViewById(R.id.delete).setOnClickListener(new View.OnClickListener() {
+        final View left_wrapper = swipeLayout.findViewById(R.id.left_wrapper);
+        final View rightSwipeView = swipeLayout.findViewById(R.id.right_wrapper);
+
+        // delete button on left swipe
+        final View deleteButton = v.findViewById(R.id.delete);
+        swipeLayout.addDrag(SwipeLayout.DragEdge.Left, left_wrapper);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                // TimetableData.ChangeNotifStatus(TimetableData.NotifStatus.DELETED,ParsedNotifId,callbackInterface,mContext);
                 Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
             }
         });
+        // right swipe
+        swipeLayout.addDrag(SwipeLayout.DragEdge.Right, rightSwipeView);
 
-        if (!item.isDeleted()) {
-            if (!item.isArchived()) {
-                // the root wrapper linear layout
-                View rightSwipeView = swipeLayout.findViewById(R.id.right_wrapper);
-                swipeLayout.addDrag(SwipeLayout.DragEdge.Right, rightSwipeView);
-                View markWrapperView = rightSwipeView.findViewById(R.id.right_read_wrapper);
-                if (item.isRead()) {
-                    // change option to Mark as unread
-                    TextView markTextView = (TextView) markWrapperView.findViewById(R.id.readText);
-                    ImageButton markImageView = (ImageButton) markWrapperView.findViewById(R.id.readBtn);
-                    markTextView.setText("mark as unread");
-                    markImageView.setImageResource(R.drawable.mark_unread);
-                }
-                // mark listener
-                markWrapperView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // update read status
-                        TimetableData.ChangeNotifStatus(item.isRead() ? TimetableData.NotifStatus.UNREAD : TimetableData.NotifStatus.READ,
-                                ParsedNotifId, callbackInterface, mContext);
-                        Toast.makeText(mContext, "click Mark as", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                //archive listener
-                (rightSwipeView.findViewById(R.id.right_archive_wrapper)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        TimetableData.ChangeNotifStatus(TimetableData.NotifStatus.ARCHIVED, ParsedNotifId, callbackInterface, mContext);
-                        Toast.makeText(mContext, "click Mark as", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            } else {
-                // archived, only unarchive option
-                View rightSwipeView = swipeLayout.findViewById(R.id.right_archive_wrapper);
-                ((TextView) rightSwipeView.findViewById(R.id.archiveText)).setText("unarchive");
-                ((ImageButton) rightSwipeView.findViewById(R.id.archiveBtn)).setImageResource(R.drawable.unarchive);
-                swipeLayout.addDrag(SwipeLayout.DragEdge.Right, rightSwipeView);
-                rightSwipeView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        TimetableData.ChangeNotifStatus(TimetableData.NotifStatus.UNARCHIVED, ParsedNotifId, callbackInterface, mContext);
-                        Toast.makeText(mContext, "Unarchived", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+        final View markWrapperView = rightSwipeView.findViewById(R.id.right_read_wrapper);
+        final View archiveWrapperView = swipeLayout.findViewById(R.id.right_archive_wrapper);
+        // TODO: 01/08/16 optimise (not process is read to begin with)
+        // mark as View
+        final TextView markTextView = (TextView) markWrapperView.findViewById(R.id.readText);
+        final ImageButton markImageButton = (ImageButton) markWrapperView.findViewById(R.id.readBtn);
+        if (item.isRead()) {
+            // change option to Mark as unread
+            markTextView.setText("mark as unread");
+            markImageButton.setImageResource(R.drawable.mark_unread);
+        } else {
+            markTextView.setText("mark as read");
+            markImageButton.setImageResource(R.drawable.mark_read);
         }
+        //Archive View
+        final TextView archiveTextView = (TextView) archiveWrapperView.findViewById(R.id.archiveText);
+        final ImageButton archiveImageButton = (ImageButton) archiveWrapperView.findViewById(R.id.archiveBtn);
 
-//        // mark
-//        v.findViewById(R.id.right_archive_wrapper).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(mContext, "click archive", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        // archive
-//        v.findViewById(R.id.right_read_wrapper).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(mContext, "click read", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        if (item.isArchived()) {
+            // hide mark as view
+            markWrapperView.setVisibility(View.GONE);
+            archiveTextView.setText("Unarchive");
+            archiveImageButton.setImageResource(R.drawable.unarchive);
+        } else {
+            archiveTextView.setText("Archive");
+            archiveImageButton.setImageResource(R.drawable.archive);
+        }
+        // setting listeners
+        View.OnClickListener markListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // update read status
+                TimetableData.ChangeNotifStatus(item.isRead() ? TimetableData.NotifStatus.UNREAD : TimetableData.NotifStatus.READ,
+                        ParsedNotifId, callbackInterface, mContext);
+                Toast.makeText(mContext, item.isRead() ? "Marked as unread" : "Marked as read", Toast.LENGTH_SHORT).show();
+            }
+        };
+        markWrapperView.setOnClickListener(markListener);
+        markImageButton.setOnClickListener(markListener);
+
+        View.OnClickListener archiveListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimetableData.ChangeNotifStatus(item.isArchived() ? TimetableData.NotifStatus.UNARCHIVED : TimetableData.NotifStatus.ARCHIVED, ParsedNotifId, callbackInterface, mContext);
+                Toast.makeText(mContext, item.isArchived() ? "Unarchived" : "Archived", Toast.LENGTH_SHORT).show();
+            }
+        };
+        archiveWrapperView.setOnClickListener(archiveListener);
+        archiveImageButton.setOnClickListener(archiveListener);
+
         return v;
     }
 
     public static boolean isImportant(String type) {
-        return !type.toUpperCase().equals("ROOM CHANGE");
+        return type.equals("1");
     }
 
     @Override
@@ -182,11 +178,7 @@ public class TimetableNotificationAdapter extends BaseSwipeAdapter {
 
     @Override
     public int getCount() {
-        int count = 0;
-        for (int i = 0; i < mNotificationArrayList.size(); ++i) {
-            if (!mNotificationArrayList.get(i).isDeleted()) count++;
-        }
-        return count;
+        return mNotificationArrayList.size();
     }
 
     @Override

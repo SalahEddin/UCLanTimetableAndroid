@@ -23,8 +23,7 @@ public class ActivityAbout extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Obtain the shared Tracker instance.
@@ -37,7 +36,7 @@ public class ActivityAbout extends AppCompatActivity {
                 .build());
 
         final ActionBar actionBar = getActionBar();
-        if(actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Display the fragment as the main content.
         getFragmentManager()
@@ -46,11 +45,9 @@ public class ActivityAbout extends AppCompatActivity {
                 .commit();
     }
 
-    public static class AboutFragment extends PreferenceFragment
-    {
+    public static class AboutFragment extends PreferenceFragment {
         @Override
-        public void onCreate(Bundle savedInstanceState)
-        {
+        public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
             // Load the preferences from an XML resource

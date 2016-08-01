@@ -48,12 +48,8 @@ public class TimetableData {
         void onDownloadFinished(ArrayList<TimetableSession> result);
     }
 
-    public enum TimetableEventsType {
-        ALL, EXAMS, NOTIFICATIONS
-    }
-
     public enum TimetableType {
-        USER, ROOM
+        STUDENT, ROOM, LECTURER, EXAM
     }
 
     public enum NotifStatus {
@@ -92,14 +88,13 @@ public class TimetableData {
 
     private static int getStatusInt(NotifStatus status) {
         switch (status) {
+            case UNARCHIVED:
             case READ:
                 return 1;
             case UNREAD:
                 return 0;
             case ARCHIVED:
                 return 4;
-            case UNARCHIVED:
-                return 1;
             case DELETED:
                 return 2;
             default:
@@ -261,8 +256,7 @@ public class TimetableData {
 
     }
 
-    public static void LoadTimetableEvents(final TimetableEventsType typeFilter,
-                                           final String startDate, final String endDate,
+    public static void LoadTimetableEvents(final String startDate, final String endDate,
                                            final String id, final MyCallbackInterface myCallbackInterface, final Context context, final TimetableType timetableType) {
         final ArrayList<TimetableSession> processedEvents = new ArrayList<>();
 
@@ -314,18 +308,18 @@ public class TimetableData {
 
                     LocalDate itemDate = Misc.parseHoursMinsDate(event.getSTART_TIME().getHours(), event.getSTART_TIME().getMinutes(), event.getSESSION_DATE_FORMATTED()).toLocalDate();
                     LocalDate selectedDateParsed = Misc.APIFormatToLocalDate(startDate);
-
+// TODO: 01/08/16 offline support
                     // exams
-                    if ((typeFilter.equals(TimetableEventsType.EXAMS) && event.getSESSION_DESCRIPTION().equals(context.getString(R.string.ExaminationTypeName)))) {
-                        processedEvents.add(new TimetableSession(event.getMODULE_CODE(), event.getMODULE_NAME(), event.getROOM_CODE(), start_date, end_date,
-                                event.getDAY_OF_WEEK(), Integer.parseInt(event.getDURATION()), event.getLECTURER_NAME(), event.getSESSION_DESCRIPTION()));
-                    }
-
-                    // if timetable, match date
-                    else if (typeFilter.equals(TimetableEventsType.ALL) && itemDate.isEqual(selectedDateParsed)) {
-                        processedEvents.add(new TimetableSession(event.getMODULE_CODE(), event.getMODULE_NAME(), event.getROOM_CODE(), start_date, end_date,
-                                event.getDAY_OF_WEEK(), Integer.parseInt(event.getDURATION()), event.getLECTURER_NAME(), event.getSESSION_DESCRIPTION()));
-                    }
+//                    if ((typeFilter.equals(TimetableEventsType.EXAMS) && event.getSESSION_DESCRIPTION().equals(context.getString(R.string.ExaminationTypeName)))) {
+//                        processedEvents.add(new TimetableSession(event.getMODULE_CODE(), event.getMODULE_NAME(), event.getROOM_CODE(), start_date, end_date,
+//                                event.getDAY_OF_WEEK(), Integer.parseInt(event.getDURATION()), event.getLECTURER_NAME(), event.getSESSION_DESCRIPTION()));
+//                    }
+//
+//                    // if timetable, match date
+//                    else if (typeFilter.equals(TimetableEventsType.ALL) && itemDate.isEqual(selectedDateParsed)) {
+//                        processedEvents.add(new TimetableSession(event.getMODULE_CODE(), event.getMODULE_NAME(), event.getROOM_CODE(), start_date, end_date,
+//                                event.getDAY_OF_WEEK(), Integer.parseInt(event.getDURATION()), event.getLECTURER_NAME(), event.getSESSION_DESCRIPTION()));
+//                    }
                 }
                 myCallbackInterface.onDownloadFinished(processedEvents);
             } else {/*error loading events*/}
@@ -333,13 +327,18 @@ public class TimetableData {
         } else {
             // online request
             TimetableSystemAPI api = getDefaultUCLanAPI();
-
+            // Choosing appropriate API
             Call<List<JSONEvent>> getCall;
-            if (timetableType == TimetableType.USER) {
+            if (timetableType == TimetableType.STUDENT) {
                 getCall = api.getTimetableByStudent(TimetableSystemAPI.SECURITY_TOKEN, id, startDate, endDate);
+            } else if (timetableType == TimetableType.LECTURER) {
+                getCall = api.getTimetableByLecturer(TimetableSystemAPI.SECURITY_TOKEN, id, startDate, endDate);
+            } else if (timetableType == TimetableType.EXAM) {
+                getCall = api.getUpcomingExam(TimetableSystemAPI.SECURITY_TOKEN, id);
             } else {
                 getCall = api.getRoomTimtable(TimetableSystemAPI.SECURITY_TOKEN, id, startDate, endDate);
             }
+
             getCall.enqueue(new Callback<List<JSONEvent>>() {
                 @Override
                 public void onResponse(Call<List<JSONEvent>> call, Response<List<JSONEvent>> response) {
@@ -356,11 +355,9 @@ public class TimetableData {
                             startDate = Misc.parseHoursMinsDate(event.getSTART_TIME().getHours(), event.getSTART_TIME().getMinutes(), event.getSESSION_DATE_FORMATTED());
                             endDate = Misc.parseHoursMinsDate(event.getEND_TIME().getHours(), event.getEND_TIME().getMinutes(), event.getSESSION_DATE_FORMATTED());
 
-                            if ((typeFilter.equals(TimetableEventsType.EXAMS) && event.getSESSION_DESCRIPTION().equals("Examination"))
-                                    || (typeFilter.equals(TimetableEventsType.ALL))) {
-                                processedEvents.add(new TimetableSession(event.getMODULE_CODE(), event.getMODULE_NAME(), event.getROOM_CODE(), startDate, endDate,
-                                        event.getDAY_OF_WEEK(), Integer.parseInt(event.getDURATION()), event.getLECTURER_NAME(), event.getSESSION_DESCRIPTION()));
-                            }
+                            processedEvents.add(new TimetableSession(event.getMODULE_CODE(), event.getMODULE_NAME(), event.getROOM_CODE(), startDate, endDate,
+                                    event.getDAY_OF_WEEK(), Integer.parseInt(event.getDURATION()), event.getLECTURER_NAME(), event.getSESSION_DESCRIPTION()));
+
                         }
                         // Get a handler that can be used to post to the main thread
                         Handler mainHandler = new Handler(context.getMainLooper());
