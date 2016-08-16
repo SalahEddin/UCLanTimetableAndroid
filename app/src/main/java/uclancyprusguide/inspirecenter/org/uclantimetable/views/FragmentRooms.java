@@ -3,6 +3,7 @@ package uclancyprusguide.inspirecenter.org.uclantimetable.views;
 import android.app.DatePickerDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +18,8 @@ import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import org.threeten.bp.LocalDate;
 
@@ -47,7 +50,8 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
     private List<JSONRoom> roomsList; // dictionary
     private ArrayList<String> roomCodeArrayList;
     private ArrayAdapter<String> roomSpinnerAdapter;
-
+    // index
+    int selectedRoomIndex = 0;
 
     public FragmentRooms() {
         // Required empty public constructor
@@ -128,7 +132,6 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
             }
         });
         // text view is clickable
-        // date acan be clicked
         selectedDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,6 +171,7 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
             roomCodeArrayList.add(room.getROOM_CODE());
         }
         roomSpinnerAdapter.notifyDataSetChanged();
+        roomSpinner.setSelection(selectedRoomIndex);
     }
 
     String getRoomIdFromName(String name) {
@@ -186,5 +190,40 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
         selectedDateTextView.setText(Misc.formatDateByPattern(selectedDate, "dd MMM, yy"));
         String selectedDateFormatted = Misc.DateToAPIFormat(selectedDate);
         TimetableData.LoadTimetableEvents(selectedDateFormatted, selectedDateFormatted, getRoomIdFromName(roomSpinner.getSelectedItem().toString()), FragmentRooms.this, context, TimetableData.TimetableType.ROOM);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        final String date_key = getActivity().getString(R.string.selected_date);
+        final String room_key = getActivity().getString(R.string.selected_room);
+
+        getActivity();
+        SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+        String dateJson = gson.toJson(selectedDate);
+
+        prefsEditor.putString(date_key, dateJson).apply();
+        int selectedRoomIndex = roomSpinner.getSelectedItemPosition();
+
+        prefsEditor.putInt(room_key, selectedRoomIndex).apply();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        final String date_key = getActivity().getString(R.string.selected_date);
+        final String room_key = getActivity().getString(R.string.selected_room);
+
+        SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = mPrefs.getString(date_key, "");
+        selectedDate = gson.fromJson(json, LocalDate.class);
+
+        if (selectedDate == null) selectedDate = LocalDate.now();
+        selectedDateTextView.setText(Misc.formatDateByPattern(selectedDate, "dd MMM, yy"));
+        selectedRoomIndex = mPrefs.getInt(room_key, 1);
     }
 }

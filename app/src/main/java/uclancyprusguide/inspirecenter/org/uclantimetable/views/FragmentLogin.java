@@ -109,13 +109,6 @@ public class FragmentLogin extends Fragment implements UserCallbackInterface {
         return view;
     }
 
-    // TODO: 26/07/16 implement
-    private void dismissSoftKeyboard() {
-        // Check if no view has focus, then hide keyboard todo resolve
-        InputMethodManager imm = (InputMethodManager) vi.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-    }
-
     private void generateEmptySubmittedAlert(String Title, String Description, String DissmissButtonText) {
         AlertDialog alertDialog = new AlertDialog.Builder((AppCompatActivity) getActivity()).create();
         alertDialog.setTitle(Title);

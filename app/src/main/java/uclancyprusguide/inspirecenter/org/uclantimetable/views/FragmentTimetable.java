@@ -3,8 +3,10 @@ package uclancyprusguide.inspirecenter.org.uclantimetable.views;
 import android.app.DatePickerDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -15,6 +17,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -43,6 +47,7 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
     private String STUDENT_ID;
     private LocalDate selectedDate = LocalDate.now();
 
+
     public FragmentTimetable() {
         // Required empty public constructor
     }
@@ -53,7 +58,9 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
         // Inflate the layout for this fragment
         setHasOptionsMenu(true);
         context = getActivity();
+
         final View view = inflater.inflate(R.layout.fragment_timetable, container, false);
+
         // initialise dataset and adapter
         timetableSessions = new ArrayList<>();
         eventArrAdapter = new TimetableSessionAdapter(view.getContext(), timetableSessions);
@@ -156,5 +163,34 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
         } else {
             TimetableData.LoadTimetableEvents(selectedDateFormatted, selectedDateFormatted, STUDENT_ID, FragmentTimetable.this, context, TimetableData.TimetableType.LECTURER);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        getActivity();
+        SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+        String dateJson = gson.toJson(selectedDate);
+        String date_key = getActivity().getString(R.string.selected_date);
+        prefsEditor.putString(date_key, dateJson).apply();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String date_key = getActivity().getString(R.string.selected_date);
+        String json = mPrefs.getString(date_key, "");
+        selectedDate = gson.fromJson(json, LocalDate.class);
+
+        if (selectedDate == null) selectedDate = LocalDate.now();
+
+        selectedDateTextView.setText(Misc.formatDateByPattern(selectedDate, "dd MMM, yy"));
+        reloadTimetable();
     }
 }

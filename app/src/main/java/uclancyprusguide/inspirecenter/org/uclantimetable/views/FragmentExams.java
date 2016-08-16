@@ -50,7 +50,6 @@ public class FragmentExams extends Fragment implements TimetableData.MyCallbackI
         ListView eventsListView = (ListView) view.findViewById(R.id.eventsListView);
         eventsListView.setAdapter(eventArrAdapter);
 
-
         //pull to refresh
         pullToRefresh = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
         pullToRefresh.setColorSchemeColors(getResources().getColor(R.color.colorAccent));

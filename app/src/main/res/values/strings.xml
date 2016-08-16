@@ -92,4 +92,6 @@
     <string name="sessions_filename">timetable_sessions</string>
     <string name="notifications_filename">timetable_notifications</string>
     <string name="network_connection_required">network connection is required to perform this action</string>
+    <string name="selected_date">selected-date</string>
+    <string name="selected_room">selected-room</string>
 </resources>

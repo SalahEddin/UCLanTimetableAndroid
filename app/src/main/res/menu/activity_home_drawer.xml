@@ -2,7 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="@string/app_name">
+    <item
+        android:id="@+id/drawer_title"
+        android:title="@string/app_name">
         <menu>
             <item
                 android:id="@+id/nav_login"

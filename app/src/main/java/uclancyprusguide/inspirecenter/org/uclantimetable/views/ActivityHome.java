@@ -44,6 +44,8 @@ public class ActivityHome extends AppCompatActivity
     public static final int FRAGMENT_ID_ABOUT = 0x100;
 
     public static final String SELECTED_FRAGMENT_KEY = "selected-fragment";
+    public static final String SELECTED_DATE_KEY = "selected-date";
+    public static final String SELECTED_ROOM_KEY = "selected-room";
 
     final FragmentManager fragmentManager = getFragmentManager();
     NavigationView navigationView;
@@ -85,7 +87,7 @@ public class ActivityHome extends AppCompatActivity
         assert drawer != null;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -102,6 +104,8 @@ public class ActivityHome extends AppCompatActivity
             navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
             // load notifications count
             TimetableData.LoadNotifications(user.getUSER_ID(), this, this);
+            // put name on the drawer
+            navigationView.getMenu().findItem(R.id.drawer_title).setTitle(user.getFULLNAME());
         }
     }
 
@@ -119,6 +123,8 @@ public class ActivityHome extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(SELECTED_FRAGMENT_KEY, selectedFragment).apply();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(getString(R.string.selected_room), selectedFragment).apply();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(getString(R.string.selected_date), selectedFragment).apply();
     }
 
     @Override
@@ -153,6 +159,8 @@ public class ActivityHome extends AppCompatActivity
             navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
             selectedFragment = FRAGMENT_ID_LOGIN;
+            // remove name
+            navigationView.getMenu().findItem(R.id.drawer_title).setTitle("My Portal");
             selectFragment();
         } else if (id == R.id.nav_login) {
             selectedFragment = FRAGMENT_ID_LOGIN;
@@ -284,10 +292,12 @@ public class ActivityHome extends AppCompatActivity
     @Override
     public void onAllDownloaded(List<Notification> notifications) {
         final int notiCount = notifications.size();
-        TextView actionView = (TextView) MenuItemCompat.getActionView(notificationNav);
-        actionView.setText(String.valueOf(notiCount));
-        actionView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        actionView.setGravity(Gravity.CENTER);
+        if (notiCount > 0) {
+            TextView actionView = (TextView) MenuItemCompat.getActionView(notificationNav);
+            actionView.setText(String.valueOf(notiCount));
+            actionView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            actionView.setGravity(Gravity.CENTER);
+        }
     }
 
     @Override

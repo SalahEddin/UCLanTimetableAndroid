@@ -27,6 +27,7 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
  * Retrieves events with notification types (cancelled, room changed, etc.)
  */
 public class FragmentTimetableNotifications extends Fragment implements NotificationsCallbackInterface {
+
     // TODO: 01/08/16 filter
     private final ArrayList<Notification> allNotifications = new ArrayList<>();
     private TimetableNotificationAdapter notificationAdapter;
@@ -71,7 +72,7 @@ public class FragmentTimetableNotifications extends Fragment implements Notifica
         {
             // save for offline use
             String userId = Misc.loadUser(context).getUSER_ID();
-            TimetableData.LoadNotificationsOffline(context);
+            TimetableData.SaveNotificationsOffline(userId, context);
         }
 
         return view;

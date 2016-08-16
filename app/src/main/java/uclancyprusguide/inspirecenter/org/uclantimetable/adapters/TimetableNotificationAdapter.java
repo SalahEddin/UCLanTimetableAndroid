@@ -75,7 +75,7 @@ public class TimetableNotificationAdapter extends BaseSwipeAdapter {
         desc.setText(item.getNOTIFICATION_TYPE_NAME());
 
         final View ribbon = v.findViewById(R.id.isImportantView);
-        // TODO: 29/07/16 change types of importance
+
         if (isImportant(item.getIMPORTANT())) {
             ribbon.setVisibility(View.VISIBLE);
         } else {
