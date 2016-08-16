@@ -40,7 +40,6 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
     private TimetableSessionAdapter eventArrAdapter;
     private Context context = null;
     // Data objects
-    // TODO: 31/07/16 dynamicity
     private String STUDENT_ID;
     private LocalDate selectedDate = LocalDate.now();
 
@@ -117,7 +116,7 @@ public class FragmentTimetable extends Fragment implements DatePickerDialog.OnDa
         if (Misc.IsOnline(context)) {
             String todayDate = Misc.DateToAPIFormat(LocalDate.now());
             String OfflineDateLimit = Misc.DateToAPIFormat(LocalDate.now().plusMonths(3));
-            TimetableData.SaveTimetableEventsForOffline(todayDate, OfflineDateLimit, STUDENT_ID, context);
+            TimetableData.SaveEventsOffline(todayDate, OfflineDateLimit, STUDENT_ID, context);
         } else {
             // user is offline
             new AlertDialog.Builder(context)

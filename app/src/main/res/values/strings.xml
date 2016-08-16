@@ -80,7 +80,7 @@
     <string name="activity_after_login">LoginReturnActivityId</string>
     <string name="show_more_button_text">Show More Badges</string>
     <string name="show_less_button_text">Show Less Badges</string>
-    <string name="sessions_filename">timetable_sessions</string>
+
     <string name="APIDatePattern">yyyy-MM-dd</string>
     <string name="userId">user_id</string>
     <string name="username">username</string>
@@ -88,4 +88,8 @@
     <string name="ExaminationTypeName">Examination</string>
     <string name="logout">Logout</string>
     <string name="notificationKey">notificationKey</string>
+    <!--offline files names-->
+    <string name="sessions_filename">timetable_sessions</string>
+    <string name="notifications_filename">timetable_notifications</string>
+    <string name="network_connection_required">network connection is required to perform this action</string>
 </resources>

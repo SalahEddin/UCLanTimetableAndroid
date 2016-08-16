@@ -40,6 +40,9 @@ public interface TimetableSystemAPI {
     @GET("app_getUpcomingExams")
     Call<List<JSONEvent>> getUpcomingExam(@Query("securityToken") String securityToken, @Query("STUDENT_ID") String studentId);
 
+    @GET("app_getNotification")
+    Call<Notification> getNotificationById(@Query("securityToken") String securityToken, @Query("NOTIFICATION_ID") String id);
+
     @GET("app_updateNotificationStatus")
     Call<Void> updateNotificationStatus(@Query("securityToken") String securityToken, @Query("NOTIFICATION_ID") int id, @Query("NOTIFICATION_STATUS") int newStatus);
 }

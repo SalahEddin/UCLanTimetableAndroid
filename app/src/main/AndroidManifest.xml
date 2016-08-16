@@ -52,7 +52,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".views.ActivityHome" />
         </activity>
-        <activity android:name=".DetailedNotificationActivity"></activity>
+        <activity android:name=".views.DetailedNotificationActivity"></activity>
     </application>
 
 </manifest>

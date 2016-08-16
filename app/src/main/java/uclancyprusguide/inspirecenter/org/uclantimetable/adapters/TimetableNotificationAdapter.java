@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +21,7 @@ import org.threeten.bp.format.TextStyle;
 
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
-import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyNotificationCallbackInterface;
+import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.NotificationsCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
@@ -34,10 +33,10 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
 public class TimetableNotificationAdapter extends BaseSwipeAdapter {
 
     private Context mContext;
-    private MyNotificationCallbackInterface callbackInterface;
+    private NotificationsCallbackInterface callbackInterface;
     private ArrayList<Notification> mNotificationArrayList;
 
-    public TimetableNotificationAdapter(Context mContext, ArrayList<Notification> dataset, MyNotificationCallbackInterface initCallbackInterface) {
+    public TimetableNotificationAdapter(Context mContext, ArrayList<Notification> dataset, NotificationsCallbackInterface initCallbackInterface) {
         this.mContext = mContext;
         this.mNotificationArrayList = dataset;
         this.callbackInterface = initCallbackInterface;
@@ -88,17 +87,18 @@ public class TimetableNotificationAdapter extends BaseSwipeAdapter {
             date.setTypeface(null, Typeface.NORMAL);
             time.setTextColor(mContext.getResources().getColor(R.color.light_gray));
             title.setTypeface(null, Typeface.NORMAL);
-//            title.setTextColor(mContext.getResources().getColor(R.color.light_gray));
             desc.setTextColor(mContext.getResources().getColor(R.color.light_gray));
         }
 
         // id of notification
         final int ParsedNotifId = Integer.parseInt(item.getNOTIFICATION_ID());
+
+        /////////////
         // swipe code
         SwipeLayout swipeLayout = (SwipeLayout) v.findViewById(getSwipeLayoutResourceId(position));
 
         final View left_wrapper = swipeLayout.findViewById(R.id.left_wrapper);
-        final View rightSwipeView = swipeLayout.findViewById(R.id.right_wrapper);
+        final View right_wrapper = swipeLayout.findViewById(R.id.right_wrapper);
 
         // delete button on left swipe
         final View deleteButton = v.findViewById(R.id.delete);
@@ -106,14 +106,18 @@ public class TimetableNotificationAdapter extends BaseSwipeAdapter {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TimetableData.ChangeNotifStatus(TimetableData.NotifStatus.DELETED,ParsedNotifId,callbackInterface,mContext);
-                Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
+                if (Misc.IsOnline(mContext)) {
+                    TimetableData.ChangeNotifStatus(TimetableData.NotifStatus.DELETED, ParsedNotifId, callbackInterface, mContext);
+                    Toast.makeText(mContext, "Notification Deleted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, R.string.network_connection_required, Toast.LENGTH_SHORT).show();
+                }
             }
         });
         // right swipe
-        swipeLayout.addDrag(SwipeLayout.DragEdge.Right, rightSwipeView);
+        swipeLayout.addDrag(SwipeLayout.DragEdge.Right, right_wrapper);
 
-        final View markWrapperView = rightSwipeView.findViewById(R.id.right_read_wrapper);
+        final View markWrapperView = right_wrapper.findViewById(R.id.right_read_wrapper);
         final View archiveWrapperView = swipeLayout.findViewById(R.id.right_archive_wrapper);
         // TODO: 01/08/16 optimise (not process is read to begin with)
         // mark as View
@@ -145,9 +149,13 @@ public class TimetableNotificationAdapter extends BaseSwipeAdapter {
             @Override
             public void onClick(View view) {
                 // update read status
-                TimetableData.ChangeNotifStatus(item.isRead() ? TimetableData.NotifStatus.UNREAD : TimetableData.NotifStatus.READ,
-                        ParsedNotifId, callbackInterface, mContext);
-                Toast.makeText(mContext, item.isRead() ? "Marked as unread" : "Marked as read", Toast.LENGTH_SHORT).show();
+                if (Misc.IsOnline(mContext)) {
+                    TimetableData.ChangeNotifStatus(item.isRead() ? TimetableData.NotifStatus.UNREAD : TimetableData.NotifStatus.READ,
+                            ParsedNotifId, callbackInterface, mContext);
+                    Toast.makeText(mContext, item.isRead() ? "Notification marked as unread" : "Notification marked as read", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, R.string.network_connection_required, Toast.LENGTH_SHORT).show();
+                }
             }
         };
         markWrapperView.setOnClickListener(markListener);
@@ -156,8 +164,12 @@ public class TimetableNotificationAdapter extends BaseSwipeAdapter {
         View.OnClickListener archiveListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimetableData.ChangeNotifStatus(item.isArchived() ? TimetableData.NotifStatus.UNARCHIVED : TimetableData.NotifStatus.ARCHIVED, ParsedNotifId, callbackInterface, mContext);
-                Toast.makeText(mContext, item.isArchived() ? "Unarchived" : "Archived", Toast.LENGTH_SHORT).show();
+                if (Misc.IsOnline(mContext)) {
+                    TimetableData.ChangeNotifStatus(item.isArchived() ? TimetableData.NotifStatus.UNARCHIVED : TimetableData.NotifStatus.ARCHIVED, ParsedNotifId, callbackInterface, mContext);
+                    Toast.makeText(mContext, item.isArchived() ? "Notification unarchived" : "Notification archived", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, R.string.network_connection_required, Toast.LENGTH_SHORT).show();
+                }
             }
         };
         archiveWrapperView.setOnClickListener(archiveListener);
@@ -172,8 +184,6 @@ public class TimetableNotificationAdapter extends BaseSwipeAdapter {
 
     @Override
     public void fillValues(int position, View convertView) {
-        // TextView t = (TextView)convertView.findViewById(R.id.position);
-        //t.setText((position + 1) + ".");
     }
 
     @Override

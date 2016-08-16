@@ -1,4 +1,4 @@
-package uclancyprusguide.inspirecenter.org.uclantimetable;
+package uclancyprusguide.inspirecenter.org.uclantimetable.views;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.TextStyle;
@@ -14,12 +15,13 @@ import org.threeten.bp.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 
-import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyNotificationCallbackInterface;
+import uclancyprusguide.inspirecenter.org.uclantimetable.R;
+import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.NotificationsCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
 
-public class DetailedNotificationActivity extends AppCompatActivity implements MyNotificationCallbackInterface {
+public class DetailedNotificationActivity extends AppCompatActivity implements NotificationsCallbackInterface {
 
     private Notification notification;
     private ImageButton archiveBtn, deleteBtn, markBtn;
@@ -41,14 +43,16 @@ public class DetailedNotificationActivity extends AppCompatActivity implements M
         notification = (Notification) myIntent.getSerializableExtra(this.getString(R.string.notificationKey)); // will return "notification"
 
         if (notification == null) {
-            // TODO: 01/08/16 return with error
+            Toast.makeText(this, "sorry, can't show this notification at the moment", Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        // mark as read
-        parsedId = Integer.parseInt(notification.getNOTIFICATION_ID());
-        TimetableData.ChangeNotifStatus(TimetableData.NotifStatus.READ, parsedId, this, this);
-        notification.setNOTIFICATION_STATUS("1");
+        if (Misc.IsOnline(this)) {
+            // mark as read
+            parsedId = Integer.parseInt(notification.getNOTIFICATION_ID());
+            TimetableData.ChangeNotifStatus(TimetableData.NotifStatus.READ, parsedId, this, this);
+            notification.setNOTIFICATION_STATUS("1");
+        }
 
         // UI Binding
         TextView title = (TextView) findViewById(R.id.title_textView);
@@ -63,11 +67,14 @@ public class DetailedNotificationActivity extends AppCompatActivity implements M
         deleteBtn = (ImageButton) findViewById(R.id.deleteBtn);
 
         // UI setup
-        handleRenaming();
         title.setText(notification.getNOTIFICATION_TITLE());
         final LocalDateTime publishDate = Misc.APITimestampToLocalDate(notification.getPUBLISH_DATE());
+
         // format date
-        String dateFormatted = String.format("%s %s", publishDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH), Misc.getDayOfMonthSuffixed(publishDate.getDayOfMonth()));
+        String dateFormatted = String.format("Publish Date: %s %s, %s",
+                publishDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+                Misc.getDayOfMonthSuffixed(publishDate.getDayOfMonth()),
+                publishDate.getYear());
         // format Time
 //        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 //        String timeFormatted = dtf.format(publishDate);
@@ -83,20 +90,36 @@ public class DetailedNotificationActivity extends AppCompatActivity implements M
         archiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeNotificationStatus(notification.isArchived() ? TimetableData.NotifStatus.UNARCHIVED : TimetableData.NotifStatus.UNARCHIVED);
+                if (Misc.IsOnline(DetailedNotificationActivity.this)) {
+                    changeNotificationStatus(notification.isArchived() ? TimetableData.NotifStatus.UNARCHIVED : TimetableData.NotifStatus.UNARCHIVED);
+                    Toast.makeText(getBaseContext(), "Notification Archived", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(DetailedNotificationActivity.this, R.string.network_connection_required, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         markBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeNotificationStatus(notification.isRead() ? TimetableData.NotifStatus.UNREAD : TimetableData.NotifStatus.READ);
+                if (Misc.IsOnline(DetailedNotificationActivity.this)) {
+                    changeNotificationStatus(notification.isRead() ? TimetableData.NotifStatus.UNREAD : TimetableData.NotifStatus.READ);
+                    Toast.makeText(getBaseContext(), "Notification Unread", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(DetailedNotificationActivity.this, R.string.network_connection_required, Toast.LENGTH_SHORT).show();
+                }
             }
         });
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeNotificationStatus(TimetableData.NotifStatus.DELETED);
+                if (Misc.IsOnline(DetailedNotificationActivity.this)) {
+                    changeNotificationStatus(TimetableData.NotifStatus.DELETED);
+                    Toast.makeText(getBaseContext(), "Notification Deleted", Toast.LENGTH_LONG).show();
+                    finish();
+                } else {
+                    Toast.makeText(DetailedNotificationActivity.this, R.string.network_connection_required, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -129,12 +152,18 @@ public class DetailedNotificationActivity extends AppCompatActivity implements M
     }
 
     @Override
-    public void onNotificationDownloadFinished(List<Notification> notifications) {
+    public void onSingleDownloaded(Notification item) {
+        this.notification = item;
         handleRenaming();
     }
 
     @Override
-    public void onStatusChanged() {
+    public void onAllDownloaded(List<Notification> notifications) {
 
+    }
+
+    @Override
+    public void onStatusChanged() {
+        TimetableData.GetNotificationById(notification.getNOTIFICATION_ID(), this, this);
     }
 }

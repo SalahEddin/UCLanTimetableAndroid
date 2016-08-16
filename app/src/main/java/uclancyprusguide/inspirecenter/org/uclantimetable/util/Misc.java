@@ -1,10 +1,14 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.util;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 
 import com.google.gson.Gson;
 
@@ -127,5 +131,27 @@ public class Misc {
         String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
         //String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         return monthNames[month];
+    }
+
+    public static void CreateNoDataFoundDialog(final Context context) {
+        // no data was written before
+        AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(context);
+        // Setting Dialog Title
+        alertDialog2.setTitle("No Offline Data");
+        // Setting Dialog Message
+        alertDialog2.setMessage("No offline data is available on this device, please connect to a network the first time you launch the app");
+        // Setting Icon to Dialog
+        alertDialog2.setIcon(R.drawable.ic_alert_warning);
+        // Setting Positive "Yes" Btn
+        alertDialog2.setPositiveButton("Go to network settings",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog
+                        context.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                    }
+                });
+        alertDialog2.setCancelable(true);
+        // Showing Alert Dialog
+        alertDialog2.create().show();
     }
 }

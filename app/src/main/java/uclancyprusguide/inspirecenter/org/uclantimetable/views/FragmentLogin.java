@@ -17,19 +17,17 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import com.google.gson.Gson;
-
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.User;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
-import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyUserCallbackInterface;
+import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.UserCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
 
 
 /**
  * Login in Fragment, can login via UCLan or Google account
  */
-public class FragmentLogin extends Fragment implements MyUserCallbackInterface {
+public class FragmentLogin extends Fragment implements UserCallbackInterface {
 
     private CheckBox rememberMeCheckBox;
     private String lastTypedName, lastTypedPass;
@@ -137,7 +135,7 @@ public class FragmentLogin extends Fragment implements MyUserCallbackInterface {
     }
 
     @Override
-    public void onUserDownloadFinished(User user) {
+    public void onDownloaded(User user) {
 
         if (user != null) {
             // save the login

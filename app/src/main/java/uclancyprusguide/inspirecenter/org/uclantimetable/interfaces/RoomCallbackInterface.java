@@ -7,6 +7,6 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.models.JSONRoom;
 /**
  * Created by salah on 26/07/16.
  */
-public interface MyRoomCallbackInterface {
-    void onRoomDownloadFinished(List<JSONRoom> rooms);
+public interface RoomCallbackInterface {
+    void onDownload(List<JSONRoom> rooms);
 }

@@ -28,12 +28,12 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.adapters.TimetableSessi
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.JSONRoom;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.TimetableSession;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
-import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyRoomCallbackInterface;
+import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.RoomCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.RoomDatePickerDialogDatePickerDialog;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
 
 
-public class FragmentRooms extends Fragment implements TimetableData.MyCallbackInterface, MyRoomCallbackInterface, DatePickerDialog.OnDateSetListener {
+public class FragmentRooms extends Fragment implements TimetableData.MyCallbackInterface, RoomCallbackInterface, DatePickerDialog.OnDateSetListener {
 
     // UI Binding
     private SwipeRefreshLayout pullToRefresh;
@@ -93,7 +93,6 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
 
                     @Override
                     public void onNothingSelected(AdapterView<?> arg0) {
-                        // TODO Auto-generated method stub
                     }
                 }
         );
@@ -162,7 +161,7 @@ public class FragmentRooms extends Fragment implements TimetableData.MyCallbackI
     }
 
     @Override
-    public void onRoomDownloadFinished(List<JSONRoom> rooms) {
+    public void onDownload(List<JSONRoom> rooms) {
         roomsList = rooms;
         roomCodeArrayList.clear();
         for (JSONRoom room : rooms) {

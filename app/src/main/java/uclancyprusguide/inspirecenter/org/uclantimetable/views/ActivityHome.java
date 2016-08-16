@@ -17,20 +17,19 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
-import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyNotificationCallbackInterface;
+import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.NotificationsCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.User;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
 
 public class ActivityHome extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MyNotificationCallbackInterface {
+        implements NavigationView.OnNavigationItemSelectedListener, NotificationsCallbackInterface {
 
     public static final String TAG = "uclan-cy";
 
@@ -101,7 +100,7 @@ public class ActivityHome extends AppCompatActivity
             // user is logged in, hide unavailable stuff
             switchUserView(user.getACCOUNT_TYPE_ID());
             navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
-            // TODO: 01/08/16 load notifications count
+            // load notifications count
             TimetableData.LoadNotifications(user.getUSER_ID(), this, this);
         }
     }
@@ -111,7 +110,7 @@ public class ActivityHome extends AppCompatActivity
         super.onResume();
 
         if (selectedFragment == 0) {
-            selectedFragment = PreferenceManager.getDefaultSharedPreferences(this).getInt(SELECTED_FRAGMENT_KEY, FRAGMENT_ID_NEWS);
+            selectedFragment = PreferenceManager.getDefaultSharedPreferences(this).getInt(SELECTED_FRAGMENT_KEY, FRAGMENT_ID_LOGIN);
             selectFragment();
         }
     }
@@ -153,7 +152,7 @@ public class ActivityHome extends AppCompatActivity
             navigationView.getMenu().findItem(R.id.nav_attendance).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_login).setVisible(true);
-            selectedFragment = FRAGMENT_ID_NEWS;
+            selectedFragment = FRAGMENT_ID_LOGIN;
             selectFragment();
         } else if (id == R.id.nav_login) {
             selectedFragment = FRAGMENT_ID_LOGIN;
@@ -283,7 +282,7 @@ public class ActivityHome extends AppCompatActivity
     }
 
     @Override
-    public void onNotificationDownloadFinished(List<Notification> notifications) {
+    public void onAllDownloaded(List<Notification> notifications) {
         final int notiCount = notifications.size();
         TextView actionView = (TextView) MenuItemCompat.getActionView(notificationNav);
         actionView.setText(String.valueOf(notiCount));
@@ -292,7 +291,12 @@ public class ActivityHome extends AppCompatActivity
     }
 
     @Override
+    public void onSingleDownloaded(Notification notifications) {
+
+    }
+
+    @Override
     public void onStatusChanged() {
-// ignored
+        // ignored
     }
 }

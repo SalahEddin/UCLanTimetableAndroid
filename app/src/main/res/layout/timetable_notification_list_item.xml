@@ -30,12 +30,12 @@
 
             <TextView
                 android:id="@+id/archiveText"
-                android:text="archive"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:textColor="@color/white"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="archive"
+                android:textColor="@color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -56,13 +56,13 @@
 
             <TextView
                 android:id="@+id/readText"
-                android:text="mark as read"
                 android:layout_width="match_parent"
-                android:textColor="@color/white"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="mark as read"
+                android:textColor="@color/white" />
         </LinearLayout>
 
     </LinearLayout>
@@ -160,7 +160,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
-                android:text="@string/lerom_ipsum"
+                android:text="Type"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/list_item_event_description" />
 

@@ -16,10 +16,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import uclancyprusguide.inspirecenter.org.uclantimetable.DetailedNotificationActivity;
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
 import uclancyprusguide.inspirecenter.org.uclantimetable.adapters.TimetableNotificationAdapter;
-import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.MyNotificationCallbackInterface;
+import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.NotificationsCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
@@ -27,7 +26,7 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
 /**
  * Retrieves events with notification types (cancelled, room changed, etc.)
  */
-public class FragmentTimetableNotifications extends Fragment implements MyNotificationCallbackInterface {
+public class FragmentTimetableNotifications extends Fragment implements NotificationsCallbackInterface {
     // TODO: 01/08/16 filter
     private final ArrayList<Notification> allNotifications = new ArrayList<>();
     private TimetableNotificationAdapter notificationAdapter;
@@ -69,6 +68,12 @@ public class FragmentTimetableNotifications extends Fragment implements MyNotifi
 
         reloadNotifications();
 
+        {
+            // save for offline use
+            String userId = Misc.loadUser(context).getUSER_ID();
+            TimetableData.LoadNotificationsOffline(context);
+        }
+
         return view;
     }
 
@@ -78,7 +83,7 @@ public class FragmentTimetableNotifications extends Fragment implements MyNotifi
     }
 
     @Override
-    public void onNotificationDownloadFinished(final List<Notification> notifications) {
+    public void onAllDownloaded(final List<Notification> notifications) {
         allNotifications.clear();
         allNotifications.addAll(notifications);
         // sort
@@ -94,6 +99,10 @@ public class FragmentTimetableNotifications extends Fragment implements MyNotifi
         notificationAdapter = new TimetableNotificationAdapter(context, allNotifications, this);
         eventsListView.setAdapter(notificationAdapter);
         if (pullToRefresh.isRefreshing()) pullToRefresh.setRefreshing(false);
+    }
+
+    @Override
+    public void onSingleDownloaded(Notification notifications) {
     }
 
     @Override
