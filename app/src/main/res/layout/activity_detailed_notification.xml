@@ -34,7 +34,9 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/activity_vertical_margin" />
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@color/light_gray" />
 
         <TextView
             android:id="@+id/description_textView"
@@ -43,10 +45,31 @@
             android:text="@string/lerom_ipsum"
             android:textSize="@dimen/body" />
 
+        <LinearLayout
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="More information:  " />
+
+            <TextView
+                android:id="@+id/url_textView"
+                android:text="http://google.com"
+                android:autoLink="all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/activity_vertical_margin" />
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:background="@color/light_gray" />
 
         <TextView
             android:id="@+id/publish_date_textView"
@@ -57,17 +80,20 @@
             android:textSize="@dimen/subheading" />
 
         <TextView
+            android:id="@+id/creation_date_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Creation Date: July 13th"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/subheading" />
+
+        <TextView
             android:id="@+id/exp_date_textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Expiry Date: July 13th"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/subheading" />
-
-        <TextView
-            android:id="@+id/url_textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"

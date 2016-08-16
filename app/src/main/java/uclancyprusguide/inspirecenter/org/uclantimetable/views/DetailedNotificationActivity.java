@@ -57,9 +57,11 @@ public class DetailedNotificationActivity extends AppCompatActivity implements N
         // UI Binding
         TextView title = (TextView) findViewById(R.id.title_textView);
         TextView type = (TextView) findViewById(R.id.type_textView);
-        TextView date = (TextView) findViewById(R.id.publish_date_textView);
+        TextView pubDate = (TextView) findViewById(R.id.publish_date_textView);
+        TextView creDate = (TextView) findViewById(R.id.creation_date_textView);
+        TextView expDate = (TextView) findViewById(R.id.exp_date_textView);
         TextView desc = (TextView) findViewById(R.id.description_textView);
-        TextView url = (TextView) findViewById(R.id.url);
+        TextView url = (TextView) findViewById(R.id.url_textView);
         archiveText = (TextView) findViewById(R.id.archiveText);
         archiveBtn = (ImageButton) findViewById(R.id.archiveBtn);
         markText = (TextView) findViewById(R.id.markText);
@@ -69,21 +71,36 @@ public class DetailedNotificationActivity extends AppCompatActivity implements N
         // UI setup
         title.setText(notification.getNOTIFICATION_TITLE());
         final LocalDateTime publishDate = Misc.APITimestampToLocalDate(notification.getPUBLISH_DATE());
+        final LocalDateTime creationDate = Misc.APITimestampToLocalDate(notification.getCREATE_DATE());
+        final LocalDateTime expiryDate = Misc.APITimestampToLocalDate(notification.getEXPIRY_DATE());
 
         // format date
-        String dateFormatted = String.format("Publish Date: %s %s, %s",
+        String publishDateFormatted = String.format("Publish Date: %s %s, %s",
                 publishDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH),
                 Misc.getDayOfMonthSuffixed(publishDate.getDayOfMonth()),
                 publishDate.getYear());
         // format Time
 //        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 //        String timeFormatted = dtf.format(publishDate);
-        date.setText(dateFormatted);
+
+        String creDateFormatted = String.format("Expiry Date: %s %s, %s",
+                creationDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+                Misc.getDayOfMonthSuffixed(creationDate.getDayOfMonth()),
+                creationDate.getYear());
+
+        String expDateFormatted = String.format("Expiry Date: %s %s, %s",
+                expiryDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+                Misc.getDayOfMonthSuffixed(expiryDate.getDayOfMonth()),
+                expiryDate.getYear());
+
+        pubDate.setText(publishDateFormatted);
+        expDate.setText(expDateFormatted);
+        creDate.setText(creDateFormatted);
         type.setText(notification.getNOTIFICATION_TYPE_NAME());
         desc.setText(notification.getNOTIFICATION_TEXT());
 
         if (notification.getNOTIFICATION_URL() != null && !notification.getNOTIFICATION_URL().equals("")) {
-            //url.setText(notification.getNOTIFICATION_URL());
+            url.setText(notification.getNOTIFICATION_URL());
         }
 
         //listeners
