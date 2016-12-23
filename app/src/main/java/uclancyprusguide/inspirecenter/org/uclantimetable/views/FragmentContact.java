@@ -217,8 +217,10 @@ public class FragmentContact
             return;
         }
         final Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        updateDistance(lastLocation);
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        if (lastLocation != null) {
+            updateDistance(lastLocation);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
     }
 
     @Override

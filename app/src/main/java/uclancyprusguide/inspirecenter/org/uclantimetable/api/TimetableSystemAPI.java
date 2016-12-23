@@ -7,6 +7,7 @@ import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import uclancyprusguide.inspirecenter.org.uclantimetable.models.Badge;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.User;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.JSONEvent;
@@ -14,6 +15,7 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.models.JSONRoom;
 
 /**
  * Created by salah on 13/07/16.
+ * List of APIs from Uni Aris System
  */
 public interface TimetableSystemAPI {
     String ENDPOINT = "https://cyprustimetable.uclan.ac.uk/TimetableAPI/TimetableWebService.asmx/";
@@ -45,4 +47,11 @@ public interface TimetableSystemAPI {
 
     @GET("app_updateNotificationStatus")
     Call<Void> updateNotificationStatus(@Query("securityToken") String securityToken, @Query("NOTIFICATION_ID") int id, @Query("NOTIFICATION_STATUS") int newStatus);
+
+    @GET("app_getBadgesByStudent")
+    Call<List<Badge>> getBadgesByStudent(@Query("securityToken") String securityToken, @Query("STUDENT_ID") String id);
+
+    @GET("app_getBadgeById")
+    Call<Badge> getBadgesById(@Query("securityToken") String securityToken, @Query("BADGE_ID") String badgeId);
+
 }

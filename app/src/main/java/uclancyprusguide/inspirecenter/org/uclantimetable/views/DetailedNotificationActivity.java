@@ -83,7 +83,7 @@ public class DetailedNotificationActivity extends AppCompatActivity implements N
 //        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 //        String timeFormatted = dtf.format(publishDate);
 
-        String creDateFormatted = String.format("Expiry Date: %s %s, %s",
+        String creDateFormatted = String.format("Creation Date: %s %s, %s",
                 creationDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH),
                 Misc.getDayOfMonthSuffixed(creationDate.getDayOfMonth()),
                 creationDate.getYear());

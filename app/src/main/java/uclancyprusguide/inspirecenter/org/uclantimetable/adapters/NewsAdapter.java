@@ -58,13 +58,26 @@ public class NewsAdapter extends ArrayAdapter<NewsItem> {
         final TextView time = (TextView) view.findViewById(R.id.news_time);
         final TextView desc = (TextView) view.findViewById(R.id.news_desc);
 
-
         title.setText(item.getMtitle());
         // LocalDateTime dateTime1 = DateTimeFormatter.RFC_1123_DATE_TIME.parse();
-        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss 'BST'");//.RFC_1123_DATE_TIME; // .ofPattern("EEE, dd MMM yyyy HH:mm:ss z");
-        LocalDateTime dateTime = LocalDateTime.parse(item.getMpubDate().trim(), dtf);
-        date.setText(dateTime.format(DateTimeFormatter.ofPattern("E")));
-        time.setText(dateTime.format(DateTimeFormatter.ofPattern("dd MMM yyy")));
+        try {
+            // normal GMT
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z");//.RFC_1123_DATE_TIME; // .ofPattern("EEE, dd MMM yyyy HH:mm:ss 'BST'");
+            LocalDateTime dateTime = LocalDateTime.parse(item.getMpubDate().trim(), dtf);
+            date.setText(dateTime.format(DateTimeFormatter.ofPattern("E")));
+            time.setText(dateTime.format(DateTimeFormatter.ofPattern("dd MMM yyy")));
+        } catch (Exception ex1) {
+            try {
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss 'BST'");//.RFC_1123_DATE_TIME; // .ofPattern("EEE, dd MMM yyyy HH:mm:ss 'BST'");
+                LocalDateTime dateTime = LocalDateTime.parse(item.getMpubDate().trim(), dtf);
+                date.setText(dateTime.format(DateTimeFormatter.ofPattern("E")));
+                time.setText(dateTime.format(DateTimeFormatter.ofPattern("dd MMM yyy")));
+            } catch (Exception ex2) {
+                date.setText("");
+                time.setText("");
+            }
+        }
+
 
         if (item.getMdescription() != null) {
             desc.setText(item.getMdescription());

@@ -18,12 +18,14 @@
             android:layout_weight="1">
 
             <ImageView
+                android:id="@+id/inspire_logo_about"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:src="@drawable/inspire_logo" />
 
             <ImageView
+                android:id="@+id/uclan_logo_about"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -34,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Developed in collaboration with InSPIRE centre 2016."
+            android:text="Developed by InSPIRE for UCLan Cyprus 2016."
             android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/heading" />
 
@@ -49,7 +51,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Director Manager: Panayiotis Andreou, Nearchos Paspallis \nTeam: Salah Eddin Alshaal, Alberto Bullo"
+            android:text="Coordinator: Panayiotis Andreou \nSAM Coordinator: Nearchos Paspallis \nDevelopers: Salah Eddin Alshaal, Alberto Bullo"
             android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/subheading" />
     </LinearLayout>

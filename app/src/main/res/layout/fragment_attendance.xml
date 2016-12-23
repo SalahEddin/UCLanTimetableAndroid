@@ -1,4 +1,4 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,7 +13,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -37,13 +38,15 @@
                     android:textSize="@dimen/subheading" />
 
                 <TextView
+                    android:id="@+id/totalBadgesText"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="109 pts"
+                    android:maxLines="1"
+                    android:text="-"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/regular_56" />
+                    android:textSize="@dimen/regular_45" />
             </LinearLayout>
 
             <LinearLayout
@@ -85,82 +88,23 @@
             android:layout_height="1dp"
             android:layout_margin="@dimen/activity_vertical_margin"
             android:background="@color/colorDivider" />
-        <!--Year 4-->
-        <android.support.v7.widget.CardView
-            android:id="@+id/year_4_cardView"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <GridView
+                android:id="@+id/badge_gridView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:columnWidth="90dp"
+                android:gravity="center"
+                android:horizontalSpacing="10dp"
+                android:numColumns="auto_fit"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="10dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    android:orientation="horizontal"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"
-                    android:paddingStart="@dimen/activity_horizontal_margin">
-
-                    <TextView
-                        android:id="@+id/year_4_pts_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Year 4"
-                        android:textColor="@color/colorPrimaryText"
-                        android:textSize="@dimen/regular_34" />
-
-                    <TextView
-                        android:id="@+id/year_4_points_textView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="- pts"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="@dimen/regular_45" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/year_4_more_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <!--android:visibility="gone">-->
-
-                    <GridView
-                        android:id="@+id/year_4_badge_gridView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:columnWidth="90dp"
-                        android:gravity="center"
-                        android:horizontalSpacing="10dp"
-                        android:numColumns="auto_fit"
-                        android:stretchMode="columnWidth"
-                        android:verticalSpacing="10dp" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:background="@color/colorDivider" />
-
-                <Button
-                    android:id="@+id/show_more_year_4_button"
-                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="show more badges"
-                    android:textSize="@dimen/list_item_event_description_secondary" />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </LinearLayout>
     </LinearLayout>
-</ScrollView>
+</LinearLayout>

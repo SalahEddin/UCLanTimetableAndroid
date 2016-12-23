@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
@@ -17,6 +19,9 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.sql.Timestamp;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
@@ -42,8 +47,7 @@ public class Misc {
         //convert unix epoch timestamp (seconds) to milliseconds
         Long longTS = Long.parseLong(requiredString);
         Timestamp timestamp = new Timestamp(longTS);
-        LocalDateTime dateTime = DateTimeUtils.toLocalDateTime(timestamp);
-        return dateTime;
+        return DateTimeUtils.toLocalDateTime(timestamp);
     }
 
     public static String DateToAPIFormat(LocalDate date) {

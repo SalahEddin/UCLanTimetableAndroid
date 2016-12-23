@@ -26,9 +26,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
+import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.BadgesInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.NotificationsCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.RoomCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.UserCallbackInterface;
+import uclancyprusguide.inspirecenter.org.uclantimetable.models.Badge;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.User;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.JSONEvent;
@@ -320,6 +322,64 @@ public class TimetableData {
 
             @Override
             public void onFailure(Call<Notification> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void LoadBadges(String id, final Context context, final BadgesInterface callbackInterface) {
+        TimetableSystemAPI api = getDefaultUCLanAPI();
+        Call<List<Badge>> getCall = api.getBadgesByStudent(TimetableSystemAPI.SECURITY_TOKEN, id);
+        getCall.enqueue(new Callback<List<Badge>>() {
+            @Override
+            public void onResponse(Call<List<Badge>> call, Response<List<Badge>> response) {
+
+                int code = response.code();
+                if (code == 200) {
+                    final List<Badge> badges = response.body();
+                    Handler mainHandler = new Handler(context.getMainLooper());
+
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            callbackInterface.onDownloaded(badges);
+                        }
+                    };
+                    mainHandler.post(myRunnable);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Badge>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void LoadBadgeById(String BadgeId, final Context context, final BadgesInterface callbackInterface) {
+        TimetableSystemAPI api = getDefaultUCLanAPI();
+        Call<List<Badge>> getCall = api.getBadgesByStudent(TimetableSystemAPI.SECURITY_TOKEN, BadgeId);
+        getCall.enqueue(new Callback<List<Badge>>() {
+            @Override
+            public void onResponse(Call<List<Badge>> call, Response<List<Badge>> response) {
+
+                int code = response.code();
+                if (code == 200) {
+                    final List<Badge> badges = response.body();
+                    Handler mainHandler = new Handler(context.getMainLooper());
+
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            callbackInterface.onDownloaded(badges);
+                        }
+                    };
+                    mainHandler.post(myRunnable);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Badge>> call, Throwable t) {
 
             }
         });

@@ -1,10 +1,14 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.views;
 
 import android.app.ActionBar;
+import android.content.Intent;
+import android.net.Uri;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -43,6 +47,8 @@ public class ActivityAbout extends AppCompatActivity {
                 .beginTransaction()
                 .replace(android.R.id.content, new AboutFragment())
                 .commit();
+
+
     }
 
     public static class AboutFragment extends PreferenceFragment {

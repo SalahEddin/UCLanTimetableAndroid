@@ -18,7 +18,9 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.adapters.NewsAdapter;
 import uclancyprusguide.inspirecenter.org.uclantimetable.adapters.TimetableExamAdapter;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.NewsCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.RSS.NewsItem;
+import uclancyprusguide.inspirecenter.org.uclantimetable.util.Misc;
 import uclancyprusguide.inspirecenter.org.uclantimetable.util.NewsRSS;
+import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
 
 /**
  * @author Nearchos
@@ -43,6 +45,16 @@ public class FragmentNews extends Fragment implements NewsCallbackInterface {
         ListView newsListView = (ListView) view.findViewById(R.id.news_listView);
         newsListView.setAdapter(adapter);
 
+        //pull to refresh
+        pullToRefresh = (SwipeRefreshLayout) view.findViewById(R.id.pullToRefresh);
+        pullToRefresh.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                reloadNews();
+            }
+        });
+
         reloadNews();
         return view;
     }
@@ -56,5 +68,6 @@ public class FragmentNews extends Fragment implements NewsCallbackInterface {
         this.newsItems.clear();
         this.newsItems.addAll(newsItems);
         adapter.notifyDataSetChanged();
+        if (pullToRefresh.isRefreshing()) pullToRefresh.setRefreshing(false);
     }
 }

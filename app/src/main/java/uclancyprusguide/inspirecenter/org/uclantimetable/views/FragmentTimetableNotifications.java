@@ -79,6 +79,7 @@ public class FragmentTimetableNotifications extends Fragment implements Notifica
     }
 
     private void reloadNotifications() {
+        allNotifications.clear();
         String userId = Misc.loadUser(context).getUSER_ID();
         TimetableData.LoadNotifications(userId, this, context);
     }
