@@ -1,4 +1,4 @@
-package uclancyprusguide.inspirecenter.org.uclantimetable.views;
+package uclancyprusguide.inspirecenter.org.uclantimetable.adapters;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -53,13 +53,16 @@ public class ModuleAttendanceAdapter extends ArrayAdapter<Attendance> {
         // binding
         final TextView code = (TextView) view.findViewById(R.id.moduleCodeTextView);
         final TextView name = (TextView) view.findViewById(R.id.moduleNameTextView);
+        final TextView absCount = (TextView) view.findViewById(R.id.absenceTextView);
+        final TextView attCount = (TextView) view.findViewById(R.id.attendedTextView);
         final TextView critical = (TextView) view.findViewById(R.id.criticalMsg);
         final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.attendanceProgressBar);
 
         if (item != null) {
             code.setText(String.valueOf(item.getMODULECODE()));
-
             name.setText(String.valueOf(item.getMODULENAME()));
+            absCount.setText(String.format("Absent:%s", String.valueOf(item.getABSENSES())));
+            attCount.setText(String.format("Attended:%s", String.valueOf(item.getATTENDANCES())));
             progressBar.setProgress(item.getATTENDANCEPERCENTAGE().intValue());
             if (item.getATTENDANCEPERCENTAGE() < 30.0) {
                 critical.setVisibility(View.VISIBLE);

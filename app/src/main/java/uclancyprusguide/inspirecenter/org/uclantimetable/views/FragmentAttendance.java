@@ -21,7 +21,6 @@ import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -30,6 +29,7 @@ import java.util.List;
 
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
 import uclancyprusguide.inspirecenter.org.uclantimetable.adapters.BadgeGridAdapter;
+import uclancyprusguide.inspirecenter.org.uclantimetable.adapters.ModuleAttendanceAdapter;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.AttendanceCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.BadgesInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Attendance;
@@ -67,8 +67,14 @@ public class FragmentAttendance extends Fragment implements AttendanceCallbackIn
         badgesGridView.setAdapter(mBadgeGridAdapter);
         progress = (ArcProgress) vi.findViewById(R.id.arc_progress);
         LinearLayout summaryLinearLayout = (LinearLayout) vi.findViewById(R.id.SummaryLinearLayout);
-        final String account_id = Misc.loadUser(getActivity()).getACCOUNT_ID();
+        final TextView nameTxt = (TextView) vi.findViewById(R.id.usernameTextView);
+        final TextView emailTxt = (TextView) vi.findViewById(R.id.emailTextView);
 
+        final String account_id = Misc.loadUser(getActivity()).getACCOUNT_ID();
+        final String username = Misc.loadUser(getActivity()).getFULLNAME();
+        final String email = Misc.loadUser(getActivity()).getEMAIL();
+        nameTxt.setText(username);
+        emailTxt.setText(email);
         // Load Data Async
         TimetableData.LoadBadges(account_id, mContext, FragmentAttendance.this);
         TimetableData.GetAvgAttendance(account_id, mContext, FragmentAttendance.this);
