@@ -7,6 +7,7 @@ import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import uclancyprusguide.inspirecenter.org.uclantimetable.models.Attendance;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Badge;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.User;
@@ -53,5 +54,11 @@ public interface TimetableSystemAPI {
 
     @GET("app_getBadgeById")
     Call<Badge> getBadgesById(@Query("securityToken") String securityToken, @Query("BADGE_ID") String badgeId);
+
+    @GET("app_getAverageAtendanceByStudent")
+    Call<List<Attendance>> getAvgAttendance(@Query("securityToken") String securityToken, @Query("STUDENT_ID") String id);
+
+    @GET("app_getDetailedAtendanceByStudent")
+    Call<List<Attendance>> getDetailedAttendance(@Query("securityToken") String securityToken, @Query("STUDENT_ID") String id);
 
 }

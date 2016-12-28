@@ -12,6 +12,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/SummaryLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:baselineAligned="false">
@@ -46,7 +47,7 @@
                     android:maxLines="1"
                     android:text="-"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/regular_45" />
+                    android:textSize="@dimen/regular_34" />
             </LinearLayout>
 
             <LinearLayout

@@ -1,11 +1,7 @@
 package uclancyprusguide.inspirecenter.org.uclantimetable.util;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Handler;
-import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -26,10 +22,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import uclancyprusguide.inspirecenter.org.uclantimetable.R;
+import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.AttendanceCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.BadgesInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.NotificationsCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.RoomCallbackInterface;
 import uclancyprusguide.inspirecenter.org.uclantimetable.interfaces.UserCallbackInterface;
+import uclancyprusguide.inspirecenter.org.uclantimetable.models.Attendance;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Badge;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.Notification;
 import uclancyprusguide.inspirecenter.org.uclantimetable.models.User;
@@ -381,6 +379,63 @@ public class TimetableData {
             @Override
             public void onFailure(Call<List<Badge>> call, Throwable t) {
 
+            }
+        });
+    }
+
+    public static void GetAvgAttendance(String id, final Context context, final AttendanceCallbackInterface callbackInterface) {
+        TimetableSystemAPI api = getDefaultUCLanAPI();
+        Call<List<Attendance>> getCall = api.getAvgAttendance(TimetableSystemAPI.SECURITY_TOKEN, id);
+        getCall.enqueue(new Callback<List<Attendance>>() {
+            @Override
+            public void onResponse(Call<List<Attendance>> call, Response<List<Attendance>> response) {
+
+                int code = response.code();
+                if (code == 200) {
+                    final List<Attendance> attendances = response.body();
+                    Handler mainHandler = new Handler(context.getMainLooper());
+
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            callbackInterface.onAvgDownloaded(attendances.get(0));
+                        }
+                    };
+                    mainHandler.post(myRunnable);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Attendance>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void GetDetailedAttendance(String id, final Context context, final AttendanceCallbackInterface callbackInterface) {
+        TimetableSystemAPI api = getDefaultUCLanAPI();
+        Call<List<Attendance>> getCall = api.getDetailedAttendance(TimetableSystemAPI.SECURITY_TOKEN, id);
+        getCall.enqueue(new Callback<List<Attendance>>() {
+            @Override
+            public void onResponse(Call<List<Attendance>> call, Response<List<Attendance>> response) {
+
+                int code = response.code();
+                if (code == 200) {
+                    final List<Attendance> attendances = response.body();
+                    Handler mainHandler = new Handler(context.getMainLooper());
+
+                    Runnable myRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            callbackInterface.onDetailedDownloaded(attendances);
+                        }
+                    };
+                    mainHandler.post(myRunnable);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Attendance>> call, Throwable t) {
             }
         });
     }

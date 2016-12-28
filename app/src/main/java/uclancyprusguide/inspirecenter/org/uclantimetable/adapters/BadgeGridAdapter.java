@@ -73,7 +73,11 @@ public class BadgeGridAdapter extends BaseAdapter {
         });
 
         TextView badgeName = (TextView) vi.findViewById(R.id.badge_name);
-        badgeName.setText(badge.getbADGENAME());
+        String name = badge.getbADGENAME();
+        if (name.length() > 13) {
+            name = String.format("%s...", name.substring(0, 10));
+        }
+        badgeName.setText(name);
         return vi;
     }
 }

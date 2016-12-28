@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="5dp"
+    android:layout_marginStart="5dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/moduleCodeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CO1407"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/list_item_title" />
+
+    <TextView
+        android:id="@+id/moduleNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Introduction to programming"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="@dimen/list_item_event_description" />
+
+    <ProgressBar
+        android:id="@+id/attendanceProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="90" />
+
+    <TextView
+        android:id="@+id/criticalMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Critical level, try to attend more classes for this module."
+        android:textColor="#ba0000"
+        android:visibility="gone" />
+</LinearLayout>
