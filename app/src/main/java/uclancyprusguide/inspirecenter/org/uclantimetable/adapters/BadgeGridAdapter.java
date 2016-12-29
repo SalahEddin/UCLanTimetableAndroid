@@ -46,8 +46,9 @@ public class BadgeGridAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return Integer.parseInt(mBadgeDataset.get(i).getbADGEID());
+        return mBadgeDataset.get(i).getBADGEID();
     }
+
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
@@ -62,7 +63,7 @@ public class BadgeGridAdapter extends BaseAdapter {
         final ImageView badgeSvg = (ImageView) vi.findViewById(R.id.badge_image);
 
         // Load image, decode it to Bitmap and return Bitmap to callback
-        mImageLoader.loadImage(badge.getbADGEURL(), new SimpleImageLoadingListener() {
+        mImageLoader.loadImage(badge.getBADGEURL(), new SimpleImageLoadingListener() {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 // Do whatever you want with Bitmap
@@ -73,7 +74,7 @@ public class BadgeGridAdapter extends BaseAdapter {
         });
 
         TextView badgeName = (TextView) vi.findViewById(R.id.badge_name);
-        String name = badge.getbADGENAME();
+        String name = badge.getBADGENAME();
         if (name.length() > 13) {
             name = String.format("%s...", name.substring(0, 10));
         }

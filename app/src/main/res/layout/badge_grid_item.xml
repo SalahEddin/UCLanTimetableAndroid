@@ -19,6 +19,6 @@
         android:gravity="center"
         android:text="Uni Master"
         android:textColor="@color/black"
-        android:textSize="@dimen/heading" />
+        android:textSize="@dimen/body" />
 
 </LinearLayout>

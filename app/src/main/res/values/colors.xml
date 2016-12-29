@@ -13,4 +13,8 @@
     <color name="gray">#7f7f7f</color>
     <color name="light_gray">#9f9f9f</color>
     <color name="dark_gray">#4f4f4f</color>
+
+    <color name="att_poor">#F44336</color>
+    <color name="att_good">#CDDC39</color>
+    <color name="att_excellent">#4CAF50</color>
 </resources>

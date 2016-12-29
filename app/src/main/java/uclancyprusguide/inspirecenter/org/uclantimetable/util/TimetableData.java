@@ -436,6 +436,7 @@ public class TimetableData {
 
             @Override
             public void onFailure(Call<List<Attendance>> call, Throwable t) {
+                Log.d("Error", t.getMessage());
             }
         });
     }

@@ -40,12 +40,14 @@ import uclancyprusguide.inspirecenter.org.uclantimetable.util.TimetableData;
 public class FragmentAttendance extends Fragment implements AttendanceCallbackInterface, BadgesInterface {
 
     private TextView pointsTextView;
+    private TextView attendanceTextView;
     private GridView badgesGridView;
     private BadgeGridAdapter mBadgeGridAdapter;
     private ArrayList<Badge> mBadges;
     private ImageLoader imageLoader;
     private ArcProgress progress;
     private Context mContext;
+    private Button detailsButton;
 
     public FragmentAttendance() {
         // Required empty public constructor
@@ -59,7 +61,8 @@ public class FragmentAttendance extends Fragment implements AttendanceCallbackIn
         mContext = getActivity().getBaseContext();
         imageLoader = ImageLoader.getInstance(); // Get singleton instance
         imageLoader.init(ImageLoaderConfiguration.createDefault(mContext));
-
+        detailsButton = (Button) vi.findViewById(R.id.detailsButton);
+        attendanceTextView = (TextView) vi.findViewById(R.id.attTextView);
         pointsTextView = (TextView) vi.findViewById(R.id.totalBadgesText);
         mBadges = new ArrayList<>();
         mBadgeGridAdapter = new BadgeGridAdapter(vi.getContext(), mBadges, imageLoader);
@@ -85,13 +88,13 @@ public class FragmentAttendance extends Fragment implements AttendanceCallbackIn
                 // get clicked badge details
                 Badge b = mBadges.get(i);
                 if (b != null) {
-                    LocalDateTime bCreationDate = Misc.APITimestampToLocalDate(b.getcREATEDATE());
+                    LocalDateTime bCreationDate = Misc.APITimestampToLocalDate(b.getCREATEDATE());
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMM, yyyy");
                     String formattedDate = dtf.format(bCreationDate);
 
                     AlertDialog alertDialog = new AlertDialog.Builder(vi.getContext()).create();
-                    alertDialog.setTitle(b.getbADGECALCULATION() + ": " + b.getbADGENAME());
-                    alertDialog.setMessage(b.getbADGEDESCRIPTION() + "\n" + "Awarded: " + formattedDate);
+                    alertDialog.setTitle(b.getBADGECALCULATION() + ": " + b.getBADGENAME());
+                    alertDialog.setMessage(b.getBADGEDESCRIPTION() + "\n" + "Awarded: " + formattedDate);
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok, Cool",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -115,7 +118,7 @@ public class FragmentAttendance extends Fragment implements AttendanceCallbackIn
         });
 
         // if progress is clicked, show custom detailed modules dialog
-        summaryLinearLayout.setOnClickListener(new View.OnClickListener() {
+        detailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TimetableData.GetDetailedAttendance(account_id, getActivity().getBaseContext(), FragmentAttendance.this);
@@ -140,7 +143,24 @@ public class FragmentAttendance extends Fragment implements AttendanceCallbackIn
 
     @Override
     public void onAvgDownloaded(Attendance attendance) {
-        progress.setProgress(attendance.getATTENDANCEAVERAGE().intValue());
+        int val = attendance.getATTENDANCEAVERAGE().intValue();
+        progress.setProgress(val);
+        int col;
+
+        if (val < 60) {
+            attendanceTextView.setText("Poor\nAttendance");
+            col = FragmentAttendance.this.getActivity().getResources().getColor(R.color.att_poor);
+
+        } else if (val < 80) {
+            attendanceTextView.setText("Good\nAttendance");
+            col = FragmentAttendance.this.getActivity().getResources().getColor(R.color.att_good);
+        } else {
+            attendanceTextView.setText("Excellent\nAttendance");
+            col = FragmentAttendance.this.getActivity().getResources().getColor(R.color.att_excellent);
+        }
+        progress.setFinishedStrokeColor(col);
+        progress.setTextColor(col);
+        attendanceTextView.setTextColor(col);
     }
 
     @Override
@@ -150,7 +170,6 @@ public class FragmentAttendance extends Fragment implements AttendanceCallbackIn
         // custom dialog
         final Dialog dialog = new Dialog(FragmentAttendance.this.getActivity());
         dialog.setContentView(R.layout.detailed_attendance_dialog);
-        dialog.setTitle("Modules Attendance");
 
         // set the custom dialog components - text, image and button
         ListView attendanceListView = (ListView) dialog.findViewById(R.id.listView);

@@ -12,9 +12,10 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Badge implements Serializable {
 
+
     @SerializedName("BADGE_ID")
     @Expose
-    private String bADGEID;
+    private Integer bADGEID;
     @SerializedName("BADGE_NAME")
     @Expose
     private String bADGENAME;
@@ -29,10 +30,10 @@ public class Badge implements Serializable {
     private String bADGECALCULATION;
     @SerializedName("BADGE_TRIGGER")
     @Expose
-    private String bADGETRIGGER;
+    private Integer bADGETRIGGER;
     @SerializedName("CAMPAIGN_ID")
     @Expose
-    private String cAMPAIGNID;
+    private Integer cAMPAIGNID;
     @SerializedName("CAMPAIGN_NAME")
     @Expose
     private String cAMPAIGNNAME;
@@ -48,100 +49,112 @@ public class Badge implements Serializable {
     @SerializedName("PREDECESSOR_BADGE_ID")
     @Expose
     private Integer pREDECESSORBADGEID;
+    @SerializedName("PREDECESSOR_BADGE_NAME")
+    @Expose
+    private String pREDECESSORBADGENAME;
 
-    public String getbADGEID() {
+    public Integer getBADGEID() {
         return bADGEID;
     }
 
-    public void setbADGEID(String bADGEID) {
+    public void setBADGEID(Integer bADGEID) {
         this.bADGEID = bADGEID;
     }
 
-    public String getbADGENAME() {
+    public String getBADGENAME() {
         return bADGENAME;
     }
 
-    public void setbADGENAME(String bADGENAME) {
+    public void setBADGENAME(String bADGENAME) {
         this.bADGENAME = bADGENAME;
     }
 
-    public String getbADGEDESCRIPTION() {
+    public String getBADGEDESCRIPTION() {
         return bADGEDESCRIPTION;
     }
 
-    public void setbADGEDESCRIPTION(String bADGEDESCRIPTION) {
+    public void setBADGEDESCRIPTION(String bADGEDESCRIPTION) {
         this.bADGEDESCRIPTION = bADGEDESCRIPTION;
     }
 
-    public String getbADGEURL() {
+    public String getBADGEURL() {
         return bADGEURL;
     }
 
-    public void setbADGEURL(String bADGEURL) {
+    public void setBADGEURL(String bADGEURL) {
         this.bADGEURL = bADGEURL;
     }
 
-    public String getbADGECALCULATION() {
+    public String getBADGECALCULATION() {
         return bADGECALCULATION;
     }
 
-    public void setbADGECALCULATION(String bADGECALCULATION) {
+    public void setBADGECALCULATION(String bADGECALCULATION) {
         this.bADGECALCULATION = bADGECALCULATION;
     }
 
-    public String getbADGETRIGGER() {
+    public Integer getBADGETRIGGER() {
         return bADGETRIGGER;
     }
 
-    public void setbADGETRIGGER(String bADGETRIGGER) {
+    public void setBADGETRIGGER(Integer bADGETRIGGER) {
         this.bADGETRIGGER = bADGETRIGGER;
     }
 
-    public String getcAMPAIGNID() {
+    public Integer getCAMPAIGNID() {
         return cAMPAIGNID;
     }
 
-    public void setcAMPAIGNID(String cAMPAIGNID) {
+    public void setCAMPAIGNID(Integer cAMPAIGNID) {
         this.cAMPAIGNID = cAMPAIGNID;
     }
 
-    public String getcAMPAIGNNAME() {
+    public String getCAMPAIGNNAME() {
         return cAMPAIGNNAME;
     }
 
-    public void setcAMPAIGNNAME(String cAMPAIGNNAME) {
+    public void setCAMPAIGNNAME(String cAMPAIGNNAME) {
         this.cAMPAIGNNAME = cAMPAIGNNAME;
     }
 
-    public String getpROGRAMMENAME() {
+    public String getPROGRAMMENAME() {
         return pROGRAMMENAME;
     }
 
-    public void setpROGRAMMENAME(String pROGRAMMENAME) {
+    public void setPROGRAMMENAME(String pROGRAMMENAME) {
         this.pROGRAMMENAME = pROGRAMMENAME;
     }
 
-    public String getpROGRAMMECODE() {
+    public String getPROGRAMMECODE() {
         return pROGRAMMECODE;
     }
 
-    public void setpROGRAMMECODE(String pROGRAMMECODE) {
+    public void setPROGRAMMECODE(String pROGRAMMECODE) {
         this.pROGRAMMECODE = pROGRAMMECODE;
     }
 
-    public String getcREATEDATE() {
+    public String getCREATEDATE() {
         return cREATEDATE;
     }
 
-    public void setcREATEDATE(String cREATEDATE) {
+    public void setCREATEDATE(String cREATEDATE) {
         this.cREATEDATE = cREATEDATE;
     }
 
-    public Integer getpREDECESSORBADGEID() {
+    public Integer getPREDECESSORBADGEID() {
         return pREDECESSORBADGEID;
     }
 
-    public void setpREDECESSORBADGEID(Integer pREDECESSORBADGEID) {
+    public void setPREDECESSORBADGEID(Integer pREDECESSORBADGEID) {
         this.pREDECESSORBADGEID = pREDECESSORBADGEID;
     }
+
+    public String getPREDECESSORBADGENAME() {
+        return pREDECESSORBADGENAME;
+    }
+
+    public void setPREDECESSORBADGENAME(String pREDECESSORBADGENAME) {
+        this.pREDECESSORBADGENAME = pREDECESSORBADGENAME;
+    }
+
 }

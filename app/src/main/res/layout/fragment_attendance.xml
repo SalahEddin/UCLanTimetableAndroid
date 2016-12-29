@@ -50,6 +50,45 @@
                     android:text="-"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/regular_34" />
+
+                <LinearLayout
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Attendance Legend:"
+                        android:textColor="@color/black" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/poor_legend"
+                            android:drawableTint="@color/att_poor"
+                            android:text="Poor" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/good_legend"
+                            android:text="Good" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/excellent_legend"
+                            android:text="Excellent" />
+                    </LinearLayout>
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -65,19 +104,28 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="end"
-                    custom:arc_finished_color="@color/colorPrimary"
-                    custom:arc_progress="70"
+
+                    custom:arc_progress="0"
                     custom:arc_stroke_width="8dp"
                     custom:arc_text_color="@color/colorPrimaryDark"
                     custom:arc_unfinished_color="@color/colorDivider" />
 
                 <TextView
+                    android:id="@+id/attTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="Attendance"
                     android:textColor="@color/colorSecondaryText"
                     android:textSize="@dimen/subheading" />
+
+                <Button
+                    android:id="@+id/detailsButton"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="More Details"
+                    android:textSize="11dp" />
                 <!--
                 custom:arc_bottom_text="Attended"
                     custom:arc_bottom_text_size="16sp"
