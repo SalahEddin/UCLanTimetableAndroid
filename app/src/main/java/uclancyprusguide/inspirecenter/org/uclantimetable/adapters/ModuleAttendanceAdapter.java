@@ -62,7 +62,6 @@ public class ModuleAttendanceAdapter extends ArrayAdapter<Attendance> {
         final TextView name = (TextView) view.findViewById(R.id.moduleNameTextView);
         final TextView absCount = (TextView) view.findViewById(R.id.absenceTextView);
         final TextView attCount = (TextView) view.findViewById(R.id.attendedTextView);
-        //final TextView perc = (TextView) view.findViewById(R.id.percTextView);
         final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.attendanceProgressBar);
 
         if (item != null) {
@@ -76,7 +75,7 @@ public class ModuleAttendanceAdapter extends ArrayAdapter<Attendance> {
 
             if (item.getATTENDANCEPERCENTAGE().intValue() < 60) {
                 col = mContext.getResources().getColor(R.color.att_poor);
-                absCount.setText(String.format("%s Critical", absCount.getText()));
+                absCount.setText(String.format("%s", absCount.getText()));
 
             } else if (item.getATTENDANCEPERCENTAGE().intValue() < 80) {
                 col = mContext.getResources().getColor(R.color.att_good);
